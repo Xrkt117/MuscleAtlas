@@ -44,7 +44,7 @@ All targets are proposals, not agreed.
 - [ ] Job to be done (skipped): "When ___, I want to ___, so I can ___".
 - [ ] Non-users beyond female anatomy (skipped).
 - [ ] Constraints (skipped): platform (web assumed), stack, AI model/API, budget for API calls.
-- [ ] Does the Z-Anatomy male muscle set export to glTF with usable mesh names? Spike first.
+- [x] Does the Z-Anatomy male muscle set export to glTF with usable mesh names? Yes, with fixes: 485 unique node names, 241/244 base names are TA2 terms, renders in Chrome with a single-muscle highlight; muscles are often split into parts, so map muscle id -> list of nodes. See `spike/FINDINGS.md`.
 - [ ] Which research sources go in the facts file, and who checks that they say what we claim?
 - [ ] Is "exercise linking" a v1 Must? The owner chose model+highlight and cited AI explanation as must-haves, but the agreed MVP demo includes exercises. Listed as Must below; confirm.
 - [ ] Primary user: "anyone" vs "beginner lifters" - the hypothesis says beginners; confirm.
@@ -119,7 +119,7 @@ Open app -> click a muscle or type a question -> AI highlights and frames the mu
 
 | # | Phase | Description | Status | Parallel | Depends | PRP Plan |
 |---|-------|-------------|--------|----------|---------|----------|
-| 1 | Model spike | Export Z-Anatomy male muscles to glTF; confirm mesh names | in-progress | - | - | [model-spike.plan.md](../plans/model-spike.plan.md) |
+| 1 | Model spike | Export Z-Anatomy male muscles to glTF; confirm mesh names | complete | - | - | [model-spike.plan.md](../plans/completed/model-spike.plan.md) |
 | 2 | Viewer | Web viewer with orbit, click-select, highlight, camera focus | pending | - | 1 | - |
 | 3 | Facts file | Curated muscles, exercises and sources, with source IDs | pending | with 2 | 1 | - |
 | 4 | AI tutor | LLM with scene tools, grounded in the facts file, citation enforcement | pending | - | 2, 3 | - |
