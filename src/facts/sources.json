@@ -1,6 +1,7 @@
 [
   {
     "id": "gray-1918-myology",
+    "short": "Gray 1918",
     "kind": "textbook",
     "title": "Anatomy of the Human Body, Twentieth Edition (1918), Myology (Internet Archive full text of the scanned book)",
     "authors": "Henry Gray; thoroughly revised and re-edited by Warren H. Lewis",
@@ -11,6 +12,7 @@
   },
   {
     "id": "free-exercise-db",
+    "short": "free-exercise-db",
     "kind": "dataset",
     "title": "Free Exercise DB (dist/exercises.json)",
     "authors": "yuhonas (restructured from wrkout/exercises.json by Ollie Jennings)",
@@ -21,6 +23,7 @@
   },
   {
     "id": "baz-valle-2022",
+    "short": "Baz-Valle 2022",
     "kind": "paper",
     "title": "A Systematic Review of The Effects of Different Resistance Training Volumes on Muscle Hypertrophy",
     "authors": "Eneko Baz-Valle, Carlos Balsalobre-Fernández, Carlos Alix-Fages, Jordan Santos-Concejero",
@@ -32,6 +35,7 @@
   },
   {
     "id": "schoenfeld-2017-volume",
+    "short": "Schoenfeld 2017",
     "kind": "paper",
     "title": "Dose-response relationship between weekly resistance training volume and increases in muscle mass: A systematic review and meta-analysis",
     "authors": "Schoenfeld BJ, Ogborn D, Krieger JW",
@@ -43,6 +47,7 @@
   },
   {
     "id": "schoenfeld-2016-frequency",
+    "short": "Schoenfeld 2016",
     "kind": "paper",
     "title": "Effects of Resistance Training Frequency on Measures of Muscle Hypertrophy: A Systematic Review and Meta-Analysis",
     "authors": "Schoenfeld BJ, Ogborn D, Krieger JW",
@@ -54,6 +59,7 @@
   },
   {
     "id": "maeo-2021-hamstrings",
+    "short": "Maeo 2021",
     "kind": "paper",
     "title": "Greater Hamstrings Muscle Hypertrophy but Similar Damage Protection after Training at Long versus Short Muscle Lengths",
     "authors": "Sumiaki Maeo, Meng Huang, Yuhang Wu, et al.",
@@ -65,6 +71,7 @@
   },
   {
     "id": "kinoshita-2023-calf",
+    "short": "Kinoshita 2023",
     "kind": "paper",
     "title": "Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training",
     "authors": "Momoka Kinoshita, Sumiaki Maeo, et al.",

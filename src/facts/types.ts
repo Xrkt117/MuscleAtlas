@@ -1,5 +1,7 @@
 export interface Source {
   id: string;
+  /** Short label for inline citations, e.g. "Gray 1918". */
+  short: string;
   kind: "textbook" | "paper" | "dataset";
   title: string;
   authors: string;
@@ -21,7 +23,14 @@ export interface ExerciseLink {
   role: "primary" | "secondary";
   cite: Cite;
 }
-export interface EvidenceClaim { text: string; appliesTo: string[] | "all"; cite: Cite }
+export interface EvidenceClaim {
+  text: string;
+  appliesTo: string[] | "all";
+  /** Applies beyond the specific muscle (shown as general evidence). */
+  general?: true;
+  caveat?: "abstract-only" | "single-study";
+  cite: Cite;
+}
 
 export type MusclesFile = Record<string, { actions: ActionClaim[] }>;
 export type ExercisesFile = Record<string, ExerciseLink[]>;

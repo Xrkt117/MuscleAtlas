@@ -88,4 +88,24 @@ describe("facts data", () => {
       }
     }
   });
+  it("every source has a non-empty unique short name", () => {
+    const shorts = sources.map((s) => s.short);
+    for (const s of sources) expect(s.short?.trim(), s.id).toBeTruthy();
+    expect(new Set(shorts).size).toBe(shorts.length);
+  });
+
+  it("caveats match the source kind", () => {
+    for (const e of evidence) {
+      if (["schoenfeld-2017-volume", "schoenfeld-2016-frequency"].includes(e.cite.sourceId)) expect(e.caveat, e.text).toBe("abstract-only");
+      if (["maeo-2021-hamstrings", "kinoshita-2023-calf"].includes(e.cite.sourceId)) expect(e.caveat, e.text).toBe("single-study");
+    }
+  });
+
+  it("appliesTo 'all' implies general", () => {
+    for (const e of evidence) if (e.appliesTo === "all") expect(e.general, e.text).toBe(true);
+  });
+
+  it("evidence text does not repeat the caveat (the caveat field carries it)", () => {
+    for (const e of evidence) expect(e.text).not.toMatch(/Single study|PubMed abstract only/);
+  });
 });
