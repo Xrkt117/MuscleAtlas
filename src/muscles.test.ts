@@ -38,6 +38,13 @@ describe("helpers", () => {
   });
 });
 
+describe("muscle map", () => {
+  it("gives every muscle a front or back view", () => {
+    expect(MUSCLES.filter((m) => m.view !== "front" && m.view !== "back")).toEqual([]);
+    expect(MUSCLES.filter((m) => m.view === "back").length).toBe(9);
+  });
+});
+
 describe("map vs GLB", () => {
   // GLB: 12-byte header, then chunk length (u32 LE) at 12, type at 16, JSON from 20.
   const buf = readFileSync("public/models/muscles-draco.glb");
