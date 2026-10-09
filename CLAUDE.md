@@ -5,10 +5,16 @@
      Run `/init` to have Claude fill this in from the codebase, then trim. -->
 
 ## Commands
-<!-- build / test / lint / run — the exact invocations -->
+- `npm run dev` - Vite dev server
+- `npm run build` - production build into `dist/`
+- `npm test` - Vitest, single run
+- `npm run typecheck` - `tsc --noEmit`
 
 ## Layout
-<!-- only what isn't obvious from the tree -->
+- `src/` - app code (`viewer.ts` is the three.js viewer and `AtlasApi`; `muscle-map.ts` the 15 seed muscles)
+- `public/models/` - the Draco GLB; `public/draco/` - local Draco decoder files
+- `spike/` - throwaway research (model export and checks); do not build on it
+- `.claude/PRPs/` - PRDs and plans
 
 ## Conventions
 <!-- rules that differ from the framework default; skip the ones that don't -->
@@ -45,7 +51,6 @@
 - Machine-local facts go in `CLAUDE.local.md`, which is git-ignored, never in this file.
 - Secrets are never printed, logged or pasted into a prompt.
 - State what was verified and how, separately from what is inferred.
-- Stack, build, test and lint commands are not decided yet. Fill "Commands" above once the stack exists;
-  do not guess them.
+- Stack is Vite + TypeScript + three.js 0.170.0 (pinned). No lint tool is installed yet.
 
 @.claude/STATE.md

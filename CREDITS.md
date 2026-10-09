@@ -13,3 +13,9 @@ The muscle model is derived from the Z-Anatomy Blender template
 Z-Anatomy content is licensed under the Creative Commons Attribution-ShareAlike 4.0 International
 License (http://creativecommons.org/licenses/by-sa/4.0/). Any model derived from it, including the
 glTF/GLB exported for this project, must be distributed under the same licence, CC BY-SA 4.0.
+
+## Model file in this repo
+
+`public/models/muscles-draco.glb` is the derived GLB (muscle layer of the Z-Anatomy male model, Draco
+compressed, placeholder materials). It was produced from the Z-Anatomy `Startup.blend` with
+`spike/export_muscles.py` and is distributed under CC BY-SA 4.0.
