@@ -11,3 +11,4 @@ paths:
 - The GLB is a CC BY-SA 4.0 derivative: both credit lines (Z-Anatomy CC-BY-SA 4.0, BodyParts3D CC-BY-SA 2.1 Japan) must stay in the page footer.
 - The skeleton (`skeleton-draco.glb`) is decoration loaded into its own group: it is never raycast, highlighted or dimmed.
 - `Muscle.view` ("front" | "back", hand-assigned) picks the side `focus()` turns the camera to (`targetAzimuth` in `camera.ts`); the camera animates azimuth/elevation/distance/target, never the position vector. Materials are assigned only in `refresh()` (selected, hover, dim, base).
+- Picking is GPU-based (`pick()`: 1x1 render target, flat id colours, skeleton hidden) because raycasting ~1M unindexed-BVH vertices stalled frames 50-600 ms; never reintroduce `Raycaster`. `AtlasApi.preview(id|null)` is the sidebar hover preview: it yields to the pointer while it is on the canvas.
