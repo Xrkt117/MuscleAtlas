@@ -3,3 +3,5 @@ CLAUDE.local.md
 .env.*
 spike/data/
 spike/node_modules/
+node_modules/
+dist/
