@@ -1,0 +1,33 @@
+import { describe, expect, it } from "vitest";
+import { targetAzimuth } from "./camera";
+
+const PI = Math.PI;
+
+describe("targetAzimuth", () => {
+  it("keeps the azimuth when already on the muscle's side", () => {
+    expect(targetAzimuth(0.2, "front")).toBe(0.2);
+    expect(targetAzimuth(3, "back")).toBe(3);
+  });
+
+  it("turns the short way round to the back", () => {
+    expect(targetAzimuth(0.2, "back")).toBeCloseTo(PI, 10);   // positive way
+    expect(targetAzimuth(-0.2, "back")).toBeCloseTo(-PI, 10); // negative way
+  });
+
+  it("keeps wrapped azimuths wrapped", () => {
+    expect(targetAzimuth(2 * PI + 0.1, "front")).toBe(2 * PI + 0.1);
+    expect(targetAzimuth(2 * PI + 0.2, "back")).toBeCloseTo(3 * PI, 10);
+  });
+
+  it("turns when exactly 90 degrees off (boundary counts as the wrong side)", () => {
+    expect(targetAzimuth(PI / 2, "back")).toBeCloseTo(PI, 10);
+    expect(targetAzimuth(PI / 2, "front")).toBeCloseTo(0, 10);
+    expect(targetAzimuth(-PI / 2, "front")).toBeCloseTo(0, 10);
+    expect(targetAzimuth(-PI / 2, "back")).toBeCloseTo(-PI, 10);
+  });
+
+  it("goes the positive way when directly opposite", () => {
+    expect(targetAzimuth(0, "back")).toBeCloseTo(PI, 10);
+    expect(targetAzimuth(PI, "front")).toBeCloseTo(2 * PI, 10);
+  });
+});
