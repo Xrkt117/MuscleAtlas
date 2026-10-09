@@ -1,0 +1,15 @@
+# Credits
+
+## 3D anatomy model
+
+The muscle model is derived from the Z-Anatomy Blender template
+(https://github.com/Z-Anatomy/Models-of-human-anatomy). Attribution as the Z-Anatomy Readme asks:
+
+- "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan"
+- "Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0"
+
+## Licence
+
+Z-Anatomy content is licensed under the Creative Commons Attribution-ShareAlike 4.0 International
+License (http://creativecommons.org/licenses/by-sa/4.0/). Any model derived from it, including the
+glTF/GLB exported for this project, must be distributed under the same licence, CC BY-SA 4.0.
