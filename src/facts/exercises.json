@@ -1,0 +1,611 @@
+{
+  "pectoralis_major": [
+    {
+      "datasetId": "Pushups",
+      "name": "Pushups",
+      "datasetPrimary": [
+        "chest"
+      ],
+      "datasetSecondary": [
+        "shoulders",
+        "triceps"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Pushups",
+        "quote": "chest"
+      }
+    },
+    {
+      "datasetId": "Dumbbell_Bench_Press",
+      "name": "Dumbbell Bench Press",
+      "datasetPrimary": [
+        "chest"
+      ],
+      "datasetSecondary": [
+        "shoulders",
+        "triceps"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Dumbbell_Bench_Press",
+        "quote": "chest"
+      }
+    },
+    {
+      "datasetId": "Incline_Push-Up",
+      "name": "Incline Push-Up",
+      "datasetPrimary": [
+        "chest"
+      ],
+      "datasetSecondary": [
+        "shoulders",
+        "triceps"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Incline_Push-Up",
+        "quote": "chest"
+      }
+    }
+  ],
+  "deltoid": [
+    {
+      "datasetId": "Side_Lateral_Raise",
+      "name": "Side Lateral Raise",
+      "datasetPrimary": [
+        "shoulders"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Side_Lateral_Raise",
+        "quote": "shoulders"
+      }
+    },
+    {
+      "datasetId": "Cable_Shoulder_Press",
+      "name": "Cable Shoulder Press",
+      "datasetPrimary": [
+        "shoulders"
+      ],
+      "datasetSecondary": [
+        "triceps"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Cable_Shoulder_Press",
+        "quote": "shoulders"
+      }
+    }
+  ],
+  "latissimus_dorsi": [
+    {
+      "datasetId": "Wide-Grip_Lat_Pulldown",
+      "name": "Wide-Grip Lat Pulldown",
+      "datasetPrimary": [
+        "lats"
+      ],
+      "datasetSecondary": [
+        "biceps",
+        "middle back",
+        "shoulders"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Wide-Grip_Lat_Pulldown",
+        "quote": "lats"
+      }
+    },
+    {
+      "datasetId": "Pullups",
+      "name": "Pullups",
+      "datasetPrimary": [
+        "lats"
+      ],
+      "datasetSecondary": [
+        "biceps",
+        "middle back"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Pullups",
+        "quote": "lats"
+      }
+    },
+    {
+      "datasetId": "Straight-Arm_Pulldown",
+      "name": "Straight-Arm Pulldown",
+      "datasetPrimary": [
+        "lats"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Straight-Arm_Pulldown",
+        "quote": "lats"
+      }
+    }
+  ],
+  "trapezius": [
+    {
+      "datasetId": "Dumbbell_Shrug",
+      "name": "Dumbbell Shrug",
+      "datasetPrimary": [
+        "traps"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Dumbbell_Shrug",
+        "quote": "traps"
+      }
+    },
+    {
+      "datasetId": "Barbell_Shrug",
+      "name": "Barbell Shrug",
+      "datasetPrimary": [
+        "traps"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Barbell_Shrug",
+        "quote": "traps"
+      }
+    }
+  ],
+  "biceps_brachii": [
+    {
+      "datasetId": "Dumbbell_Bicep_Curl",
+      "name": "Dumbbell Bicep Curl",
+      "datasetPrimary": [
+        "biceps"
+      ],
+      "datasetSecondary": [
+        "forearms"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Dumbbell_Bicep_Curl",
+        "quote": "biceps"
+      }
+    },
+    {
+      "datasetId": "Barbell_Curl",
+      "name": "Barbell Curl",
+      "datasetPrimary": [
+        "biceps"
+      ],
+      "datasetSecondary": [
+        "forearms"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Barbell_Curl",
+        "quote": "biceps"
+      }
+    },
+    {
+      "datasetId": "Hammer_Curls",
+      "name": "Hammer Curls",
+      "datasetPrimary": [
+        "biceps"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Hammer_Curls",
+        "quote": "biceps"
+      }
+    }
+  ],
+  "triceps_brachii": [
+    {
+      "datasetId": "Triceps_Pushdown",
+      "name": "Triceps Pushdown",
+      "datasetPrimary": [
+        "triceps"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Triceps_Pushdown",
+        "quote": "triceps"
+      }
+    },
+    {
+      "datasetId": "Dips_-_Triceps_Version",
+      "name": "Dips - Triceps Version",
+      "datasetPrimary": [
+        "triceps"
+      ],
+      "datasetSecondary": [
+        "chest",
+        "shoulders"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Dips_-_Triceps_Version",
+        "quote": "triceps"
+      }
+    },
+    {
+      "datasetId": "Standing_Dumbbell_Triceps_Extension",
+      "name": "Standing Dumbbell Triceps Extension",
+      "datasetPrimary": [
+        "triceps"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Standing_Dumbbell_Triceps_Extension",
+        "quote": "triceps"
+      }
+    }
+  ],
+  "rectus_abdominis": [
+    {
+      "datasetId": "Crunches",
+      "name": "Crunches",
+      "datasetPrimary": [
+        "abdominals"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Crunches",
+        "quote": "abdominals"
+      }
+    },
+    {
+      "datasetId": "Plank",
+      "name": "Plank",
+      "datasetPrimary": [
+        "abdominals"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Plank",
+        "quote": "abdominals"
+      }
+    },
+    {
+      "datasetId": "Reverse_Crunch",
+      "name": "Reverse Crunch",
+      "datasetPrimary": [
+        "abdominals"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Reverse_Crunch",
+        "quote": "abdominals"
+      }
+    }
+  ],
+  "gluteus_maximus": [
+    {
+      "datasetId": "Butt_Lift_Bridge",
+      "name": "Butt Lift (Bridge)",
+      "datasetPrimary": [
+        "glutes"
+      ],
+      "datasetSecondary": [
+        "hamstrings"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Butt_Lift_Bridge",
+        "quote": "glutes"
+      }
+    },
+    {
+      "datasetId": "Single_Leg_Glute_Bridge",
+      "name": "Single Leg Glute Bridge",
+      "datasetPrimary": [
+        "glutes"
+      ],
+      "datasetSecondary": [
+        "hamstrings"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Single_Leg_Glute_Bridge",
+        "quote": "glutes"
+      }
+    },
+    {
+      "datasetId": "Pull_Through",
+      "name": "Pull Through",
+      "datasetPrimary": [
+        "glutes"
+      ],
+      "datasetSecondary": [
+        "hamstrings",
+        "lower back"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Pull_Through",
+        "quote": "glutes"
+      }
+    }
+  ],
+  "quadriceps_femoris": [
+    {
+      "datasetId": "Bodyweight_Squat",
+      "name": "Bodyweight Squat",
+      "datasetPrimary": [
+        "quadriceps"
+      ],
+      "datasetSecondary": [
+        "glutes",
+        "hamstrings"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Bodyweight_Squat",
+        "quote": "quadriceps"
+      }
+    },
+    {
+      "datasetId": "Goblet_Squat",
+      "name": "Goblet Squat",
+      "datasetPrimary": [
+        "quadriceps"
+      ],
+      "datasetSecondary": [
+        "calves",
+        "glutes",
+        "hamstrings",
+        "shoulders"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Goblet_Squat",
+        "quote": "quadriceps"
+      }
+    },
+    {
+      "datasetId": "Leg_Extensions",
+      "name": "Leg Extensions",
+      "datasetPrimary": [
+        "quadriceps"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Leg_Extensions",
+        "quote": "quadriceps"
+      }
+    }
+  ],
+  "biceps_femoris": [
+    {
+      "datasetId": "Lying_Leg_Curls",
+      "name": "Lying Leg Curls",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Lying_Leg_Curls",
+        "quote": "hamstrings"
+      }
+    },
+    {
+      "datasetId": "Seated_Leg_Curl",
+      "name": "Seated Leg Curl",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Seated_Leg_Curl",
+        "quote": "hamstrings"
+      }
+    },
+    {
+      "datasetId": "Ball_Leg_Curl",
+      "name": "Ball Leg Curl",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [
+        "calves",
+        "glutes"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Ball_Leg_Curl",
+        "quote": "hamstrings"
+      }
+    }
+  ],
+  "semitendinosus": [
+    {
+      "datasetId": "Lying_Leg_Curls",
+      "name": "Lying Leg Curls",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Lying_Leg_Curls",
+        "quote": "hamstrings"
+      }
+    },
+    {
+      "datasetId": "Seated_Leg_Curl",
+      "name": "Seated Leg Curl",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Seated_Leg_Curl",
+        "quote": "hamstrings"
+      }
+    },
+    {
+      "datasetId": "Ball_Leg_Curl",
+      "name": "Ball Leg Curl",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [
+        "calves",
+        "glutes"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Ball_Leg_Curl",
+        "quote": "hamstrings"
+      }
+    }
+  ],
+  "semimembranosus": [
+    {
+      "datasetId": "Lying_Leg_Curls",
+      "name": "Lying Leg Curls",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Lying_Leg_Curls",
+        "quote": "hamstrings"
+      }
+    },
+    {
+      "datasetId": "Seated_Leg_Curl",
+      "name": "Seated Leg Curl",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Seated_Leg_Curl",
+        "quote": "hamstrings"
+      }
+    },
+    {
+      "datasetId": "Ball_Leg_Curl",
+      "name": "Ball Leg Curl",
+      "datasetPrimary": [
+        "hamstrings"
+      ],
+      "datasetSecondary": [
+        "calves",
+        "glutes"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Ball_Leg_Curl",
+        "quote": "hamstrings"
+      }
+    }
+  ],
+  "gastrocnemius": [
+    {
+      "datasetId": "Standing_Calf_Raises",
+      "name": "Standing Calf Raises",
+      "datasetPrimary": [
+        "calves"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Standing_Calf_Raises",
+        "quote": "calves"
+      }
+    },
+    {
+      "datasetId": "Standing_Barbell_Calf_Raise",
+      "name": "Standing Barbell Calf Raise",
+      "datasetPrimary": [
+        "calves"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Standing_Barbell_Calf_Raise",
+        "quote": "calves"
+      }
+    }
+  ],
+  "soleus": [
+    {
+      "datasetId": "Standing_Calf_Raises",
+      "name": "Standing Calf Raises",
+      "datasetPrimary": [
+        "calves"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Standing_Calf_Raises",
+        "quote": "calves"
+      }
+    },
+    {
+      "datasetId": "Seated_Calf_Raise",
+      "name": "Seated Calf Raise",
+      "datasetPrimary": [
+        "calves"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Seated_Calf_Raise",
+        "quote": "calves"
+      }
+    }
+  ]
+}
