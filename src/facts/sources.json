@@ -1,0 +1,77 @@
+[
+  {
+    "id": "gray-1918-myology",
+    "kind": "textbook",
+    "title": "Anatomy of the Human Body, Twentieth Edition (1918), Myology (Internet Archive full text of the scanned book)",
+    "authors": "Henry Gray; thoroughly revised and re-edited by Warren H. Lewis",
+    "year": 1918,
+    "url": "https://archive.org/download/anatomyofhumanbo00grayrich/anatomyofhumanbo00grayrich_djvu.txt",
+    "licence": "Public domain in the US (published 1918). Internet Archive item page (https://archive.org/details/anatomyofhumanbo00grayrich) prints: Possible copyright status NOT_IN_COPYRIGHT; Copyright-region US; Copyright-evidence: visible notice of copyright; stated date is 1918. Wikimedia Commons page for this scan (File:Anatomy_of_the_Human_Body_(1918).djvu) prints: This work is in the public domain in the United States because it was published (or registered with the U.S. Copyright Office) before January 1, 1931. The book itself prints: Copyright LEA & FEBIGER 1918.",
+    "readOn": "2026-10-09"
+  },
+  {
+    "id": "free-exercise-db",
+    "kind": "dataset",
+    "title": "Free Exercise DB (dist/exercises.json)",
+    "authors": "yuhonas (restructured from wrkout/exercises.json by Ollie Jennings)",
+    "year": 2026,
+    "url": "https://github.com/yuhonas/free-exercise-db",
+    "licence": "License: Unlicense (README badge); README: Open Public Domain Exercise Dataset. Data read from dist/exercises.json at main, latest commit touching it: 79ca7b4 (2026-08-29)",
+    "readOn": "2026-10-09"
+  },
+  {
+    "id": "baz-valle-2022",
+    "kind": "paper",
+    "title": "A Systematic Review of The Effects of Different Resistance Training Volumes on Muscle Hypertrophy",
+    "authors": "Eneko Baz-Valle, Carlos Balsalobre-Fernández, Carlos Alix-Fages, Jordan Santos-Concejero",
+    "year": 2022,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8884877/",
+    "doi": "10.2478/hukin-2022-0017",
+    "licence": "This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 License.",
+    "readOn": "2026-10-09"
+  },
+  {
+    "id": "schoenfeld-2017-volume",
+    "kind": "paper",
+    "title": "Dose-response relationship between weekly resistance training volume and increases in muscle mass: A systematic review and meta-analysis",
+    "authors": "Schoenfeld BJ, Ogborn D, Krieger JW",
+    "year": 2017,
+    "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=27433992&rettype=abstract&retmode=text",
+    "doi": "10.1080/02640414.2016.1210197",
+    "licence": "Not stated (PubMed abstract record only; no licence printed; full text not opened)",
+    "readOn": "2026-10-09"
+  },
+  {
+    "id": "schoenfeld-2016-frequency",
+    "kind": "paper",
+    "title": "Effects of Resistance Training Frequency on Measures of Muscle Hypertrophy: A Systematic Review and Meta-Analysis",
+    "authors": "Schoenfeld BJ, Ogborn D, Krieger JW",
+    "year": 2016,
+    "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=27102172&rettype=abstract&retmode=text",
+    "doi": "10.1007/s40279-016-0543-8",
+    "licence": "Not stated (PubMed abstract record only; no licence printed; full text not opened)",
+    "readOn": "2026-10-09"
+  },
+  {
+    "id": "maeo-2021-hamstrings",
+    "kind": "paper",
+    "title": "Greater Hamstrings Muscle Hypertrophy but Similar Damage Protection after Training at Long versus Short Muscle Lengths",
+    "authors": "Sumiaki Maeo, Meng Huang, Yuhang Wu, et al.",
+    "year": 2021,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7969179/",
+    "doi": "10.1249/MSS.0000000000002523",
+    "licence": "This is an open-access article distributed under the terms of the Creative Commons Attribution-Non Commercial-No Derivatives License 4.0 (CCBY-NC-ND), where it is permissible to download and share the work provided it is properly cited. The work cannot be changed in any way or used commercially without permission from the journal.",
+    "readOn": "2026-10-09"
+  },
+  {
+    "id": "kinoshita-2023-calf",
+    "kind": "paper",
+    "title": "Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training",
+    "authors": "Momoka Kinoshita, Sumiaki Maeo, et al.",
+    "year": 2023,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10753835/",
+    "doi": "10.3389/fphys.2023.1272106",
+    "licence": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY).",
+    "readOn": "2026-10-09"
+  }
+]
