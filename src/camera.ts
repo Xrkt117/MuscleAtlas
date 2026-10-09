@@ -13,3 +13,9 @@ export function targetAzimuth(current: number, view: View): number {
   if (d <= -Math.PI) d = Math.PI;
   return Math.abs(d) < Math.PI / 2 - 1e-9 ? current : current + d;
 }
+
+/** Cubic ease-in-out of k, clamped to [0, 1]. */
+export function easeInOutCubic(k: number): number {
+  const t = Math.min(Math.max(k, 0), 1);
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}

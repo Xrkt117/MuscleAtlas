@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { targetAzimuth } from "./camera";
+import { easeInOutCubic, targetAzimuth } from "./camera";
 
 const PI = Math.PI;
 
@@ -29,5 +29,23 @@ describe("targetAzimuth", () => {
   it("goes the positive way when directly opposite", () => {
     expect(targetAzimuth(0, "back")).toBeCloseTo(PI, 10);
     expect(targetAzimuth(PI, "front")).toBeCloseTo(2 * PI, 10);
+  });
+});
+
+describe("easeInOutCubic", () => {
+  it("hits the endpoints and the midpoint", () => {
+    expect(easeInOutCubic(0)).toBe(0);
+    expect(easeInOutCubic(1)).toBe(1);
+    expect(easeInOutCubic(0.5)).toBeCloseTo(0.5, 12);
+  });
+
+  it("is monotonic on a sample", () => {
+    let prev = -1;
+    for (let i = 0; i <= 100; i++) { const v = easeInOutCubic(i / 100); expect(v).toBeGreaterThanOrEqual(prev); prev = v; }
+  });
+
+  it("clamps outside [0, 1]", () => {
+    expect(easeInOutCubic(-0.5)).toBe(0);
+    expect(easeInOutCubic(1.5)).toBe(1);
   });
 });
