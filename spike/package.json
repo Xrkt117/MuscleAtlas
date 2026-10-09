@@ -1,0 +1,9 @@
+{
+  "name": "spike",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "private": true,
+  "devDependencies": {
+    "@gltf-transform/core": "^4.5.1"
+  }
+}
