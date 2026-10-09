@@ -47,6 +47,14 @@ export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
   const dimMaterial = new THREE.MeshStandardMaterial({ color: 0xc87f6e, roughness: 0.6, transparent: true, opacity: 0.15, depthWrite: false });
   const meshes: THREE.Mesh[] = [];
   gltf.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) { meshes.push(o as THREE.Mesh); (o as THREE.Mesh).material = baseMaterial; } });
+
+  // Skeleton is decoration: own group, added first, never in meshes[] / highlight / clear / picking. A load failure throws to main.ts.
+  const skeleton = await loader.loadAsync(`${base}models/skeleton-draco.glb`);
+  const boneMaterial = new THREE.MeshStandardMaterial({ color: 0xe8e0cc, roughness: 0.8 });
+  skeleton.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = boneMaterial; });
+  const skeletonGroup = new THREE.Group();
+  skeletonGroup.add(skeleton.scene);
+  scene.add(skeletonGroup);
   scene.add(gltf.scene);
 
   const box = new THREE.Box3().setFromObject(gltf.scene);
@@ -90,6 +98,7 @@ export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
     down = null;
     const r = renderer.domElement.getBoundingClientRect();
     raycaster.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+    // Muscle scene only: the skeleton lives in a separate group, which is what keeps bones unselectable.
     const hit = raycaster.intersectObject(gltf.scene, true)[0];
     let id: string | null = null;
     for (let o: THREE.Object3D | null = hit?.object ?? null; o && !id; o = o.parent) id = muscleIdForNode(o.name) ?? null;
