@@ -14,8 +14,12 @@ const list = $<HTMLUListElement>("list");
 const selectedEl = $("selected");
 const buttons = new Map<string, HTMLButtonElement>();
 
+const loading = $("loading"), loadingText = $("loading-text"), loadingBar = $<HTMLProgressElement>("loading-bar");
 try {
-  const atlas = await createViewer($("stage"));
+  const atlas = await createViewer($("stage"), (f) => {
+    loadingText.textContent = f === null ? "Loading model..." : `Loading model... ${Math.round(f * 100)}%`;
+    if (f === null) loadingBar.removeAttribute("value"); else loadingBar.value = f;
+  });
   window.atlas = atlas;
 
   const select = (id: string | null) => {
@@ -36,6 +40,8 @@ try {
     b.textContent = m.label;
     b.setAttribute("aria-pressed", "false");
     b.addEventListener("click", () => select(m.id));
+    for (const ev of ["mouseenter", "focus"]) b.addEventListener(ev, () => atlas.preview(m.id));
+    for (const ev of ["mouseleave", "blur"]) b.addEventListener(ev, () => atlas.preview(null));
     li.appendChild(b);
     list.appendChild(li);
     buttons.set(m.id, b);
@@ -47,7 +53,7 @@ try {
 
   const tip = $("tip"), stage = $("stage");
   atlas.onHover((id, x, y) => {
-    tip.style.display = id === null ? "none" : "block";
+    tip.classList.toggle("show", id !== null);  // fades out keeping its old label; a new label is set before the next fade-in
     if (id === null) return;
     tip.textContent = MUSCLE_BY_ID[id].label;
     const r = stage.getBoundingClientRect();
@@ -59,4 +65,6 @@ try {
   const banner = $("error");
   banner.textContent = `Could not load the 3D model: ${err instanceof Error ? err.message : String(err)}`;
   banner.style.display = "block";
+} finally {
+  loading.style.display = "none";
 }

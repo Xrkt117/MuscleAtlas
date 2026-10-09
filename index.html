@@ -15,15 +15,24 @@
   #stage { grid-area: stage; position: relative; min-width: 0; min-height: 0; overflow: hidden; }
   #stage canvas { display: block; }
   #selected { position: absolute; left: 12px; bottom: 12px; pointer-events: none; }
-  #tip { display: none; position: absolute; pointer-events: none; padding: 3px 8px; background: #000c; border-radius: 4px; white-space: nowrap; }
+  li button:focus-visible, #clear:focus-visible { outline: 2px solid #ffc857; outline-offset: 1px; }
+  #hint { margin: 4px 0 0; font-size: 12px; color: #999; }
+  #tip { position: absolute; pointer-events: none; padding: 3px 8px; background: #000c; border: 1px solid #fff2; border-radius: 6px; box-shadow: 0 2px 8px #0006; white-space: nowrap; opacity: 0; transition: opacity 120ms; }
+  #tip.show { opacity: 1; }
+  #loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; z-index: 1; background: #222; }
+  #loading-text { padding: 0; }
+  #loading-bar { width: 220px; height: 4px; appearance: none; border: 0; border-radius: 2px; background: #444; overflow: hidden; }
+  #loading-bar::-webkit-progress-bar { background: #444; }
+  #loading-bar::-webkit-progress-value { background: #c87f6e; }
+  #loading-bar::-moz-progress-bar { background: #c87f6e; }
   #error { display: none; position: absolute; inset: 0 0 auto 0; padding: 12px; background: #900; color: #fff; z-index: 1; }
   footer { grid-area: foot; padding: 6px 12px; border-top: 1px solid #444; font-size: 12px; color: #aaa; }
 </style>
 </head>
 <body>
 <header>MuscleAtlas</header>
-<aside><ul id="list"></ul><button id="clear" type="button">Clear</button></aside>
-<main id="stage"><div id="error" role="alert"></div><div id="selected"></div><div id="tip"></div></main>
+<aside><ul id="list"></ul><button id="clear" type="button">Clear</button><p id="hint">Esc or click empty space to deselect</p></aside>
+<main id="stage"><div id="loading" role="status"><div id="loading-text">Loading model...</div><progress id="loading-bar" max="1"></progress></div><div id="error" role="alert"></div><div id="selected" aria-live="polite"></div><div id="tip" aria-hidden="true"></div></main>
 <footer>Model: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0; BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan</footer>
 <script type="module" src="/src/main.ts"></script>
 </body>
