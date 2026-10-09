@@ -12,7 +12,7 @@
 
 ## Layout
 - `src/` - app code (`viewer.ts` is the three.js viewer and `AtlasApi`; `muscle-map.ts` the 15 seed muscles)
-- `public/models/` - the Draco GLB; `public/draco/` - local Draco decoder files
+- `public/models/` - the Draco GLBs (`muscles-draco.glb`, plus `skeleton-draco.glb` as unselectable decoration); `public/draco/` - local Draco decoder files
 - `spike/` - throwaway research (model export and checks); do not build on it
 - `.claude/PRPs/` - PRDs and plans
 

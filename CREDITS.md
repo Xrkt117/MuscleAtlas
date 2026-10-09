@@ -19,3 +19,7 @@ glTF/GLB exported for this project, must be distributed under the same licence, 
 `public/models/muscles-draco.glb` is the derived GLB (muscle layer of the Z-Anatomy male model, Draco
 compressed, placeholder materials). It was produced from the Z-Anatomy `Startup.blend` with
 `spike/export_muscles.py` and is distributed under CC BY-SA 4.0.
+
+`public/models/skeleton-draco.glb` is derived from the same Z-Anatomy / BodyParts3D collection
+("1: Skeletal system"), produced with `spike/export_skeleton.py`, and carries the same CC BY-SA 4.0
+obligation.
