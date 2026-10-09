@@ -1,0 +1,63 @@
+<!doctype html>
+<!-- Throwaway spike viewer. Serve spike/ over HTTP, open view.html?file=data/muscles.glb&hl=Latissimus dorsi muscle.l
+     Console: highlight("Biceps brachii muscle.r")  (Z-Anatomy name; mapped to the three.js-sanitised node name) -->
+<meta charset="utf-8">
+<title>Muscle spike</title>
+<style>body{margin:0;background:#222;color:#eee;font:14px monospace}#stats{position:fixed;top:8px;left:8px}</style>
+<div id="stats">loading...</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+
+const q = new URLSearchParams(location.search);
+const stats = document.getElementById("stats");
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2.5), new THREE.DirectionalLight(0xffffff, 1.5));
+const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.01, 100);
+const controls = new OrbitControls(camera, renderer.domElement);
+
+const loader = new GLTFLoader();
+loader.setDRACOLoader(new DRACOLoader().setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/"));
+const t0 = performance.now();
+const gltf = await loader.loadAsync(q.get("file") || "data/muscles.glb");
+const loadMs = Math.round(performance.now() - t0);
+const base = new THREE.MeshStandardMaterial({ color: 0xc87f6e, roughness: 0.6 });
+gltf.scene.traverse((o) => { if (o.isMesh) o.material = base; });
+scene.add(gltf.scene);
+
+const box = new THREE.Box3().setFromObject(gltf.scene);
+const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
+controls.target.copy(c);
+camera.position.set(c.x, c.y, c.z + size.y * 1.8);  // front view (+Z) after Blender's Y-up conversion
+
+const sanitize = (n) => n.replace(/\s/g, "_").replace(/[[\].:/]/g, "");  // = THREE.PropertyBinding.sanitizeNodeName
+window.highlight = (name) => {
+  const obj = gltf.scene.getObjectByName(sanitize(name));
+  if (!obj) return false;
+  const red = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+  obj.traverse((o) => { if (o.isMesh) o.material = red; });
+  return true;
+};
+const hl = q.get("hl");
+const hlOk = hl ? window.highlight(hl) : null;
+
+let frames = 0, f0 = 0, fps = 0, firstMs = 0;  // FPS measured over 3 s after the first frame (shader compile)
+renderer.setAnimationLoop(() => {
+  controls.update(); renderer.render(scene, camera);
+  if (!f0) { f0 = performance.now(); firstMs = Math.round(f0 - t0) - loadMs; return; }
+  frames++;
+  const dt = performance.now() - f0;
+  if (dt > 3000 && !fps) {
+    fps = Math.round((frames * 1000) / dt);
+    let meshes = 0; gltf.scene.traverse((o) => o.isMesh && meshes++);
+    stats.textContent = `load ${loadMs} ms | first frame +${firstMs} ms | fps ${fps} | meshes ${meshes} | highlight "${hl}": ${hlOk}`;
+    document.title = "DONE " + stats.textContent;
+  }
+});
+</script>
