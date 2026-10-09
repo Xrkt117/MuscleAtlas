@@ -121,7 +121,7 @@ Open app -> click a muscle or type a question -> AI highlights and frames the mu
 |---|-------|-------------|--------|----------|---------|----------|
 | 1 | Model spike | Export Z-Anatomy male muscles to glTF; confirm mesh names | complete | - | - | [model-spike.plan.md](../plans/completed/model-spike.plan.md) |
 | 2 | Viewer | Web viewer with orbit, click-select, highlight, camera focus | complete | - | 1 | [viewer.plan.md](../plans/completed/viewer.plan.md) |
-| 3 | Facts file | Curated muscles, exercises and sources, with source IDs | in-progress | - | 1 | [facts-file.plan.md](../plans/facts-file.plan.md) |
+| 3 | Facts file | Curated muscles, exercises and sources, with source IDs | complete | - | 1 | [facts-file.plan.md](../plans/completed/facts-file.plan.md) |
 | 4 | AI tutor | LLM with scene tools, grounded in the facts file, citation enforcement | pending | - | 2, 3 | - |
 | 5 | Polish and demo | Credits screen, sample questions, demo script | pending | - | 4 | - |
 
