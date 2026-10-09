@@ -41,8 +41,19 @@ try {
     buttons.set(m.id, b);
   }
   $("clear").addEventListener("click", () => select(null));
-  // Click on empty space or an unmapped muscle leaves the current selection alone.
-  atlas.onSelect((id) => { if (id !== null) select(id); });
+  // Click on empty space or an unmapped muscle deselects, same as Esc.
+  atlas.onSelect(select);
+  addEventListener("keydown", (e) => { if (e.key === "Escape") select(null); });
+
+  const tip = $("tip"), stage = $("stage");
+  atlas.onHover((id, x, y) => {
+    tip.style.display = id === null ? "none" : "block";
+    if (id === null) return;
+    tip.textContent = MUSCLE_BY_ID[id].label;
+    const r = stage.getBoundingClientRect();
+    tip.style.left = `${Math.max(0, Math.min(x - r.left + 12, r.width - tip.offsetWidth))}px`;
+    tip.style.top = `${Math.max(0, Math.min(y - r.top + 12, r.height - tip.offsetHeight))}px`;
+  });
 } catch (err) {
   console.error("MuscleAtlas failed to load", err);
   const banner = $("error");
