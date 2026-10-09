@@ -3,7 +3,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { MUSCLE_BY_ID, MUSCLES } from "./muscle-map";
-import { targetAzimuth } from "./camera";
+import { easeInOutCubic, targetAzimuth } from "./camera";
 import { muscleIdForNode, nodeNamesFor, sanitize } from "./muscles";
 
 export interface AtlasApi {
@@ -13,6 +13,8 @@ export interface AtlasApi {
   clear(): void;
   /** Animate the camera to frame the muscle (both sides). Throws on an unknown muscle id. */
   focus(id: string): void;
+  /** Sidebar preview: same hover highlight as the pointer, but ignored while the pointer is on the canvas. null clears it. */
+  preview(id: string | null): void;
   /** Pointer over a seed muscle (or null) with client coordinates, at most once per frame. Returns an unsubscribe. */
   onHover(cb: (id: string | null, clientX: number, clientY: number) => void): () => void;
   /** Canvas click: id of the seed muscle hit, or null for empty space / unmapped muscle. Returns an unsubscribe. */
@@ -21,9 +23,10 @@ export interface AtlasApi {
 
 const FOCUS_MS = 600;
 const CLICK_MAX_PX = 4;
-const HOVER_MS = 50;  // hover raycasts on a hit measured up to ~0.5 s worst case, median 0.4 ms (misses are cheap)
+const HOVER_MS = 50;
 
-export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
+/** onProgress gets the combined loaded fraction of both GLBs, or null while a total is unknown. Resolves after the first rendered frame. */
+export async function createViewer(container: HTMLElement, onProgress?: (fraction: number | null) => void): Promise<AtlasApi> {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   container.appendChild(renderer.domElement);
   const scene = new THREE.Scene();
@@ -43,7 +46,17 @@ export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
   const loader = new GLTFLoader();
   const base = import.meta.env.BASE_URL;
   loader.setDRACOLoader(new DRACOLoader().setDecoderPath(`${base}draco/`));
-  const gltf = await loader.loadAsync(`${base}models/muscles-draco.glb`);
+  const bytes = [{ loaded: 0, total: 0 }, { loaded: 0, total: 0 }];
+  const track = (i: number) => (e: ProgressEvent) => {
+    bytes[i] = { loaded: e.loaded, total: e.total };
+    const total = bytes[0].total + bytes[1].total;
+    onProgress?.(bytes.every((b) => b.total > 0) ? (bytes[0].loaded + bytes[1].loaded) / total : null);
+  };
+  // both files load at once; a failure in either rejects to main.ts
+  const [gltf, skeleton] = await Promise.all([
+    loader.loadAsync(`${base}models/muscles-draco.glb`, track(0)),
+    loader.loadAsync(`${base}models/skeleton-draco.glb`, track(1)),
+  ]);
 
   // Materials are placeholders in the GLB (FINDINGS #2); the viewer owns them. Shared, never disposed.
   const baseMaterial = new THREE.MeshStandardMaterial({ color: 0xc87f6e, roughness: 0.6 });
@@ -54,7 +67,6 @@ export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
   gltf.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) { meshes.push(o as THREE.Mesh); (o as THREE.Mesh).material = baseMaterial; } });
 
   // Skeleton is decoration: own group, added first, never in meshes[] / highlight / clear / picking. A load failure throws to main.ts.
-  const skeleton = await loader.loadAsync(`${base}models/skeleton-draco.glb`);
   const boneMaterial = new THREE.MeshStandardMaterial({ color: 0xe8e0cc, roughness: 0.8 });
   skeleton.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = boneMaterial; });
   const skeletonGroup = new THREE.Group();
@@ -99,6 +111,7 @@ export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
   let anim: Anim | null = null;
   const offset = new THREE.Vector3();
   let lastHoverRay = 0;
+  let pointerOnCanvas = false;
   let pendingMove: { x: number; y: number } | null = null;  // set by pointermove, consumed once per frame
   const hoverListeners = new Set<(id: string | null, x: number, y: number) => void>();
   const setHover = (id: string | null, x: number, y: number) => {
@@ -106,27 +119,63 @@ export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
     hoverListeners.forEach((cb) => cb(id, x, y));
   };
 
-  const raycaster = new THREE.Raycaster();
-  /** Seed muscle id under the pointer, or null. Muscle scene only: the skeleton lives in a separate group, which is what keeps bones unselectable. */
-  const pick = (clientX: number, clientY: number): string | null => {
+  // GPU picking: a raycast against ~1M vertices with no BVH stalled frames for 50-600 ms. Instead render the muscles once into a
+  // 1x1 target through a view offset, each mesh flat-coloured with its muscle index+1 in the red channel (0 = background/unmapped).
+  const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.UnsignedByteType, format: THREE.RGBAFormat });
+  const idMaterials = MUSCLES.map((_, i) => new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB((i + 1) / 255, 0, 0, THREE.LinearSRGBColorSpace) }));
+  const blackMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });  // unmapped muscles still occlude
+  const muscleIndexOf = new Map<THREE.Mesh, number>();
+  for (const m of meshes) {
+    let id: string | undefined;
+    for (let o: THREE.Object3D | null = m; o && !id; o = o.parent) id = muscleIdForNode(o.name);
+    muscleIndexOf.set(m, id ? MUSCLES.findIndex((x) => x.id === id) : -1);
+  }
+  const pixel = new Uint8Array(4);
+  /** Seed muscle id under the pointer, or null. The skeleton is hidden while picking, which is what keeps bones unselectable. */
+  const pick = (clientX: number, clientY: number, warmUp = false): string | null => {
     const r = renderer.domElement.getBoundingClientRect();
-    raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1), camera);
-    const hit = raycaster.intersectObject(gltf.scene, true)[0];
-    let id: string | null = null;
-    for (let o: THREE.Object3D | null = hit?.object ?? null; o && !id; o = o.parent) id = muscleIdForNode(o.name) ?? null;
-    return id;
+    const fullW = renderer.domElement.width, fullH = renderer.domElement.height;
+    const px = Math.floor(((clientX - r.left) / r.width) * fullW), py = Math.floor(((clientY - r.top) / r.height) * fullH);
+    if (px < 0 || py < 0 || px >= fullW || py >= fullH) return null;
+    for (const m of meshes) { const i = muscleIndexOf.get(m)!; m.material = i < 0 ? blackMaterial : idMaterials[i]; }
+    skeletonGroup.visible = false;
+    if (!warmUp) camera.setViewOffset(fullW, fullH, px, py, 1, 1);  // warm-up renders the whole view so every mesh gets its GPU state
+    const prevColor = renderer.getClearColor(new THREE.Color()), prevAlpha = renderer.getClearAlpha();
+    try {
+      renderer.setRenderTarget(target);
+      renderer.setClearColor(0x000000, 0);
+      renderer.clear();
+      renderer.render(scene, camera);
+      renderer.readRenderTargetPixels(target, 0, 0, 1, 1, pixel);
+    } finally {
+      camera.clearViewOffset();
+      renderer.setRenderTarget(null);
+      renderer.setClearColor(prevColor, prevAlpha);
+      skeletonGroup.visible = true;
+      refresh();
+    }
+    return pixel[0] ? MUSCLES[pixel[0] - 1].id : null;
   };
 
+  // Warm-up. One full-view pick now: it uploads the geometry and binds every mesh to the id program, work the first frame needs anyway.
+  // The first partial picks then cost 60-250 ms of CPU each (measured, decays to ~5 ms), so spend them in the loop below,
+  // one per idle frame, instead of making the page load wait for them.
+  const centre = () => { const r = renderer.domElement.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2] as const; };
+  pick(...centre(), true);
+  let warmPicks = 9;
   renderer.setAnimationLoop(() => {
     if (anim) {
-      const k = Math.min((performance.now() - anim.t0) / FOCUS_MS, 1);
+      const raw = Math.min((performance.now() - anim.t0) / FOCUS_MS, 1), k = easeInOutCubic(raw);
       const lerp = (a: number, b: number) => a + (b - a) * k;
       const az = lerp(anim.fromAz, anim.toAz), el = lerp(anim.fromEl, anim.toEl), d = lerp(anim.fromDist, anim.toDist);
       controls.target.lerpVectors(anim.fromTarget, anim.toTarget, k);
       // camera stays on a circle around the target; lerping the position vector would cut through the body
       camera.position.copy(controls.target).add(offset.set(Math.cos(el) * Math.sin(az), Math.sin(el), Math.cos(el) * Math.cos(az)).multiplyScalar(d));
-      if (k === 1) anim = null;
+      if (raw === 1) anim = null;
       pendingMove = null;
+    } else if (!pendingMove && warmPicks > 0) {
+      warmPicks--;
+      pick(...centre());
     } else if (pendingMove && performance.now() - lastHoverRay >= HOVER_MS) {
       const { x, y } = pendingMove;
       pendingMove = null;
@@ -147,7 +196,10 @@ export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
     listeners.forEach((cb) => cb(id));
   });
   renderer.domElement.addEventListener("pointermove", (e) => { if (e.buttons === 0 && !anim) pendingMove = { x: e.clientX, y: e.clientY }; });
-  renderer.domElement.addEventListener("pointerleave", (e) => { pendingMove = null; setHover(null, e.clientX, e.clientY); });
+  renderer.domElement.addEventListener("pointerenter", () => { pointerOnCanvas = true; });
+  renderer.domElement.addEventListener("pointerleave", (e) => { pointerOnCanvas = false; pendingMove = null; setHover(null, e.clientX, e.clientY); });
+
+  await new Promise(requestAnimationFrame);  // the loop above has rendered its first frame by now
 
   return {
     highlight(ids) {
@@ -173,6 +225,12 @@ export async function createViewer(container: HTMLElement): Promise<AtlasApi> {
         fromDist, toDist: dist, fromTarget: controls.target.clone(), toTarget: center,
       };
       if (hovered) setHover(null, 0, 0);  // hover is paused during the animation; don't leave a stale tooltip
+    },
+    preview(id) {
+      if (pointerOnCanvas || id === hovered) return;
+      if (id) nodesFor(id);  // validate
+      hovered = id;
+      refresh();  // no hover listeners: the tooltip is pointer-only
     },
     onHover(cb) {
       hoverListeners.add(cb);
