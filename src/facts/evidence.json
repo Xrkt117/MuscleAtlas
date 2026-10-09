@@ -10,7 +10,7 @@
     "cite": { "sourceId": "baz-valle-2022", "locator": "Abstract", "quote": "there were no differences between moderate and high training volume responses for the quadriceps (p = 0.19) and the biceps brachii (p = 0.59)" }
   },
   {
-    "text": "The Baz-Valle systematic review found that a high training volume was better for muscle mass gains in the triceps brachii (p = 0.01).",
+    "text": "The Baz-Valle systematic review concluded that a high training volume appears to be better for muscle mass gains in the triceps brachii (p = 0.01).",
     "appliesTo": ["triceps_brachii"],
     "cite": { "sourceId": "baz-valle-2022", "locator": "Abstract", "quote": "a high training volume is better to induce muscle mass gains in the triceps brachii (p = 0.01)" }
   },
@@ -20,9 +20,9 @@
     "cite": { "sourceId": "schoenfeld-2017-volume", "locator": "Abstract (PubMed record)", "quote": "The findings indicate a graded dose-response relationship whereby increases in RT volume produce greater gains in muscle hypertrophy." }
   },
   {
-    "text": "The Schoenfeld review's abstract concludes that training frequencies of twice a week promote superior hypertrophic outcomes to once a week. Read from the PubMed abstract only.",
+    "text": "The Schoenfeld review's abstract concludes that, comparing studies on a volume-equated basis, training twice a week promotes superior hypertrophic outcomes to once a week. Read from the PubMed abstract only.",
     "appliesTo": "all",
-    "cite": { "sourceId": "schoenfeld-2016-frequency", "locator": "Abstract, CONCLUSIONS (PubMed record)", "quote": "the current body of evidence indicates that frequencies of training twice a week promote superior hypertrophic outcomes to once a week" }
+    "cite": { "sourceId": "schoenfeld-2016-frequency", "locator": "Abstract, CONCLUSIONS (PubMed record)", "quote": "on a volume-equated basis, the current body of evidence indicates that frequencies of training twice a week promote superior hypertrophic outcomes to once a week" }
   },
   {
     "text": "One study concluded that hamstrings muscle size can be increased more effectively by seated than by prone (lying) leg curl training. Single study.",
@@ -35,7 +35,7 @@
     "cite": { "sourceId": "kinoshita-2023-calf", "locator": "Abstract, Conclusion", "quote": "Standing calf-raise was by far more effective, therefore recommended, than seated calf-raise for inducing muscle hypertrophy of the gastrocnemius" }
   },
   {
-    "text": "In the same study, soleus growth was similar between the two legs (2.1% vs. 2.9%, p = 0.410). Single study.",
+    "text": "In the Kinoshita calf-raise study, soleus growth was similar between the two legs (2.1% vs. 2.9%, p = 0.410). Single study.",
     "appliesTo": ["soleus"],
     "cite": { "sourceId": "kinoshita-2023-calf", "locator": "Abstract, Results", "quote": "similar between legs in the soleus (2.1% vs. 2.9%, p = 0.410)" }
   }
