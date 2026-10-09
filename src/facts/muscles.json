@@ -1,0 +1,398 @@
+{
+  "pectoralis_major": {
+    "actions": [
+      {
+        "text": "Acting alone, it pulls the arm in and forward across the front of the chest and rotates it inward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, II. The Muscles Connecting the Upper Extremity to the Anterior and Lateral Thoracic Walls, Actions (p. 439); Pectoralis major",
+          "quote": "it adducts and draws forward the arm, bringing it across the front of the chest, and at the same time rotates it inward"
+        }
+      },
+      {
+        "text": "With the latissimus dorsi and teres major, it brings a raised arm back down to the side of the chest.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, II. The Muscles Connecting the Upper Extremity to the Anterior and Lateral Thoracic Walls, Actions (p. 439); Pectoralis major, when the arm has been raised",
+          "quote": "conjointly with the Latissimus dorsi and Teres major, depress it to the side of the chest"
+        }
+      }
+    ]
+  },
+  "deltoid": {
+    "actions": [
+      {
+        "text": "Raises the arm out from the side until it is at a right angle to the trunk.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, III. The Muscles and Fasciae of the Shoulder, Deltoideus, Actions (p. 440)",
+          "quote": "The Deltoideus raises the arm from the side, so as to bring it at right angles with the trunk."
+        }
+      },
+      {
+        "text": "Its front fibers, helped by the pectoralis major, draw the arm forward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, III. The Muscles and Fasciae of the Shoulder, Deltoideus, Actions (p. 440)",
+          "quote": "Its anterior fibers, assisted by the Pectoralis major, draw the arm forward"
+        }
+      },
+      {
+        "text": "Its rear fibers, helped by the teres major and latissimus dorsi, draw the arm backward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, III. The Muscles and Fasciae of the Shoulder, Deltoideus, Actions (p. 440)",
+          "quote": "its posterior fibers, aided by the Teres major and Latissimus dorsi, draw it backward"
+        }
+      }
+    ]
+  },
+  "latissimus_dorsi": {
+    "actions": [
+      {
+        "text": "Pulls the upper arm down and back and rotates it inward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, I. The Muscles Connecting the Upper Extremity to the Vertebral Column, Actions (p. 435); Latissimus dorsi",
+          "quote": "When the Latissimus dorsi acts upon the humerus, it depresses and draws it backward, and at the same time rotates it inward."
+        }
+      },
+      {
+        "text": "Gray 1918 calls it the main muscle used for a downward blow, as in chopping down a tree.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, I. The Muscles Connecting the Upper Extremity to the Vertebral Column, Actions (p. 435); Latissimus dorsi",
+          "quote": "It is the muscle which is principally employed in giving a downward blow, as in felling a tree"
+        }
+      },
+      {
+        "text": "With both arms fixed, the two latissimus muscles help hang the body from the arms and pull the trunk forward (Gray's example is climbing).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, I. The Muscles Connecting the Upper Extremity to the Vertebral Column, Actions (p. 435); Latissimus dorsi, with the arms fixed",
+          "quote": "if both arms be fixed, the two muscles may assist the abdominal muscles and Pectorales in suspending and drawing the trunk forward"
+        }
+      }
+    ]
+  },
+  "trapezius": {
+    "actions": [
+      {
+        "text": "The whole trapezius pulls the shoulder blade back and braces the shoulder back.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, I. The Muscles Connecting the Upper Extremity to the Vertebral Column, Actions (p. 435); Trapezius",
+          "quote": "When the whole Trapezius is in action it retracts the scapula and braces back the shoulder"
+        }
+      },
+      {
+        "text": "With the head fixed, its upper part raises the point of the shoulder, as when supporting weights.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, I. The Muscles Connecting the Upper Extremity to the Vertebral Column, Actions (p. 435); Trapezius, upper part",
+          "quote": "if the head be fixed, the upper part of the muscle will elevate the point of the shoulder, as in supporting weights"
+        }
+      },
+      {
+        "text": "Its middle and lower fibers rotate the shoulder blade so that the top of the shoulder (acromion) rises.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, I. The Muscles Connecting the Upper Extremity to the Vertebral Column, Actions (p. 435); Trapezius, middle and lower fibers",
+          "quote": "The middle and lower fibers of the muscle rotate the scapula, causing elevation of the acromion."
+        }
+      }
+    ]
+  },
+  "serratus_anterior": {
+    "actions": [
+      {
+        "text": "Pulls the shoulder blade forward and raises its inner (spine-side) border.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, II. The Muscles Connecting the Upper Extremity to the Anterior and Lateral Thoracic Walls, Actions (p. 439); Serratus anterior",
+          "quote": "The Serratus anterior, as a whole, carries the scapula forward, and at the same time raises the vertebral border of the bone."
+        }
+      },
+      {
+        "text": "It is involved in pushing.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, II. The Muscles Connecting the Upper Extremity to the Anterior and Lateral Thoracic Walls, Actions (p. 439); Serratus anterior",
+          "quote": "It is therefore concerned in the action of pushing."
+        }
+      },
+      {
+        "text": "Together with the trapezius, it rotates the shoulder blade to raise the arm to nearly vertical.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, II. The Muscles Connecting the Upper Extremity to the Anterior and Lateral Thoracic Walls, Actions (p. 439); Serratus anterior, after the deltoid has raised the arm to a right angle",
+          "quote": "the Serratus anterior and the Trapezius, by rotating the scapula, raise the arm into an almost vertical position"
+        }
+      }
+    ]
+  },
+  "biceps_brachii": {
+    "actions": [
+      {
+        "text": "Bends the elbow and, to a lesser extent, flexes the shoulder; it is also a powerful supinator (turns the palm up).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, IV. The Muscles and Fasciae of the Arm, Actions (p. 444); Biceps brachii",
+          "quote": "The Biceps brachii is a flexor of the elbow and, to a less extent, of the shoulder; it is also a powerful supinator"
+        }
+      },
+      {
+        "text": "With the forearm fixed, the biceps and brachialis pull the upper arm toward the forearm, as in climbing.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, IV. The Muscles and Fasciae of the Arm, Actions (p. 444); Biceps brachii and Brachialis, with the forearm fixed",
+          "quote": "When the forearm is fixed, the Biceps brachii and Brachialis flex the arm upon the forearm, as in efforts of climbing."
+        }
+      }
+    ]
+  },
+  "triceps_brachii": {
+    "actions": [
+      {
+        "text": "The main muscle that straightens the elbow; it directly opposes the biceps and brachialis.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, IV. The Muscles and Fasciae of the Arm, Triceps brachii, Actions (p. 445)",
+          "quote": "The Triceps brachii is the great extensor muscle of the forearm, and is the direct antagonist of the Biceps brachii and Brachialis."
+        }
+      },
+      {
+        "text": "With the arm extended, its long head can help the teres major and latissimus dorsi draw the upper arm backward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, IV. The Muscles and Fasciae of the Arm, Triceps brachii, Actions (p. 445); long head",
+          "quote": "When the arm is extended, the long head of the muscle may assist the Teres major and Latissimus dorsi in drawing the humerus backward"
+        }
+      }
+    ]
+  },
+  "rectus_abdominis": {
+    "actions": [
+      {
+        "text": "Working from below, the rectus abdominis pulls the rib cage down and so bends the spine forward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 418); the Recti",
+          "quote": "The Recti, acting from below, depress the thorax, and consequently flex the vertebral column"
+        }
+      },
+      {
+        "text": "Working from above, it tilts the pelvis up toward the spine (flexes the pelvis on the vertebral column).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 418); the Recti",
+          "quote": "when acting from above, they flex the pelvis upon the vertebral column."
+        }
+      },
+      {
+        "text": "With the pelvis fixed, the abdominal muscles of both sides (as a group) bend the trunk straight forward. Group statement.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 417); group statement, for the antero-lateral abdominal muscles together",
+          "quote": "If the pelvis alone be fixed, the thorax is bent directly forward, when the muscles of both sides act"
+        }
+      }
+    ]
+  },
+  "gluteus_maximus": {
+    "actions": [
+      {
+        "text": "Extends the hip, bringing a bent thigh back into line with the body.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 3. The Muscles of the Gluteal Region, Actions (p. 478); Glutaeus maximus, taking its fixed point from the pelvis",
+          "quote": "it extends the femur and brings the bent thigh into a line with the body"
+        }
+      },
+      {
+        "text": "Its most powerful action is bringing the body back upright after bending over, by pulling the pelvis back.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 3. The Muscles of the Gluteal Region, Actions (p. 478); Glutaeus maximus",
+          "quote": "Its most powerful action is to cause the body to regain the erect position after stooping, by drawing the pelvis backward"
+        }
+      },
+      {
+        "text": "Its lower part also adducts and rotates the thigh outward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 3. The Muscles of the Gluteal Region, Actions (p. 478); Glutaeus maximus, lower part",
+          "quote": "The lower part of the muscle also acts as an adductor and external rotator"
+        }
+      }
+    ]
+  },
+  "quadriceps_femoris": {
+    "actions": [
+      {
+        "text": "Straightens the knee.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 1. The Anterior Femoral Muscles, Actions (p. 471); Quadriceps femoris",
+          "quote": "The Quadriceps femoris extends the leg upon the thigh."
+        }
+      },
+      {
+        "text": "The rectus femoris part also helps flex the hip (or, with the thigh fixed, tilts the pelvis forward).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 1. The Anterior Femoral Muscles, Actions (p. 471); Rectus femoris (the sentence's subject is the Rectus femoris)",
+          "quote": "It also assists in flexing the thigh on the pelvis, or if the thigh be fixed it will flex the pelvis."
+        }
+      },
+      {
+        "text": "The vastus medialis pulls the kneecap inward as well as upward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 1. The Anterior Femoral Muscles, Actions (p. 471); Vastus medialis",
+          "quote": "The Vastus medialis draws the patella medialward as well as upward."
+        }
+      }
+    ]
+  },
+  "biceps_femoris": {
+    "actions": [
+      {
+        "text": "The hamstrings (as a group) bend the knee. Group statement, not specific to this muscle.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); group statement, for all three hamstrings together",
+          "quote": "The hamstring muscles flex the leg upon the thigh."
+        }
+      },
+      {
+        "text": "With the knee half bent, the biceps femoris rotates the lower leg slightly outward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); Biceps femoris",
+          "quote": "When the knee is semiflexed, the Biceps femoris in consequence of its oblique direction rotates the leg slightly outward"
+        }
+      },
+      {
+        "text": "Working from below, the hamstrings (as a group) support the pelvis on the thigh bone and pull the trunk straight back, as when rising from a stooped position. Group statement.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); group statement, for all three hamstrings together",
+          "quote": "these muscles serve to support the pelvis upon the head of the femur, and to draw the trunk directly backward"
+        }
+      }
+    ]
+  },
+  "semitendinosus": {
+    "actions": [
+      {
+        "text": "The hamstrings (as a group) bend the knee. Group statement, not specific to this muscle.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); group statement, for all three hamstrings together",
+          "quote": "The hamstring muscles flex the leg upon the thigh."
+        }
+      },
+      {
+        "text": "With the knee half bent, the semitendinosus, and to a slight extent the semimembranosus, rotate the lower leg inward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); sentence names semitendinosus and semimembranosus",
+          "quote": "the Semitendinosus, and to a slight extent the Semimembranosus, rotate the leg inward"
+        }
+      },
+      {
+        "text": "Working from below, the hamstrings (as a group) support the pelvis on the thigh bone and pull the trunk straight back, as when rising from a stooped position. Group statement.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); group statement, for all three hamstrings together",
+          "quote": "these muscles serve to support the pelvis upon the head of the femur, and to draw the trunk directly backward"
+        }
+      }
+    ]
+  },
+  "semimembranosus": {
+    "actions": [
+      {
+        "text": "The hamstrings (as a group) bend the knee. Group statement, not specific to this muscle.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); group statement, for all three hamstrings together",
+          "quote": "The hamstring muscles flex the leg upon the thigh."
+        }
+      },
+      {
+        "text": "With the knee half bent, the semitendinosus, and to a slight extent the semimembranosus, rotate the lower leg inward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); sentence names semitendinosus and semimembranosus",
+          "quote": "the Semitendinosus, and to a slight extent the Semimembranosus, rotate the leg inward"
+        }
+      },
+      {
+        "text": "Working from below, the hamstrings (as a group) support the pelvis on the thigh bone and pull the trunk straight back, as when rising from a stooped position. Group statement.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 4. The Posterior Femoral Muscles (Hamstring Muscles), Actions (p. 480); group statement, for all three hamstrings together",
+          "quote": "these muscles serve to support the pelvis upon the head of the femur, and to draw the trunk directly backward"
+        }
+      }
+    ]
+  },
+  "gastrocnemius": {
+    "actions": [
+      {
+        "text": "The calf muscles (as a group) are the main muscles that point the foot down at the ankle (plantar flexion; Gray 1918 calls this 'extension' of the foot).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Posterior Crural Muscles, Superficial Group, Actions (p. 483); group statement, for the calf muscles together",
+          "quote": "The muscles of the calf are the chief extensors of the foot at the ankle-joint."
+        }
+      },
+      {
+        "text": "In walking, the calf muscles (as a group) lift the heel off the ground.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Posterior Crural Muscles, Superficial Group, Actions (p. 483); group statement, for the calf muscles together",
+          "quote": "In walking, these muscles raise the heel from the ground"
+        }
+      },
+      {
+        "text": "Working from below, the gastrocnemius helps bend the knee (flexes the thigh bone on the shin bone).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Posterior Crural Muscles, Superficial Group, Actions (p. 483); Gastrocnemius",
+          "quote": "The Gastrocnemius, acting from below, serves to flex the femur upon the tibia"
+        }
+      }
+    ]
+  },
+  "soleus": {
+    "actions": [
+      {
+        "text": "The calf muscles (as a group) are the main muscles that point the foot down at the ankle (plantar flexion; Gray 1918 calls this 'extension' of the foot).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Posterior Crural Muscles, Superficial Group, Actions (p. 483); group statement, for the calf muscles together",
+          "quote": "The muscles of the calf are the chief extensors of the foot at the ankle-joint."
+        }
+      },
+      {
+        "text": "In walking, the calf muscles (as a group) lift the heel off the ground.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Posterior Crural Muscles, Superficial Group, Actions (p. 483); group statement, for the calf muscles together",
+          "quote": "In walking, these muscles raise the heel from the ground"
+        }
+      },
+      {
+        "text": "In standing, the soleus steadies the lower leg over the foot and keeps the body from falling forward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Posterior Crural Muscles, Superficial Group, Actions (p. 483); Soleus",
+          "quote": "In standing, the Soleus, taking its fixed point from below, steadies the leg upon the foot and prevents the body from falling forward."
+        }
+      }
+    ]
+  }
+}
