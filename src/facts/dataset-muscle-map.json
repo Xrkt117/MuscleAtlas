@@ -1,5 +1,5 @@
 {
-  "note": "free-exercise-db names muscle groups, not individual muscles or muscle heads. A mapping row means only that the dataset group covers the listed MuscleAtlas group. It is not evidence that every exercise affects every included muscle equally.",
+  "note": "free-exercise-db names muscle GROUPS (17 names in primaryMuscles/secondaryMuscles), not individual muscles or muscle heads. A mapping row says only that the dataset group covers the listed MuscleAtlas group; it is not evidence about any single muscle or head inside the group, nor that every exercise affects every included muscle equally. Dataset names with no mapped muscle map to [].",
   "mapping": {
     "abdominals": {
       "muscleIds": [
@@ -46,7 +46,7 @@
       "muscleIds": [
         "gluteus_maximus"
       ],
-      "why": "Gluteal group; gluteus maximus is the currently mapped gluteal muscle."
+      "why": "Gluteal group; gluteus maximus is our only gluteal muscle (the group also covers gluteus medius/minimus, which we do not track)."
     },
     "hamstrings": {
       "muscleIds": [
@@ -84,7 +84,7 @@
       "muscleIds": [
         "deltoid"
       ],
-      "why": "Shoulder group; deltoid is the currently mapped shoulder muscle."
+      "why": "Shoulder group; deltoid is our only shoulder muscle (the group may also cover rotator cuff muscles we do not track)."
     },
     "traps": {
       "muscleIds": [
