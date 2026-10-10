@@ -6,3 +6,5 @@ read-only reviewer, in three roles (CLAUDE.md, "Model routing"): the cold review
 (`scripts/codex-adversarial.sh`, gpt-5.6-sol, which tries to break what the change claims), and the second
 opinion (`scripts/codex-opinion.sh`, gpt-6-astra, which argues the case against a settled document). In
 every role it never edits a file. Tie each finding to a file and line, and a concrete scenario.
+
+Commits solely pushed by Spertia allow for direct Codex implementation, following extensive review and testing.
