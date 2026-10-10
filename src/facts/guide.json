@@ -1,0 +1,153 @@
+[
+  {
+    "id": "training-stimulus",
+    "title": "Training stimulus",
+    "claims": [
+      {
+        "id": "mechanical-tension",
+        "text": "Progressive resistance training creates mechanical tension, the main non-drug training stimulus for increasing muscle mass.",
+        "cite": {
+          "sourceId": "van-every-2025",
+          "locator": "Section 1, Introduction",
+          "quote": "mechanical tension through progressive overload with RET is the most potent non-pharmacological stimulus and external variable for increasing skeletal muscle mass"
+        }
+      },
+      {
+        "id": "progressive-overload",
+        "text": "Progressive overload means gradually and systematically increasing training stress over time.",
+        "badge": "Clinic guide",
+        "cite": {
+          "sourceId": "performance-medicine-2025",
+          "locator": "Resistance Training Variables Explained, Core Principles of Resistance Training",
+          "quote": "This involves a gradual and systematic increase in training stress over time."
+        }
+      }
+    ]
+  },
+  {
+    "id": "loading",
+    "title": "Rep range and loading",
+    "claims": [
+      {
+        "id": "moderate-load-template",
+        "text": "About 6–12 reps, 3–6 sets and 60–80% of one-rep max is a practical moderate-load template.",
+        "cite": {
+          "sourceId": "krzysztofik-2019",
+          "locator": "Section 4, Training Principles for Muscle Hypertrophy",
+          "quote": "Implementation of training with moderate number of repetitions (~6−12), multiple sets (3−6), moderate loads (60−80% 1RM), and short rest intervals (60 s)"
+        }
+      },
+      {
+        "id": "wide-loading-range",
+        "text": "There is no single required hypertrophy rep zone: similar whole-muscle growth can occur across loads of roughly 30% 1RM and above.",
+        "cite": {
+          "sourceId": "schoenfeld-2021-loading",
+          "locator": "Section 3, Hypertrophy, Conclusions and Practical Applications",
+          "quote": "similar whole muscle growth (i.e., muscle thickness, CSA) can be achieved across a wide spectrum of loading ranges ≥ ~30% 1RM"
+        }
+      },
+      {
+        "id": "cambridge-model-load",
+        "text": "A Cambridge mathematical model estimated 70% of maximum load as more efficient than lighter loading; this is model-based, not a universal prescription.",
+        "badge": "Model estimate",
+        "cite": {
+          "sourceId": "cambridge-2021-model",
+          "locator": "Paragraph quoting Eugene Terentjev",
+          "quote": "our model suggests that loads of 70% are a more efficient method of stimulating growth"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exercise-choice",
+    "title": "Exercise overview",
+    "claims": [
+      {
+        "id": "resistance-options",
+        "text": "Resistance can come from free weights, body weight, bands or machines.",
+        "cite": {
+          "sourceId": "concordia-2020",
+          "locator": "Truth #2: You Need to Challenge Your Muscles",
+          "quote": "The resistance can come from lifting weights, using your body as a weight, pulling resistance bands, or pushing and pulling machines like gym equipment."
+        }
+      },
+      {
+        "id": "compound-definition",
+        "text": "Compound exercises move multiple joints and train several muscle groups at once.",
+        "badge": "Clinic guide",
+        "cite": {
+          "sourceId": "performance-medicine-2025",
+          "locator": "Exercise and Equipment Selection, Compound vs. Isolation Exercises",
+          "quote": "Compound exercises are multi-joint movements that engage multiple muscle groups simultaneously, such as the squat, deadlift, bench press, overhead press, and row."
+        }
+      },
+      {
+        "id": "isolation-definition",
+        "text": "Isolation exercises are single-joint movements used to target a particular muscle group more directly.",
+        "badge": "Clinic guide",
+        "cite": {
+          "sourceId": "performance-medicine-2025",
+          "locator": "Exercise and Equipment Selection, Compound vs. Isolation Exercises",
+          "quote": "Isolation exercises are single-joint movements that target a specific muscle group, such as the bicep curl, triceps extension, leg extension, or calf raise."
+        }
+      }
+    ]
+  },
+  {
+    "id": "frequency",
+    "title": "Frequency and recovery",
+    "claims": [
+      {
+        "id": "weekly-frequency",
+        "text": "A general starting point is to train every major muscle group two or three times per week.",
+        "cite": {
+          "sourceId": "concordia-2020",
+          "locator": "Truth #2: You Need to Challenge Your Muscles",
+          "quote": "Aim to work all major muscle groups — chest, back, arms, legs, shoulders, and core — 2 to 3 times each week."
+        }
+      },
+      {
+        "id": "between-session-recovery",
+        "text": "Allow roughly 48–72 hours before challenging the same muscle group again.",
+        "cite": {
+          "sourceId": "concordia-2020",
+          "locator": "Truth #3: Muscles Grow When You Rest",
+          "quote": "recommend that you take 48 to 72 hours between resistance training workouts that challenge the same muscle group."
+        }
+      }
+    ]
+  },
+  {
+    "id": "nutrition-sleep",
+    "title": "Diet and sleep",
+    "claims": [
+      {
+        "id": "calorie-support",
+        "text": "Muscle gain requires enough energy; eating a little more than usual can support growth.",
+        "cite": {
+          "sourceId": "concordia-2020",
+          "locator": "Truth #4: Muscles Need the Right Fuel",
+          "quote": "You must eat enough calories; a little more than when you are not working on building muscles."
+        }
+      },
+      {
+        "id": "protein-with-training",
+        "text": "Pair resistance training with adequate dietary protein to support muscle protein synthesis.",
+        "cite": {
+          "sourceId": "krzysztofik-2019",
+          "locator": "Section 1, Introduction",
+          "quote": "protein intake alongside RT is a potent stimulus for muscle protein synthesis."
+        }
+      },
+      {
+        "id": "sleep-duration",
+        "text": "Most people should aim for 7–9 hours of quality sleep to support muscle-building recovery.",
+        "cite": {
+          "sourceId": "concordia-2020",
+          "locator": "Truth #3: Muscles Grow When You Rest",
+          "quote": "Most people need 7–9 h of quality sleep to support their muscle-building goals."
+        }
+      }
+    ]
+  }
+]

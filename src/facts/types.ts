@@ -2,7 +2,7 @@ export interface Source {
   id: string;
   /** Short label for inline citations, e.g. "Gray 1918". */
   short: string;
-  kind: "textbook" | "paper" | "dataset";
+  kind: "textbook" | "paper" | "dataset" | "article";
   title: string;
   authors: string;
   year: number;
@@ -21,6 +21,7 @@ export interface ExerciseLink {
   datasetPrimary: string[];
   datasetSecondary: string[];
   role: "primary" | "secondary";
+  mechanic: "compound" | "isolation";
   cite: Cite;
 }
 export interface EvidenceClaim {
@@ -34,7 +35,16 @@ export interface EvidenceClaim {
   cite: Cite;
 }
 
+export interface GuideClaim {
+  id: string;
+  text: string;
+  badge?: "Model estimate" | "Clinic guide";
+  cite: Cite;
+}
+export interface GuideSection { id: string; title: string; claims: GuideClaim[] }
+
 export type MusclesFile = Record<string, { actions: ActionClaim[] }>;
 export type ExercisesFile = Record<string, ExerciseLink[]>;
 export type EvidenceFile = EvidenceClaim[];
+export type GuideFile = GuideSection[];
 export type SourcesFile = Source[];

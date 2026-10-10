@@ -80,5 +80,74 @@
     "doi": "10.3389/fphys.2023.1272106",
     "licence": "This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY).",
     "readOn": "2026-10-09"
+  },
+  {
+    "id": "krzysztofik-2019",
+    "short": "Krzysztofik 2019",
+    "kind": "paper",
+    "title": "Maximizing Muscle Hypertrophy: A Systematic Review of Advanced Resistance Training Techniques and Methods",
+    "authors": "Krzysztofik M, Wilk M, Wojdała G, Gołaś A",
+    "year": 2019,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6950543/",
+    "doi": "10.3390/ijerph16244897",
+    "licence": "Creative Commons Attribution 4.0 International (CC BY 4.0).",
+    "readOn": "2026-10-10"
+  },
+  {
+    "id": "cambridge-2021-model",
+    "short": "Cambridge 2021",
+    "kind": "article",
+    "title": "Mathematical model predicts best way to build muscle",
+    "authors": "University of Cambridge",
+    "year": 2021,
+    "url": "https://www.cam.ac.uk/research/news/mathematical-model-predicts-best-way-to-build-muscle",
+    "licence": "No reuse licence is stated on the article page; © University of Cambridge.",
+    "readOn": "2026-10-10"
+  },
+  {
+    "id": "performance-medicine-2025",
+    "short": "Performance Medicine 2025",
+    "kind": "article",
+    "title": "Strength Training: A Comprehensive Guide to Using Science to Build Muscles",
+    "authors": "Performance Medicine Institute",
+    "year": 2025,
+    "url": "https://www.performancemedinst.com/edu/st-sbm/?pl=1678&plp=60129",
+    "licence": "No reuse licence is stated on the article page; brief attributed quotations are used.",
+    "readOn": "2026-10-10"
+  },
+  {
+    "id": "schoenfeld-2021-loading",
+    "short": "Schoenfeld 2021",
+    "kind": "paper",
+    "title": "Loading Recommendations for Muscle Strength, Hypertrophy, and Local Endurance: A Re-Examination of the Repetition Continuum",
+    "authors": "Schoenfeld BJ, Grgic J, Van Every DW, Plotkin DL",
+    "year": 2021,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7927075/",
+    "doi": "10.3390/sports9020032",
+    "licence": "Creative Commons Attribution 4.0 International (CC BY 4.0).",
+    "readOn": "2026-10-10"
+  },
+  {
+    "id": "van-every-2025",
+    "short": "Van Every 2025",
+    "kind": "paper",
+    "title": "Load-induced human skeletal muscle hypertrophy: Mechanisms, myths, and misconceptions",
+    "authors": "Van Every DW, Lees MJ, Wilson B, Nippard J, Phillips SM",
+    "year": 2025,
+    "url": "https://www.sciencedirect.com/science/article/pii/S2095254625000869",
+    "doi": "10.1016/j.jshs.2025.101104",
+    "licence": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).",
+    "readOn": "2026-10-10"
+  },
+  {
+    "id": "concordia-2020",
+    "short": "Concordia 2020",
+    "kind": "article",
+    "title": "The 4 truths about building muscle",
+    "authors": "Concordia University Health Services",
+    "year": 2020,
+    "url": "https://www.concordia.ca/cunews/offices/provost/health/topics/healthy-eating/4-truths-about-building-muscle.html",
+    "licence": "No reuse licence is stated on the article page; © Concordia University.",
+    "readOn": "2026-10-10"
   }
 ]

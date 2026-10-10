@@ -2,14 +2,16 @@ import { describe, expect, it } from "vitest";
 import { MUSCLES } from "../muscle-map";
 import evidenceJson from "./evidence.json";
 import exercisesJson from "./exercises.json";
+import guideJson from "./guide.json";
 import musclesJson from "./muscles.json";
 import sourcesJson from "./sources.json";
-import type { Cite, EvidenceFile, ExercisesFile, MusclesFile, SourcesFile } from "./types";
+import type { Cite, EvidenceFile, ExercisesFile, GuideFile, MusclesFile, SourcesFile } from "./types";
 
 const sources = sourcesJson as SourcesFile;
 const muscles = musclesJson as MusclesFile;
 const exercises = exercisesJson as ExercisesFile;
 const evidence = evidenceJson as EvidenceFile;
+const guide = guideJson as GuideFile;
 const ids = MUSCLES.map((m) => m.id);
 
 // The dataset has no group specific enough to support exercise links for these muscles without guessing.
@@ -19,6 +21,7 @@ const cites: Cite[] = [
   ...Object.values(muscles).flatMap((m) => m.actions.map((a) => a.cite)),
   ...Object.values(exercises).flatMap((l) => l.map((e) => e.cite)),
   ...evidence.map((e) => e.cite),
+  ...guide.flatMap((section) => section.claims.map((claim) => claim.cite)),
 ];
 
 describe("facts data", () => {
@@ -54,6 +57,10 @@ describe("facts data", () => {
       const d = list.map((e) => e.datasetId);
       expect(new Set(d).size, mid).toBe(d.length);
     }
+    const sectionIds = guide.map((section) => section.id);
+    const claimIds = guide.flatMap((section) => section.claims.map((claim) => claim.id));
+    expect(new Set(sectionIds).size).toBe(sectionIds.length);
+    expect(new Set(claimIds).size).toBe(claimIds.length);
   });
 
   it("every locator is non-empty and every quote has at most 25 words", () => {
@@ -78,6 +85,17 @@ describe("facts data", () => {
       if (KNOWN_EXERCISE_GAPS.includes(id)) expect(n, id).toBe(0);
       else expect(n, id).toBeGreaterThanOrEqual(2);
     }
+  });
+
+  it("every exercise has a supported mechanic classification", () => {
+    for (const [id, list] of Object.entries(exercises)) {
+      for (const exercise of list) expect(["compound", "isolation"], `${id}: ${exercise.name}`).toContain(exercise.mechanic);
+    }
+  });
+
+  it("the guide covers the requested training topics", () => {
+    expect(guide.map((section) => section.id)).toEqual(["training-stimulus", "loading", "exercise-choice", "frequency", "nutrition-sleep"]);
+    for (const section of guide) expect(section.claims.length, section.id).toBeGreaterThan(0);
   });
 
   it("evidence appliesTo is 'all' or only seed ids", () => {

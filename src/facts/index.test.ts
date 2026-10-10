@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { MUSCLES } from "../muscle-map";
-import { formatCitation, getFacts, getSource } from "./index";
+import { formatCitation, getFacts, getSource, getSources } from "./index";
 
 describe("facts api", () => {
   it("getFacts throws on an unknown id", () => {
@@ -21,6 +21,11 @@ describe("facts api", () => {
 
   it("getSource throws on an unknown id", () => {
     expect(() => getSource("nope")).toThrow("Unknown source id: nope");
+  });
+
+  it("the complete source registry is available to the UI", () => {
+    expect(getSources().length).toBeGreaterThan(10);
+    expect(getSources().map((source) => source.id)).toContain("free-exercise-db");
   });
 
   it("formatCitation includes the source title and the locator", () => {

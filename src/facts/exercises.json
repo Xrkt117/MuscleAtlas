@@ -15,7 +15,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Pushups",
         "quote": "chest"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Dumbbell_Bench_Press",
@@ -32,7 +33,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Dumbbell_Bench_Press",
         "quote": "chest"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Incline_Push-Up",
@@ -49,7 +51,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Incline_Push-Up",
         "quote": "chest"
-      }
+      },
+      "mechanic": "compound"
     }
   ],
   "deltoid": [
@@ -65,7 +68,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Side_Lateral_Raise",
         "quote": "shoulders"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Cable_Shoulder_Press",
@@ -81,7 +85,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Cable_Shoulder_Press",
         "quote": "shoulders"
-      }
+      },
+      "mechanic": "compound"
     }
   ],
   "latissimus_dorsi": [
@@ -101,7 +106,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Wide-Grip_Lat_Pulldown",
         "quote": "lats"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Pullups",
@@ -118,7 +124,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Pullups",
         "quote": "lats"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Straight-Arm_Pulldown",
@@ -132,7 +139,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Straight-Arm_Pulldown",
         "quote": "lats"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "trapezius": [
@@ -148,7 +156,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Dumbbell_Shrug",
         "quote": "traps"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Barbell_Shrug",
@@ -162,7 +171,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Barbell_Shrug",
         "quote": "traps"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "biceps_brachii": [
@@ -180,7 +190,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Dumbbell_Bicep_Curl",
         "quote": "biceps"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Barbell_Curl",
@@ -196,7 +207,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Barbell_Curl",
         "quote": "biceps"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Hammer_Curls",
@@ -210,7 +222,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Hammer_Curls",
         "quote": "biceps"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "triceps_brachii": [
@@ -226,7 +239,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Triceps_Pushdown",
         "quote": "triceps"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Dips_-_Triceps_Version",
@@ -243,7 +257,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Dips_-_Triceps_Version",
         "quote": "triceps"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Standing_Dumbbell_Triceps_Extension",
@@ -257,122 +272,130 @@
         "sourceId": "free-exercise-db",
         "locator": "Standing_Dumbbell_Triceps_Extension",
         "quote": "triceps"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
-"rectus_abdominis": [
-  {
-    "datasetId": "Crunches",
-    "name": "Crunches",
-    "datasetPrimary": [
-      "abdominals"
-    ],
-    "datasetSecondary": [],
-    "role": "primary",
-    "cite": {
-      "sourceId": "free-exercise-db",
-      "locator": "Crunches",
-      "quote": "abdominals"
+  "rectus_abdominis": [
+    {
+      "datasetId": "Crunches",
+      "name": "Crunches",
+      "datasetPrimary": [
+        "abdominals"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Crunches",
+        "quote": "abdominals"
+      },
+      "mechanic": "isolation"
+    },
+    {
+      "datasetId": "Plank",
+      "name": "Plank",
+      "datasetPrimary": [
+        "abdominals"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Plank",
+        "quote": "abdominals"
+      },
+      "mechanic": "isolation"
+    },
+    {
+      "datasetId": "Reverse_Crunch",
+      "name": "Reverse Crunch",
+      "datasetPrimary": [
+        "abdominals"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Reverse_Crunch",
+        "quote": "abdominals"
+      },
+      "mechanic": "isolation"
     }
-  },
-  {
-    "datasetId": "Plank",
-    "name": "Plank",
-    "datasetPrimary": [
-      "abdominals"
-    ],
-    "datasetSecondary": [],
-    "role": "primary",
-    "cite": {
-      "sourceId": "free-exercise-db",
-      "locator": "Plank",
-      "quote": "abdominals"
+  ],
+  "forearm_muscles": [
+    {
+      "datasetId": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+      "name": "Palms-Up Barbell Wrist Curl Over A Bench",
+      "datasetPrimary": [
+        "forearms"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+        "quote": "forearms"
+      },
+      "mechanic": "isolation"
+    },
+    {
+      "datasetId": "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
+      "name": "Palms-Down Dumbbell Wrist Curl Over A Bench",
+      "datasetPrimary": [
+        "forearms"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
+        "quote": "forearms"
+      },
+      "mechanic": "isolation"
     }
-  },
-  {
-    "datasetId": "Reverse_Crunch",
-    "name": "Reverse Crunch",
-    "datasetPrimary": [
-      "abdominals"
-    ],
-    "datasetSecondary": [],
-    "role": "primary",
-    "cite": {
-      "sourceId": "free-exercise-db",
-      "locator": "Reverse_Crunch",
-      "quote": "abdominals"
+  ],
+  "hip_adductors": [
+    {
+      "datasetId": "Thigh_Adductor",
+      "name": "Thigh Adductor",
+      "datasetPrimary": [
+        "adductors"
+      ],
+      "datasetSecondary": [
+        "glutes",
+        "hamstrings"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Thigh_Adductor",
+        "quote": "adductors"
+      },
+      "mechanic": "isolation"
+    },
+    {
+      "datasetId": "Lateral_Bound",
+      "name": "Lateral Bound",
+      "datasetPrimary": [
+        "adductors"
+      ],
+      "datasetSecondary": [
+        "abductors",
+        "calves",
+        "glutes",
+        "hamstrings",
+        "quadriceps"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Lateral_Bound",
+        "quote": "adductors"
+      },
+      "mechanic": "compound"
     }
-  }
-],
-"forearm_muscles": [
-  {
-    "datasetId": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
-    "name": "Palms-Up Barbell Wrist Curl Over A Bench",
-    "datasetPrimary": [
-      "forearms"
-    ],
-    "datasetSecondary": [],
-    "role": "primary",
-    "cite": {
-      "sourceId": "free-exercise-db",
-      "locator": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
-      "quote": "forearms"
-    }
-  },
-  {
-    "datasetId": "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
-    "name": "Palms-Down Dumbbell Wrist Curl Over A Bench",
-    "datasetPrimary": [
-      "forearms"
-    ],
-    "datasetSecondary": [],
-    "role": "primary",
-    "cite": {
-      "sourceId": "free-exercise-db",
-      "locator": "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
-      "quote": "forearms"
-    }
-  }
-],
-"hip_adductors": [
-  {
-    "datasetId": "Thigh_Adductor",
-    "name": "Thigh Adductor",
-    "datasetPrimary": [
-      "adductors"
-    ],
-    "datasetSecondary": [
-      "glutes",
-      "hamstrings"
-    ],
-    "role": "primary",
-    "cite": {
-      "sourceId": "free-exercise-db",
-      "locator": "Thigh_Adductor",
-      "quote": "adductors"
-    }
-  },
-  {
-    "datasetId": "Lateral_Bound",
-    "name": "Lateral Bound",
-    "datasetPrimary": [
-      "adductors"
-    ],
-    "datasetSecondary": [
-      "abductors",
-      "calves",
-      "glutes",
-      "hamstrings",
-      "quadriceps"
-    ],
-    "role": "primary",
-    "cite": {
-      "sourceId": "free-exercise-db",
-      "locator": "Lateral_Bound",
-      "quote": "adductors"
-    }
-  }
-],
+  ],
   "gluteus_maximus": [
     {
       "datasetId": "Butt_Lift_Bridge",
@@ -388,7 +411,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Butt_Lift_Bridge",
         "quote": "glutes"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Single_Leg_Glute_Bridge",
@@ -404,7 +428,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Single_Leg_Glute_Bridge",
         "quote": "glutes"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Pull_Through",
@@ -421,7 +446,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Pull_Through",
         "quote": "glutes"
-      }
+      },
+      "mechanic": "compound"
     }
   ],
   "quadriceps_femoris": [
@@ -440,7 +466,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Bodyweight_Squat",
         "quote": "quadriceps"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Goblet_Squat",
@@ -459,7 +486,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Goblet_Squat",
         "quote": "quadriceps"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Leg_Extensions",
@@ -473,7 +501,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Leg_Extensions",
         "quote": "quadriceps"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "biceps_femoris": [
@@ -489,7 +518,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Lying_Leg_Curls",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Seated_Leg_Curl",
@@ -503,7 +533,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Seated_Leg_Curl",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Ball_Leg_Curl",
@@ -520,7 +551,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Ball_Leg_Curl",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "semitendinosus": [
@@ -536,7 +568,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Lying_Leg_Curls",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Seated_Leg_Curl",
@@ -550,7 +583,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Seated_Leg_Curl",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Ball_Leg_Curl",
@@ -567,7 +601,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Ball_Leg_Curl",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "semimembranosus": [
@@ -583,7 +618,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Lying_Leg_Curls",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Seated_Leg_Curl",
@@ -597,7 +633,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Seated_Leg_Curl",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Ball_Leg_Curl",
@@ -614,7 +651,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Ball_Leg_Curl",
         "quote": "hamstrings"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "gastrocnemius": [
@@ -630,7 +668,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Standing_Calf_Raises",
         "quote": "calves"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Standing_Barbell_Calf_Raise",
@@ -644,7 +683,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Standing_Barbell_Calf_Raise",
         "quote": "calves"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "soleus": [
@@ -660,7 +700,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Standing_Calf_Raises",
         "quote": "calves"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Seated_Calf_Raise",
@@ -674,7 +715,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Seated_Calf_Raise",
         "quote": "calves"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "rhomboids": [
@@ -694,7 +736,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Bent_Over_Barbell_Row",
         "quote": "middle back"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Seated_Cable_Rows",
@@ -712,7 +755,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Seated_Cable_Rows",
         "quote": "middle back"
-      }
+      },
+      "mechanic": "compound"
     }
   ],
   "spinal_erectors": [
@@ -737,7 +781,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Barbell_Deadlift",
         "quote": "lower back"
-      }
+      },
+      "mechanic": "compound"
     },
     {
       "datasetId": "Hyperextensions_Back_Extensions",
@@ -754,7 +799,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Hyperextensions_Back_Extensions",
         "quote": "lower back"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "sternocleidomastoid": [
@@ -770,7 +816,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Lying_Face_Down_Plate_Neck_Resistance",
         "quote": "neck"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Seated_Head_Harness_Neck_Resistance",
@@ -784,7 +831,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Seated_Head_Harness_Neck_Resistance",
         "quote": "neck"
-      }
+      },
+      "mechanic": "isolation"
     }
   ],
   "gluteus_medius_minimus": [
@@ -802,7 +850,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Thigh_Abductor",
         "quote": "abductors"
-      }
+      },
+      "mechanic": "isolation"
     },
     {
       "datasetId": "Monster_Walk",
@@ -816,7 +865,8 @@
         "sourceId": "free-exercise-db",
         "locator": "Monster_Walk",
         "quote": "abductors"
-      }
+      },
+      "mechanic": "compound"
     }
   ]
 }
