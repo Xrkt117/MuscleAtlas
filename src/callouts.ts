@@ -22,8 +22,12 @@ export function createCallouts(stage: HTMLElement, avoidEls: HTMLElement[]) {
   let avoid: Rect[] = [];
   let animUntil = Infinity;  // layer shows once now >= animUntil
   let on = false;
+  let shownId: string | null = null;
 
+  // chips measure 0x0 while the layer is display:none (under 600 px), so measure again on resize and when the layer turns on
+  const measure = () => items.forEach((it) => { it.w = it.chip.offsetWidth; it.h = it.chip.offsetHeight; });
   const readAvoid = () => {
+    measure();
     avoid = avoidEls.filter((e) => e.offsetWidth > 0).map((e) => ({ x: e.offsetLeft - stage.offsetLeft, y: e.offsetTop - stage.offsetTop, w: e.offsetWidth, h: e.offsetHeight }));
   };
   readAvoid();
@@ -32,42 +36,49 @@ export function createCallouts(stage: HTMLElement, avoidEls: HTMLElement[]) {
   avoidEls.forEach((e) => ro.observe(e));
   addEventListener("resize", readAvoid);
 
-  const setOn = (v: boolean) => { if (v !== on) { on = v; layer.classList.toggle("on", v); } };
+  const setOn = (v: boolean) => { if (v !== on) { on = v; layer.classList.toggle("on", v); if (v) measure(); } };
   const set = (el: Element, k: string, v: number) => el.setAttribute(k, String(v));
 
+  const show = (id: string | null) => {
+    shownId = id;
+    svg.replaceChildren();
+    layer.querySelectorAll(".callout").forEach((c) => c.remove());
+    items = []; prevSide = [];
+    animUntil = Infinity;
+    setOn(false);
+    if (id === null) return;
+    const parts = partsFor(id);
+    const made = parts.map((p) => {
+      const g = document.createElementNS(NS, "g");
+      const line = document.createElementNS(NS, "line");
+      const dot = document.createElementNS(NS, "circle");
+      dot.setAttribute("r", "4");
+      g.append(line, dot);
+      svg.appendChild(g);
+      const chip = document.createElement("div");
+      chip.className = "callout";
+      chip.textContent = p.name;
+      layer.appendChild(chip);
+      return { chip, g, line, dot };
+    });
+    items = made.map((m) => ({ ...m, w: 0, h: 0, tx: NaN, ty: NaN, x1: NaN, y1: NaN, x2: NaN, y2: NaN, op: -1 }));
+    measure();  // one layout read after creation
+  };
+
   return {
-    show(id: string | null) {
-      svg.replaceChildren();
-      layer.querySelectorAll(".callout").forEach((c) => c.remove());
-      items = []; prevSide = [];
-      animUntil = Infinity;
-      setOn(false);
-      if (id === null) return;
-      const parts = partsFor(id);
-      const made = parts.map((p) => {
-        const g = document.createElementNS(NS, "g");
-        const line = document.createElementNS(NS, "line");
-        const dot = document.createElementNS(NS, "circle");
-        dot.setAttribute("r", "4");
-        g.append(line, dot);
-        svg.appendChild(g);
-        const chip = document.createElement("div");
-        chip.className = "callout";
-        chip.textContent = p.name;
-        layer.appendChild(chip);
-        return { chip, g, line, dot };
-      });
-      // one layout read after creation
-      items = made.map((m) => ({ ...m, w: m.chip.offsetWidth, h: m.chip.offsetHeight, tx: NaN, ty: NaN, x1: NaN, y1: NaN, x2: NaN, y2: NaN, op: -1 }));
-    },
+    /** Per-frame hook: rebuilds the chips when the selection changes, hides them on null. */
     update(f: FrameInfo | null) {
-      if (!f || !items.length) return;
+      if (!f) { if (shownId !== null) show(null); return; }
+      if (f.id !== shownId) show(f.id);
+      const n = Math.min(items.length, f.parts.length);  // never index past the frame's parts
+      if (!n) return;
       const now = performance.now();
       if (f.animating) animUntil = Infinity;
       else if (animUntil === Infinity) animUntil = now + SETTLE_MS;
       setOn(now >= animUntil);
       const out = layoutCallouts({
-        anchors: items.map((it, i) => ({ x: f.parts[i].x, y: f.parts[i].y, w: it.w, h: it.h })),
+        anchors: items.slice(0, n).map((it, i) => ({ x: f.parts[i].x, y: f.parts[i].y, w: it.w, h: it.h })),
+        visible: items.slice(0, n).map((_, i) => f.parts[i].visibility > 0),
         bounds: { w: f.width, h: f.height },
         obstacle: f.bounds,
         avoid,
