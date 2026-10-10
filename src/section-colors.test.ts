@@ -1,24 +1,38 @@
 import { describe, expect, it } from "vitest";
-import { sectionHsl } from "./section-colors";
+import { MUSCLES } from "./muscle-map";
+import { SECTION_COLORS, sectionColor } from "./section-colors";
 
-describe("sectionHsl", () => {
-  it("gives all 24 forearm sections distinct valid colours", () => {
-    const colours = Array.from({ length: 24 }, (_, index) => sectionHsl(index));
-    const keys = colours.map(({ hue, saturation, lightness }) => `${hue}:${saturation}:${lightness}`);
+const channels = (color: number) => [(color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff];
+const distanceSquared = (a: number, b: number) => {
+  const ac = channels(a), bc = channels(b);
+  return ac.reduce((sum, channel, i) => sum + (channel - bc[i]) ** 2, 0);
+};
 
-    expect(new Set(keys).size).toBe(colours.length);
+describe("sectionColor", () => {
+  it("covers the largest mapped group with unique valid colours", () => {
+    const needed = Math.max(...MUSCLES.map((muscle) => muscle.nodes.length));
+    const colours = Array.from({ length: needed }, (_, index) => sectionColor(index));
+
+    expect(SECTION_COLORS.length).toBeGreaterThanOrEqual(needed);
+    expect(new Set(colours).size).toBe(colours.length);
     for (const colour of colours) {
-      expect(colour.hue).toBeGreaterThanOrEqual(0);
-      expect(colour.hue).toBeLessThan(1);
-      expect(colour.saturation).toBeGreaterThan(0);
-      expect(colour.saturation).toBeLessThanOrEqual(1);
-      expect(colour.lightness).toBeGreaterThan(0);
-      expect(colour.lightness).toBeLessThan(1);
+      expect(colour).toBeGreaterThanOrEqual(0x000000);
+      expect(colour).toBeLessThanOrEqual(0xffffff);
     }
   });
 
-  it("rejects invalid section indices", () => {
-    expect(() => sectionHsl(-1)).toThrow("non-negative integer");
-    expect(() => sectionHsl(0.5)).toThrow("non-negative integer");
+  it("keeps the five abdominal layer colours strongly separated", () => {
+    const abdominalColours = SECTION_COLORS.slice(0, 5);
+    for (let i = 0; i < abdominalColours.length; i++) {
+      for (let j = i + 1; j < abdominalColours.length; j++) {
+        expect(distanceSquared(abdominalColours[i], abdominalColours[j])).toBeGreaterThan(5_000);
+      }
+    }
+  });
+
+  it("rejects invalid or unconfigured section indices", () => {
+    expect(() => sectionColor(-1)).toThrow("non-negative integer");
+    expect(() => sectionColor(0.5)).toThrow("non-negative integer");
+    expect(() => sectionColor(SECTION_COLORS.length)).toThrow("No section colour");
   });
 });

@@ -9,7 +9,7 @@ import { anchorForObject } from "./anchors";
 import { facingVisibility } from "./visibility";
 import { progressFraction } from "./progress";
 import { pickCalloutParts } from "./callout-parts";
-import { sectionHsl } from "./section-colors";
+import { sectionColor } from "./section-colors";
 
 /** Per-frame projection of the selected muscle. One object, reused: valid only inside the callback. */
 export interface FrameInfo {
@@ -88,10 +88,12 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   const dimMaterial = new THREE.MeshStandardMaterial({ color: 0xc87f6e, roughness: 0.6, transparent: true, opacity: 0.15, depthWrite: false });
   const maxSections = Math.max(...MUSCLES.map((m) => m.nodes.length));
   const sectionMaterials = Array.from({ length: maxSections }, (_, index) => {
-    const { hue, saturation, lightness } = sectionHsl(index);
+    const color = sectionColor(index);
     return new THREE.MeshStandardMaterial({
-      color: new THREE.Color().setHSL(hue, saturation, lightness),
-      roughness: 0.4,
+      color,
+      emissive: color,
+      emissiveIntensity: 0.12,
+      roughness: 0.35,
     });
   });
   const meshes: THREE.Mesh[] = [];
