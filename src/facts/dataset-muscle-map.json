@@ -1,22 +1,102 @@
 {
-  "note": "free-exercise-db names muscle GROUPS (17 names in primaryMuscles/secondaryMuscles), not individual muscles or heads. A mapping row says only that the dataset's group name covers our muscle id; it is not evidence about any single muscle or head inside the group. Each justification rests on the dataset's own group name only. Dataset names with no seed muscle map to [].",
+  "note": "free-exercise-db names muscle groups, not individual muscles or muscle heads. A mapping row means only that the dataset group covers the listed MuscleAtlas group. It is not evidence that every exercise affects every included muscle equally.",
   "mapping": {
-    "abdominals": { "muscleIds": ["rectus_abdominis"], "why": "Group name for the abdominal muscles; rectus abdominis is our only abdominal seed muscle (the group also covers abdominals we do not track, e.g. obliques)." },
-    "abductors": { "muscleIds": [], "why": "Hip abductor group; no seed muscle is a hip abductor by name." },
-    "adductors": { "muscleIds": [], "why": "Hip adductor group; no seed muscle is a hip adductor by name." },
-    "biceps": { "muscleIds": ["biceps_brachii"], "why": "Arm group (dataset lists it with curls); biceps brachii. Hamstring exercises use the separate name 'hamstrings', so biceps femoris is not mapped here." },
-    "calves": { "muscleIds": ["gastrocnemius", "soleus"], "why": "Calf group; gastrocnemius and soleus are the seed calf muscles. The dataset does not say which of the two an exercise targets." },
-    "chest": { "muscleIds": ["pectoralis_major"], "why": "Chest group; pectoralis major is our only chest seed muscle." },
-    "forearms": { "muscleIds": [], "why": "Forearm group; no seed muscle is in the forearm." },
-    "glutes": { "muscleIds": ["gluteus_maximus"], "why": "Gluteal group; gluteus maximus is our only gluteal seed muscle (the group also covers gluteus medius/minimus, which we do not track)." },
-    "hamstrings": { "muscleIds": ["biceps_femoris", "semitendinosus", "semimembranosus"], "why": "Hamstring group; the three seed hamstring muscles. The dataset does not distinguish between them." },
-    "lats": { "muscleIds": ["latissimus_dorsi"], "why": "Common short name for latissimus dorsi." },
-    "lower back": { "muscleIds": [], "why": "Region name; no seed muscle is a lower-back muscle." },
-    "middle back": { "muscleIds": [], "why": "Region name that does not identify a muscle; left unmapped rather than guessed (could include part of trapezius, rhomboids and others)." },
-    "neck": { "muscleIds": [], "why": "Region name; no seed muscle is a neck muscle." },
-    "quadriceps": { "muscleIds": ["quadriceps_femoris"], "why": "Same group as our quadriceps_femoris id (four muscles treated as one seed id)." },
-    "shoulders": { "muscleIds": ["deltoid"], "why": "Shoulder group; deltoid is our only shoulder seed muscle (the group may also cover rotator cuff muscles we do not track)." },
-    "traps": { "muscleIds": ["trapezius"], "why": "Common short name for trapezius." },
-    "triceps": { "muscleIds": ["triceps_brachii"], "why": "Common short name for triceps brachii." }
+    "abdominals": {
+      "muscleIds": [
+        "rectus_abdominis"
+      ],
+      "why": "The rectus_abdominis id represents the mapped abdominal group: rectus abdominis, external and internal obliques, transversus abdominis and pyramidalis."
+    },
+    "abductors": {
+      "muscleIds": [],
+      "why": "Hip abductor group; no mapped MuscleAtlas group currently represents the hip abductors."
+    },
+    "adductors": {
+      "muscleIds": [
+        "hip_adductors"
+      ],
+      "why": "Hip-adductor group represented by adductor longus, brevis, magnus and minimus, gracilis and pectineus."
+    },
+    "biceps": {
+      "muscleIds": [
+        "biceps_brachii"
+      ],
+      "why": "Arm group used by the dataset for curls. Hamstring exercises use the separate hamstrings group."
+    },
+    "calves": {
+      "muscleIds": [
+        "gastrocnemius",
+        "soleus"
+      ],
+      "why": "Calf group represented by gastrocnemius and soleus. The dataset does not distinguish between them."
+    },
+    "chest": {
+      "muscleIds": [
+        "pectoralis_major"
+      ],
+      "why": "Chest group; pectoralis major is the mapped chest muscle."
+    },
+    "forearms": {
+      "muscleIds": [
+        "forearm_muscles"
+      ],
+      "why": "Forearm group covering the mapped wrist and finger flexors, extensors, pronators, supinator and brachioradialis."
+    },
+    "glutes": {
+      "muscleIds": [
+        "gluteus_maximus"
+      ],
+      "why": "Gluteal group; gluteus maximus is the currently mapped gluteal muscle."
+    },
+    "hamstrings": {
+      "muscleIds": [
+        "biceps_femoris",
+        "semitendinosus",
+        "semimembranosus"
+      ],
+      "why": "Hamstring group represented by biceps femoris, semitendinosus and semimembranosus. The dataset does not distinguish between them."
+    },
+    "lats": {
+      "muscleIds": [
+        "latissimus_dorsi"
+      ],
+      "why": "Common short name for latissimus dorsi."
+    },
+    "lower back": {
+      "muscleIds": [],
+      "why": "Region name; no mapped MuscleAtlas group currently represents the lower back."
+    },
+    "middle back": {
+      "muscleIds": [],
+      "why": "Region name that could cover multiple muscles, so it is left unmapped rather than guessed."
+    },
+    "neck": {
+      "muscleIds": [],
+      "why": "Region name; no mapped MuscleAtlas group currently represents the neck."
+    },
+    "quadriceps": {
+      "muscleIds": [
+        "quadriceps_femoris"
+      ],
+      "why": "Quadriceps group represented by rectus femoris and the three vastus muscles."
+    },
+    "shoulders": {
+      "muscleIds": [
+        "deltoid"
+      ],
+      "why": "Shoulder group; deltoid is the currently mapped shoulder muscle."
+    },
+    "traps": {
+      "muscleIds": [
+        "trapezius"
+      ],
+      "why": "Common short name for trapezius."
+    },
+    "triceps": {
+      "muscleIds": [
+        "triceps_brachii"
+      ],
+      "why": "Common short name for triceps brachii."
+    }
   }
 }
