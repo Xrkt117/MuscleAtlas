@@ -1,7 +1,7 @@
 # 0003 — Muscle picking is a 1-pixel GPU id render, not raycasting or a BVH
 
 **Date:** 2026-10-09
-**Status:** accepted
+**Status:** accepted (rationale partly superseded by 0006)
 
 ## Context
 The viewer has about 700 heavy muscle meshes (about 1M vertices) and picks on every hover. Raycasting stalled
