@@ -9,6 +9,7 @@ import { anchorForObject } from "./anchors";
 import { facingVisibility } from "./visibility";
 import { progressFraction } from "./progress";
 import { pickCalloutParts } from "./callout-parts";
+import { sectionHsl } from "./section-colors";
 
 /** Per-frame projection of the selected muscle. One object, reused: valid only inside the callback. */
 export interface FrameInfo {
@@ -24,7 +25,7 @@ export interface FrameInfo {
 }
 
 export interface AtlasApi {
-  /** Selected muscles red, everything else dimmed. Throws on an unknown muscle id. */
+  /** Selected groups use one colour per mapped section; everything else is dimmed. Throws on an unknown muscle id. */
   highlight(ids: string[]): void;
   /** Back to the base material for every mesh. */
   clear(): void;
@@ -83,9 +84,16 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
 
   // Materials are placeholders in the GLB (FINDINGS #2); the viewer owns them. Shared, never disposed.
   const baseMaterial = new THREE.MeshStandardMaterial({ color: 0xc87f6e, roughness: 0.6 });
-  const highlightMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
   const hoverMaterial = new THREE.MeshStandardMaterial({ color: 0xffc857 });
   const dimMaterial = new THREE.MeshStandardMaterial({ color: 0xc87f6e, roughness: 0.6, transparent: true, opacity: 0.15, depthWrite: false });
+  const maxSections = Math.max(...MUSCLES.map((m) => m.nodes.length));
+  const sectionMaterials = Array.from({ length: maxSections }, (_, index) => {
+    const { hue, saturation, lightness } = sectionHsl(index);
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color().setHSL(hue, saturation, lightness),
+      roughness: 0.4,
+    });
+  });
   const meshes: THREE.Mesh[] = [];
   gltf.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) { meshes.push(o as THREE.Mesh); (o as THREE.Mesh).material = baseMaterial; } });
 
@@ -124,12 +132,25 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   const guard = (fn: () => void) => { try { fn(); } catch (err) { console.error(err); } };
   const refresh = () => {
     for (const m of meshes) m.material = selected.length ? dimMaterial : baseMaterial;
-    const paint = (id: string, material: THREE.Material) => {
+    const paintNode = (node: THREE.Object3D, material: THREE.Material) => {
       // a node with two primitives loads as a Group, so always traverse
-      for (const n of nodesFor(id)) n.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = material; });
+      node.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = material; });
+    };
+    const paint = (id: string, material: THREE.Material) => {
+      for (const node of nodesFor(id)) paintNode(node, material);
+    };
+    const paintSelected = (id: string) => {
+      const nodes = nodesFor(id);
+      // nodeNamesFor() emits each mapped section as a left/right pair. The pair shares a colour;
+      // the next mapped section receives the next colour.
+      for (let i = 0; i < nodes.length; i += 2) {
+        const material = sectionMaterials[i / 2];
+        paintNode(nodes[i], material);
+        if (nodes[i + 1]) paintNode(nodes[i + 1], material);
+      }
     };
     if (hovered && !selected.includes(hovered)) paint(hovered, hoverMaterial);
-    for (const id of selected) paint(id, highlightMaterial);
+    for (const id of selected) paintSelected(id);
   };
 
   type Anim = { t0: number; ms: number; fromAz: number; toAz: number; fromEl: number; toEl: number; fromDist: number; toDist: number; fromTarget: THREE.Vector3; toTarget: THREE.Vector3 };
