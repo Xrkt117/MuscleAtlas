@@ -7,9 +7,12 @@ export interface Anchor { point: Vec3; normal: Vec3 }
 const STRICT = 0.5;
 const LOOSE = 0.3;
 
+const MAX_TRIS = 20000; // cap: examine at most this many triangles per mesh (stride sampling) to bound cost
+
 /**
  * Triangle of `g` (world space) that faces `viewDir` and sits nearest the part centroid in the view plane.
  * Face normals are multiplied by sign(det(matrixWorld)): mirrored (negative-scale) parents flip the winding.
+ * Allocation-free per triangle: scalar math, two passes over the same sampled triangles.
  */
 export function surfaceAnchor(
   g: { position: ArrayLike<number>; index?: ArrayLike<number> | null },
@@ -17,35 +20,68 @@ export function surfaceAnchor(
   viewDir: Vec3,
 ): Anchor | null {
   const sign = matrixWorld.determinant() < 0 ? -1 : 1;
-  const view = new THREE.Vector3(viewDir.x, viewDir.y, viewDir.z).normalize();
-  const nTri = g.index ? Math.floor(g.index.length / 3) : Math.floor(g.position.length / 9);
-  const vtx = (i: number) => new THREE.Vector3(g.position[i * 3], g.position[i * 3 + 1], g.position[i * 3 + 2]).applyMatrix4(matrixWorld);
-  const tris: { c: THREE.Vector3; n: THREE.Vector3; d: number }[] = [];
-  const mean = new THREE.Vector3();
-  for (let t = 0; t < nTri; t++) {
-    const [i, j, k] = g.index ? [g.index[t * 3], g.index[t * 3 + 1], g.index[t * 3 + 2]] : [t * 3, t * 3 + 1, t * 3 + 2];
-    const a = vtx(i), b = vtx(j), c = vtx(k);
-    const n = b.clone().sub(a).cross(c.clone().sub(a));
-    if (n.lengthSq() === 0) continue; // degenerate
-    n.normalize().multiplyScalar(sign);
-    const cen = a.add(b).add(c).divideScalar(3);
-    tris.push({ c: cen, n, d: n.dot(view) });
-    mean.add(cen);
-  }
-  if (!tris.length) return null;
-  mean.divideScalar(tris.length);
+  const vl = Math.hypot(viewDir.x, viewDir.y, viewDir.z) || 1;
+  const vx = viewDir.x / vl, vy = viewDir.y / vl, vz = viewDir.z / vl;
+  const e = matrixWorld.elements;
+  const pos = g.position, idx = g.index;
+  const nTri = idx ? Math.floor(idx.length / 3) : Math.floor(pos.length / 9);
+  const stride = Math.max(1, Math.ceil(nTri / MAX_TRIS));
+  const w = new Float64Array(9); // world-space a, b, c of the current triangle
 
-  // distance to the part centroid measured perpendicular to the view direction
-  const planar = (p: THREE.Vector3) => {
-    const d = p.clone().sub(mean);
-    return d.sub(view.clone().multiplyScalar(d.dot(view))).lengthSq();
+  const nrm = new Float64Array(3);
+  const load = (t: number): number => {
+    for (let v = 0; v < 3; v++) {
+      const i = idx ? idx[t * 3 + v] : t * 3 + v;
+      const x = pos[i * 3], y = pos[i * 3 + 1], z = pos[i * 3 + 2];
+      w[v * 3] = e[0] * x + e[4] * y + e[8] * z + e[12];
+      w[v * 3 + 1] = e[1] * x + e[5] * y + e[9] * z + e[13];
+      w[v * 3 + 2] = e[2] * x + e[6] * y + e[10] * z + e[14];
+    }
+    const ux = w[3] - w[0], uy = w[4] - w[1], uz = w[5] - w[2];
+    const wx = w[6] - w[0], wy = w[7] - w[1], wz = w[8] - w[2];
+    nrm[0] = uy * wz - uz * wy;
+    nrm[1] = uz * wx - ux * wz;
+    nrm[2] = ux * wy - uy * wx;
+    return nrm[0] * nrm[0] + nrm[1] * nrm[1] + nrm[2] * nrm[2];
   };
-  let pool = tris.filter((t) => t.d > STRICT);
-  if (!pool.length) pool = tris.filter((t) => t.d > LOOSE);
-  const best = pool.length
-    ? pool.reduce((p, q) => (planar(q.c) < planar(p.c) ? q : p))
-    : tris.reduce((p, q) => (q.d > p.d ? q : p));
-  return { point: { x: best.c.x, y: best.c.y, z: best.c.z }, normal: { x: best.n.x, y: best.n.y, z: best.n.z } };
+
+  // pass 1: mean of centroids
+  let mx = 0, my = 0, mz = 0, count = 0;
+  for (let t = 0; t < nTri; t += stride) {
+    if (load(t) === 0) continue; // degenerate
+    mx += (w[0] + w[3] + w[6]) / 3;
+    my += (w[1] + w[4] + w[7]) / 3;
+    mz += (w[2] + w[5] + w[8]) / 3;
+    count++;
+  }
+  if (!count) return null;
+  mx /= count; my /= count; mz /= count;
+
+  // pass 2: three winners, first minimum wins (strict <); planar = distance perpendicular to the view direction
+  let sP = Infinity, lP = Infinity, dBest = -Infinity;
+  const sc = [0, 0, 0, 0, 0, 0], lc = [0, 0, 0, 0, 0, 0], dc = [0, 0, 0, 0, 0, 0]; // point xyz + normal xyz
+  const put = (o: number[], cx: number, cy: number, cz: number, nx: number, ny: number, nz: number) => {
+    o[0] = cx; o[1] = cy; o[2] = cz; o[3] = nx; o[4] = ny; o[5] = nz;
+  };
+  for (let t = 0; t < nTri; t += stride) {
+    const l2 = load(t);
+    if (l2 === 0) continue;
+    const len = Math.sqrt(l2);
+    const nx = (nrm[0] / len) * sign, ny = (nrm[1] / len) * sign, nz = (nrm[2] / len) * sign;
+    const d = nx * vx + ny * vy + nz * vz;
+    const cx = (w[0] + w[3] + w[6]) / 3, cy = (w[1] + w[4] + w[7]) / 3, cz = (w[2] + w[5] + w[8]) / 3;
+    if (d > dBest) { dBest = d; put(dc, cx, cy, cz, nx, ny, nz); }
+    if (d > LOOSE) {
+      const px = cx - mx, py = cy - my, pz = cz - mz;
+      const k = px * vx + py * vy + pz * vz;
+      const rx = px - vx * k, ry = py - vy * k, rz = pz - vz * k;
+      const p = rx * rx + ry * ry + rz * rz;
+      if (p < lP) { lP = p; put(lc, cx, cy, cz, nx, ny, nz); }
+      if (d > STRICT && p < sP) { sP = p; put(sc, cx, cy, cz, nx, ny, nz); }
+    }
+  }
+  const r = sP < Infinity ? sc : lP < Infinity ? lc : dc;
+  return { point: { x: r[0], y: r[1], z: r[2] }, normal: { x: r[3], y: r[4], z: r[5] } };
 }
 
 /** Anchor for a node (a node with several primitives is a Group): per-mesh anchors, nearest to their mean wins. */

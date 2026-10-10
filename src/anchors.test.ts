@@ -87,6 +87,50 @@ describe("surfaceAnchor", () => {
   });
 });
 
+// Non-indexed N x N grid on z=0 spanning [-1,1]^2, two CCW (+Z) triangles per cell.
+function bigPlane(n = 320) {
+  const p = new Float32Array(n * n * 18);
+  let o = 0;
+  const push = (x: number, y: number) => { p[o++] = x; p[o++] = y; p[o++] = 0; };
+  const s = 2 / n;
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+    const x = -1 + i * s, y = -1 + j * s;
+    push(x, y); push(x + s, y); push(x + s, y + s);
+    push(x, y); push(x + s, y + s); push(x, y + s);
+  }
+  return { position: p };
+}
+
+describe("surfaceAnchor on large meshes", () => {
+  const big = bigPlane();
+
+  it("has more than 100000 triangles", () => {
+    expect(big.position.length / 9).toBeGreaterThanOrEqual(100000);
+  });
+
+  it("finds the centre of a big +Z plane", () => {
+    const a = surfaceAnchor(big, I, FRONT)!;
+    expect(a.normal.x).toBeCloseTo(0);
+    expect(a.normal.y).toBeCloseTo(0);
+    expect(a.normal.z).toBeCloseTo(1);
+    expect(Math.abs(a.point.x)).toBeLessThan(0.05);
+    expect(Math.abs(a.point.y)).toBeLessThan(0.05);
+  });
+
+  it("keeps the determinant correction on a big mirrored mesh", () => {
+    const m = new THREE.Matrix4().makeScale(-1, 1, 1);
+    expect(dot(surfaceAnchor(big, m, FRONT)!.normal, FRONT)).toBeGreaterThan(0);
+  });
+
+  it("runs the 100000+ triangle case in under 250 ms", () => {
+    const t0 = performance.now();
+    surfaceAnchor(big, I, FRONT);
+    const ms = performance.now() - t0;
+    console.log(`big surfaceAnchor: ${ms.toFixed(1)} ms`);
+    expect(ms).toBeLessThan(250);
+  });
+});
+
 describe("anchorForObject", () => {
   it("combines the meshes of a group and honours parent transforms", () => {
     const mk = (z: number) => {
