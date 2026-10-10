@@ -30,6 +30,25 @@ export const SECTION_COLORS = [
   0xee6677, // coral
 ] as const;
 
+export interface AbdominalSectionStyle {
+  color: number;
+  opacity: number;
+  renderOrder: number;
+}
+
+/**
+ * Cutaway styling in muscle-map order: rectus, external oblique, internal
+ * oblique, transversus, pyramidalis. Superficial sheets are increasingly
+ * transparent so the deeper layers remain visible without changing anatomy.
+ */
+export const ABDOMINAL_SECTION_STYLES: readonly AbdominalSectionStyle[] = [
+  { color: 0xc44e52, opacity: 1, renderOrder: 20 },
+  { color: 0x4e79a7, opacity: 0.28, renderOrder: 13 },
+  { color: 0x59a14f, opacity: 0.52, renderOrder: 12 },
+  { color: 0xa05195, opacity: 0.78, renderOrder: 11 },
+  { color: 0xf28e2b, opacity: 1, renderOrder: 20 },
+];
+
 /** High-contrast RGB colour for a zero-based mapped section. */
 export function sectionColor(index: number): number {
   if (!Number.isInteger(index) || index < 0) {

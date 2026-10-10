@@ -9,7 +9,7 @@ import { anchorForObject } from "./anchors";
 import { facingVisibility } from "./visibility";
 import { progressFraction } from "./progress";
 import { pickCalloutParts } from "./callout-parts";
-import { sectionColor } from "./section-colors";
+import { ABDOMINAL_SECTION_STYLES, sectionColor } from "./section-colors";
 
 /** Per-frame projection of the selected muscle. One object, reused: valid only inside the callback. */
 export interface FrameInfo {
@@ -96,6 +96,15 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       roughness: 0.35,
     });
   });
+  const abdominalSectionMaterials = ABDOMINAL_SECTION_STYLES.map(({ color, opacity }) => new THREE.MeshStandardMaterial({
+    color,
+    emissive: color,
+    emissiveIntensity: opacity === 1 ? 0.06 : 0.02,
+    roughness: 0.5,
+    transparent: true,
+    opacity,
+    depthWrite: false,
+  }));
   const meshes: THREE.Mesh[] = [];
   gltf.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) { meshes.push(o as THREE.Mesh); (o as THREE.Mesh).material = baseMaterial; } });
 
@@ -133,10 +142,18 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   // one throwing listener must not end setAnimationLoop (three.js does not request the next frame after a throw)
   const guard = (fn: () => void) => { try { fn(); } catch (err) { console.error(err); } };
   const refresh = () => {
-    for (const m of meshes) m.material = selected.length ? dimMaterial : baseMaterial;
-    const paintNode = (node: THREE.Object3D, material: THREE.Material) => {
+    for (const m of meshes) {
+      m.material = selected.length ? dimMaterial : baseMaterial;
+      m.renderOrder = 0;
+    }
+    const paintNode = (node: THREE.Object3D, material: THREE.Material, renderOrder = 0) => {
       // a node with two primitives loads as a Group, so always traverse
-      node.traverse((o) => { if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = material; });
+      node.traverse((o) => {
+        if ((o as THREE.Mesh).isMesh) {
+          (o as THREE.Mesh).material = material;
+          (o as THREE.Mesh).renderOrder = renderOrder;
+        }
+      });
     };
     const paint = (id: string, material: THREE.Material) => {
       for (const node of nodesFor(id)) paintNode(node, material);
@@ -146,9 +163,12 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       // nodeNamesFor() emits each mapped section as a left/right pair. The pair shares a colour;
       // the next mapped section receives the next colour.
       for (let i = 0; i < nodes.length; i += 2) {
-        const material = sectionMaterials[i / 2];
-        paintNode(nodes[i], material);
-        if (nodes[i + 1]) paintNode(nodes[i + 1], material);
+        const section = i / 2;
+        const abdominalStyle = id === "rectus_abdominis" ? ABDOMINAL_SECTION_STYLES[section] : undefined;
+        const material = abdominalStyle ? abdominalSectionMaterials[section] : sectionMaterials[section];
+        const renderOrder = abdominalStyle?.renderOrder ?? 0;
+        paintNode(nodes[i], material, renderOrder);
+        if (nodes[i + 1]) paintNode(nodes[i + 1], material, renderOrder);
       }
     };
     if (hovered && !selected.includes(hovered)) paint(hovered, hoverMaterial);

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { MUSCLES } from "./muscle-map";
-import { SECTION_COLORS, sectionColor } from "./section-colors";
+import { ABDOMINAL_SECTION_STYLES, SECTION_COLORS, sectionColor } from "./section-colors";
 
 const channels = (color: number) => [(color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff];
 const distanceSquared = (a: number, b: number) => {
@@ -22,12 +22,26 @@ describe("sectionColor", () => {
   });
 
   it("keeps the five abdominal layer colours strongly separated", () => {
-    const abdominalColours = SECTION_COLORS.slice(0, 5);
+    const abdominalColours = ABDOMINAL_SECTION_STYLES.map((style) => style.color);
     for (let i = 0; i < abdominalColours.length; i++) {
       for (let j = i + 1; j < abdominalColours.length; j++) {
         expect(distanceSquared(abdominalColours[i], abdominalColours[j])).toBeGreaterThan(5_000);
       }
     }
+  });
+
+  it("uses an anatomical cutaway for the overlapping abdominal sheets", () => {
+    const abdominal = MUSCLES.find((muscle) => muscle.id === "rectus_abdominis");
+    expect(abdominal).toBeDefined();
+    expect(ABDOMINAL_SECTION_STYLES).toHaveLength(abdominal!.nodes.length);
+    expect(ABDOMINAL_SECTION_STYLES[0].opacity).toBe(1);
+    expect(ABDOMINAL_SECTION_STYLES[4].opacity).toBe(1);
+    expect(ABDOMINAL_SECTION_STYLES[1].opacity).toBeLessThan(ABDOMINAL_SECTION_STYLES[2].opacity);
+    expect(ABDOMINAL_SECTION_STYLES[2].opacity).toBeLessThan(ABDOMINAL_SECTION_STYLES[3].opacity);
+    expect(ABDOMINAL_SECTION_STYLES[1].renderOrder).toBeGreaterThan(ABDOMINAL_SECTION_STYLES[2].renderOrder);
+    expect(ABDOMINAL_SECTION_STYLES[2].renderOrder).toBeGreaterThan(ABDOMINAL_SECTION_STYLES[3].renderOrder);
+    expect(ABDOMINAL_SECTION_STYLES[0].renderOrder).toBeGreaterThan(ABDOMINAL_SECTION_STYLES[1].renderOrder);
+    expect(ABDOMINAL_SECTION_STYLES[4].renderOrder).toBeGreaterThan(ABDOMINAL_SECTION_STYLES[1].renderOrder);
   });
 
   it("rejects invalid or unconfigured section indices", () => {
