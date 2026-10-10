@@ -31,7 +31,7 @@ function evidenceItem(e: PanelEvidence): HTMLElement {
 export function renderPanel(root: HTMLElement, id: string | null): void {
   root.classList.toggle("empty", id === null);
   if (id === null) {
-    root.replaceChildren(h("p", { id: "info-title", class: "intro" }, "Select a muscle to see what it does and the evidence"));
+    root.replaceChildren(h("p", { id: "info-title", class: "intro" }, "Select a muscle to see its function and optimization exercises"));
     return;
   }
   const m = buildPanelModel(id);
