@@ -37,6 +37,12 @@ export const MUSCLES: readonly Muscle[] = [
     view: "back",
   },
   {
+    id: "teres_major",
+    label: "Teres major",
+    nodes: ["Teres major muscle"],
+    view: "back",
+  },
+  {
     id: "trapezius",
     label: "Trapezius",
     nodes: [
@@ -45,6 +51,32 @@ export const MUSCLES: readonly Muscle[] = [
       "Ascending part of trapezius muscle",
     ],
     view: "back",
+  },
+  {
+    id: "rhomboids",
+    label: "Rhomboids",
+    nodes: [
+      "Rhomboid major muscle",
+      "Rhomboid minor muscle",
+    ],
+    view: "back",
+  },
+  {
+    id: "spinal_erectors",
+    label: "Spinal erectors",
+    nodes: [
+      "Iliocostalis lumborum muscle",
+      "Iliocostalis thoracis muscle",
+      "Longissimus thoracis muscle",
+      "Spinalis thoracis muscle",
+    ],
+    view: "back",
+  },
+  {
+    id: "sternocleidomastoid",
+    label: "Sternocleidomastoid (neck)",
+    nodes: ["Sternocleidomastoid muscle"],
+    view: "front",
   },
   {
     id: "serratus_anterior",
@@ -59,6 +91,12 @@ export const MUSCLES: readonly Muscle[] = [
       "Long head of biceps brachii",
       "Short head of biceps brachii",
     ],
+    view: "front",
+  },
+  {
+    id: "brachialis",
+    label: "Brachialis",
+    nodes: ["Brachialis muscle"],
     view: "front",
   },
   {
@@ -118,6 +156,15 @@ export const MUSCLES: readonly Muscle[] = [
     id: "gluteus_maximus",
     label: "Gluteus maximus",
     nodes: ["Gluteus maximus muscle"],
+    view: "back",
+  },
+  {
+    id: "gluteus_medius_minimus",
+    label: "Gluteus medius and minimus",
+    nodes: [
+      "Gluteus medius muscle",
+      "Gluteus minimus muscle",
+    ],
     view: "back",
   },
   {

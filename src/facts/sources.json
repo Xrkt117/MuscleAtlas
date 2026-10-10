@@ -8,7 +8,7 @@
     "year": 1918,
     "url": "https://archive.org/download/anatomyofhumanbo00grayrich/anatomyofhumanbo00grayrich_djvu.txt",
     "licence": "Public domain in the US (published 1918). Internet Archive item page (https://archive.org/details/anatomyofhumanbo00grayrich) prints: Possible copyright status NOT_IN_COPYRIGHT; Copyright-region US; Copyright-evidence: visible notice of copyright; stated date is 1918. Wikimedia Commons page for this scan (File:Anatomy_of_the_Human_Body_(1918).djvu) prints: This work is in the public domain in the United States because it was published (or registered with the U.S. Copyright Office) before January 1, 1931. The book itself prints: Copyright LEA & FEBIGER 1918.",
-    "readOn": "2026-10-09"
+    "readOn": "2026-10-10"
   },
   {
     "id": "free-exercise-db",
@@ -19,7 +19,7 @@
     "year": 2026,
     "url": "https://github.com/yuhonas/free-exercise-db",
     "licence": "License: Unlicense (README badge); README: Open Public Domain Exercise Dataset. Data read from dist/exercises.json at main, latest commit touching it: 79ca7b4 (2026-08-29)",
-    "readOn": "2026-10-09"
+    "readOn": "2026-10-10"
   },
   {
     "id": "baz-valle-2022",

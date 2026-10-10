@@ -166,7 +166,7 @@ describe("muscle map", () => {
 
     expect(
       MUSCLES.filter((muscle) => muscle.view === "back").length,
-    ).toBe(9);
+    ).toBe(13);
   });
 
   it("contains the expected muscle groups", () => {
@@ -180,6 +180,17 @@ describe("muscle map", () => {
 
     expect(MUSCLES.map((muscle) => muscle.id)).toContain(
       "hip_adductors",
+    );
+
+    expect(MUSCLES.map((muscle) => muscle.id)).toEqual(
+      expect.arrayContaining([
+        "brachialis",
+        "gluteus_medius_minimus",
+        "rhomboids",
+        "spinal_erectors",
+        "sternocleidomastoid",
+        "teres_major",
+      ]),
     );
   });
 });
@@ -208,14 +219,14 @@ describe("map vs GLB", () => {
     expect(new Set(names).size).toBe(names.length);
   });
 
-  it("contains all 126 mapped node names", () => {
+  it("contains all 148 mapped node names", () => {
     const available = new Set(names);
     const wanted = MUSCLES.flatMap((muscle) =>
       nodeNamesFor(muscle.id),
     );
 
-    expect(MUSCLES.length).toBe(17);
-    expect(wanted.length).toBe(126);
+    expect(MUSCLES.length).toBe(23);
+    expect(wanted.length).toBe(148);
     expect(
       wanted.filter((name) => !available.has(name)),
     ).toEqual([]);

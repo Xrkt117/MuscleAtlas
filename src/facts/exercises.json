@@ -676,5 +676,147 @@
         "quote": "calves"
       }
     }
+  ],
+  "rhomboids": [
+    {
+      "datasetId": "Bent_Over_Barbell_Row",
+      "name": "Bent Over Barbell Row",
+      "datasetPrimary": [
+        "middle back"
+      ],
+      "datasetSecondary": [
+        "biceps",
+        "lats",
+        "shoulders"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Bent_Over_Barbell_Row",
+        "quote": "middle back"
+      }
+    },
+    {
+      "datasetId": "Seated_Cable_Rows",
+      "name": "Seated Cable Rows",
+      "datasetPrimary": [
+        "middle back"
+      ],
+      "datasetSecondary": [
+        "biceps",
+        "lats",
+        "shoulders"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Seated_Cable_Rows",
+        "quote": "middle back"
+      }
+    }
+  ],
+  "spinal_erectors": [
+    {
+      "datasetId": "Barbell_Deadlift",
+      "name": "Barbell Deadlift",
+      "datasetPrimary": [
+        "lower back"
+      ],
+      "datasetSecondary": [
+        "calves",
+        "forearms",
+        "glutes",
+        "hamstrings",
+        "lats",
+        "middle back",
+        "quadriceps",
+        "traps"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Barbell_Deadlift",
+        "quote": "lower back"
+      }
+    },
+    {
+      "datasetId": "Hyperextensions_Back_Extensions",
+      "name": "Hyperextensions (Back Extensions)",
+      "datasetPrimary": [
+        "lower back"
+      ],
+      "datasetSecondary": [
+        "glutes",
+        "hamstrings"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Hyperextensions_Back_Extensions",
+        "quote": "lower back"
+      }
+    }
+  ],
+  "sternocleidomastoid": [
+    {
+      "datasetId": "Lying_Face_Down_Plate_Neck_Resistance",
+      "name": "Lying Face Down Plate Neck Resistance",
+      "datasetPrimary": [
+        "neck"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Lying_Face_Down_Plate_Neck_Resistance",
+        "quote": "neck"
+      }
+    },
+    {
+      "datasetId": "Seated_Head_Harness_Neck_Resistance",
+      "name": "Seated Head Harness Neck Resistance",
+      "datasetPrimary": [
+        "neck"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Seated_Head_Harness_Neck_Resistance",
+        "quote": "neck"
+      }
+    }
+  ],
+  "gluteus_medius_minimus": [
+    {
+      "datasetId": "Thigh_Abductor",
+      "name": "Thigh Abductor",
+      "datasetPrimary": [
+        "abductors"
+      ],
+      "datasetSecondary": [
+        "glutes"
+      ],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Thigh_Abductor",
+        "quote": "abductors"
+      }
+    },
+    {
+      "datasetId": "Monster_Walk",
+      "name": "Monster Walk",
+      "datasetPrimary": [
+        "abductors"
+      ],
+      "datasetSecondary": [],
+      "role": "primary",
+      "cite": {
+        "sourceId": "free-exercise-db",
+        "locator": "Monster_Walk",
+        "quote": "abductors"
+      }
+    }
   ]
 }

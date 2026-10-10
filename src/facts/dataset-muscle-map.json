@@ -8,8 +8,10 @@
       "why": "The rectus_abdominis id represents the mapped abdominal group: rectus abdominis, external and internal obliques, transversus abdominis and pyramidalis."
     },
     "abductors": {
-      "muscleIds": [],
-      "why": "Hip abductor group; no mapped MuscleAtlas group currently represents the hip abductors."
+      "muscleIds": [
+        "gluteus_medius_minimus"
+      ],
+      "why": "Hip abductor group represented by gluteus medius and gluteus minimus."
     },
     "adductors": {
       "muscleIds": [
@@ -44,9 +46,10 @@
     },
     "glutes": {
       "muscleIds": [
-        "gluteus_maximus"
+        "gluteus_maximus",
+        "gluteus_medius_minimus"
       ],
-      "why": "Gluteal group; gluteus maximus is our only gluteal muscle (the group also covers gluteus medius/minimus, which we do not track)."
+      "why": "Gluteal group represented by gluteus maximus, medius and minimus."
     },
     "hamstrings": {
       "muscleIds": [
@@ -63,16 +66,22 @@
       "why": "Common short name for latissimus dorsi."
     },
     "lower back": {
-      "muscleIds": [],
-      "why": "Region name; no mapped MuscleAtlas group currently represents the lower back."
+      "muscleIds": [
+        "spinal_erectors"
+      ],
+      "why": "Lower-back region represented by the lumbar and thoracic spinal erector columns."
     },
     "middle back": {
-      "muscleIds": [],
-      "why": "Region name that could cover multiple muscles, so it is left unmapped rather than guessed."
+      "muscleIds": [
+        "rhomboids"
+      ],
+      "why": "Middle-back region represented conservatively by the rhomboid major and minor group."
     },
     "neck": {
-      "muscleIds": [],
-      "why": "Region name; no mapped MuscleAtlas group currently represents the neck."
+      "muscleIds": [
+        "sternocleidomastoid"
+      ],
+      "why": "Neck region represented by the sternocleidomastoid selection."
     },
     "quadriceps": {
       "muscleIds": [

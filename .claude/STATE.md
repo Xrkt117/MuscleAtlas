@@ -7,7 +7,7 @@ Interactive male-anatomy tutor for a hackathon: an AI drives a 3D muscle model a
 does and how exercise trains it, citing only a verified facts file. PRD: `.claude/PRPs/prds/muscleatlas.prd.md`.
 
 ## Now
-- Nothing in flight. Phases 1-3 and the spacious UI (floating panels, cited info panel, callouts, list rail, 17 muscles)
+- Nothing in flight. Phases 1-3 and the spacious UI (floating panels, cited info panel, callouts, list rail, 23 muscles)
   are done, reviewed, pushed (`origin/main` = `5cea0f2`) and verified live in native Chrome (loads in about 2 s, no console errors).
 
 ## Next

@@ -12,8 +12,8 @@ const exercises = exercisesJson as ExercisesFile;
 const evidence = evidenceJson as EvidenceFile;
 const ids = MUSCLES.map((m) => m.id);
 
-// The dataset (free-exercise-db) has no muscle group covering serratus anterior, so it has no exercise links.
-const KNOWN_EXERCISE_GAPS = ["serratus_anterior"];
+// The dataset has no group specific enough to support exercise links for these muscles without guessing.
+const KNOWN_EXERCISE_GAPS = ["serratus_anterior", "brachialis", "teres_major"];
 
 const cites: Cite[] = [
   ...Object.values(muscles).flatMap((m) => m.actions.map((a) => a.cite)),

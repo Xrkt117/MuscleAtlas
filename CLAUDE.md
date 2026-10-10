@@ -11,7 +11,7 @@
 - `npm run typecheck` - `tsc --noEmit`
 
 ## Layout
-- `src/` - app code (`viewer.ts` is the three.js viewer and `AtlasApi`; `muscle-map.ts` the mapped muscle groups (17 at last count; see `MUSCLES`))
+- `src/` - app code (`viewer.ts` is the three.js viewer and `AtlasApi`; `muscle-map.ts` the mapped muscle groups (23 at last count; see `MUSCLES`))
 - `public/models/` - the Draco GLBs (`muscles-draco.glb`, plus `skeleton-draco.glb` as unselectable decoration); `public/draco/` - local Draco decoder files
 - `src/panel.ts` - cited info panel (DOM via `h()`, never innerHTML); `src/callouts.ts` - 3D callout chips and leader lines; `src/style.css` - all CSS (layout A: floating panels over a full-window canvas)
 - `src/facts/` - cited facts the AI tutor may use; every claim has a source id and a verbatim quote

@@ -450,5 +450,85 @@
         }
       }
     ]
+  },
+  "teres_major": {
+    "actions": [
+      {
+        "text": "Helps the latissimus dorsi pull a raised upper arm down and back.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, III. The Muscles and Fasciae of the Shoulder, Actions (p. 442); Teres major",
+          "quote": "The Teres major assists the Latissimus dorsi in drawing the previously raised humerus downward and backward"
+        }
+      }
+    ]
+  },
+  "rhomboids": {
+    "actions": [
+      {
+        "text": "Pull the lower angle of the shoulder blade backward and upward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, I. The Muscles Connecting the Upper Extremity to the Vertebral Column, Actions (p. 435); Rhomboidei",
+          "quote": "The Rhomboidei carry the inferior angle backward and upward"
+        }
+      }
+    ]
+  },
+  "spinal_erectors": {
+    "actions": [
+      {
+        "text": "The spinal erectors bend the trunk backward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, I. The Deep Muscles of the Back, Actions (p. 401); Sacrospinalis and its continuations",
+          "quote": "they also serve to bend the trunk backward"
+        }
+      }
+    ]
+  },
+  "sternocleidomastoid": {
+    "actions": [
+      {
+        "text": "Working on one side, it tilts the head toward the shoulder on that side.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, II. The Lateral Cervical Muscles, Actions (p. 390); Sternocleidomastoideus",
+          "quote": "When only one Sternocleidomastoideus acts, it draws the head toward the shoulder of the same side"
+        }
+      }
+    ]
+  },
+  "brachialis": {
+    "actions": [
+      {
+        "text": "Bends the elbow by flexing the forearm.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, IV. The Muscles and Fasciae of the Arm, Actions (p. 444); Brachialis",
+          "quote": "The Brachialis is a flexor of the forearm"
+        }
+      }
+    ]
+  },
+  "gluteus_medius_minimus": {
+    "actions": [
+      {
+        "text": "The gluteus medius and minimus move an extended thigh out to the side.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 3. The Muscles of the Gluteal Region, Actions (p. 478); Glutaei medius and minimus",
+          "quote": "abduct the thigh, when the limb is extended"
+        }
+      },
+      {
+        "text": "Their front fibers rotate the thigh inward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 3. The Muscles of the Gluteal Region, Actions (p. 478); anterior fibers of Glutaei medius and minimus",
+          "quote": "Their anterior fibers, by drawing the greater trochanter forward, rotate the thigh inward"
+        }
+      }
+    ]
   }
 }
