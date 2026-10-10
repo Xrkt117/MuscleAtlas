@@ -9,14 +9,22 @@ const h = (tag: string, attrs: Attrs | null, ...kids: (Node | string)[]): HTMLEl
   return el;
 };
 const muted = (text: string, cls = "cite") => h("p", { class: cls }, text);
-const fullCite = (c: PanelCite) => [muted(c.full, "fine"), muted(`Licence: ${c.licence}`, "fine")];
+const fullCite = (c: PanelCite) => [
+  muted(c.full, "fine"),
+  h("p", { class: "fine" }, h("a", { href: c.url, rel: "noopener noreferrer", target: "_blank" }, c.url)),
+  muted(`Licence: ${c.licence}`, "fine"),
+];
+const original = (c: PanelCite, quote: string) => h("details", null,
+  h("summary", null, `${c.short.split(",")[0]}, original wording`),
+  h("blockquote", null, quote),
+  ...fullCite(c));
 
 function evidenceItem(e: PanelEvidence): HTMLElement {
   return h("div", { class: "claim" },
     h("p", null, e.text),
     muted(e.short),
     ...(e.badges.length ? [h("p", { class: "badges" }, ...e.badges.map((b) => h("span", { class: "badge" }, b)))] : []),
-    h("details", null, h("summary", null, "Citation and licence"), ...fullCite(e)));
+    original(e, e.quote));
 }
 
 /** Render the cited panel for a muscle id, or the intro card for null. Never moves focus. */
@@ -31,10 +39,7 @@ export function renderPanel(root: HTMLElement, id: string | null): void {
     ...m.actions.map((a) => h("div", { class: "claim" },
       h("p", null, a.text),
       muted(a.short),
-      h("details", null,
-        h("summary", null, `${a.short.split(",")[0]}, original wording`),
-        h("blockquote", null, a.quote),
-        ...fullCite(a)))));
+      original(a, a.quote))));
   const evidence = h("section", null, h("h3", null, "Training evidence"),
     ...(m.specific.length ? m.specific.map(evidenceItem) : [muted("No muscle-specific studies in our sources.", "empty-note")]),
     ...(m.general.length ? [h("h4", null, "General findings, not specific to this muscle"), ...m.general.map(evidenceItem)] : []));
