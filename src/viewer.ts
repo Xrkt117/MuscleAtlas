@@ -10,6 +10,8 @@ import { facingVisibility } from "./visibility";
 
 /** Per-frame projection of the selected muscle. One object, reused: valid only inside the callback. */
 export interface FrameInfo {
+  /** the selected muscle (first of highlight()'s ids) */
+  id: string;
   width: number;
   height: number;
   animating: boolean;
@@ -36,7 +38,7 @@ export interface AtlasApi {
   onFrame(cb: (f: FrameInfo | null) => void): () => void;
 }
 
-const FOCUS_MS = matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 600;  // 1, not 0: the loop divides by it
+const FOCUS_MS = 600;
 const BOUNDS_PAD = 12;
 const CLICK_MAX_PX = 4;
 const HOVER_MS = 50;
@@ -116,6 +118,8 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   // Selection and hover are state; refresh() is the only place materials are assigned.
   let selected: string[] = [];
   let hovered: string | null = null;
+  // one throwing listener must not end setAnimationLoop (three.js does not request the next frame after a throw)
+  const guard = (fn: () => void) => { try { fn(); } catch (err) { console.error(err); } };
   const refresh = () => {
     for (const m of meshes) m.material = selected.length ? dimMaterial : baseMaterial;
     const paint = (id: string, material: THREE.Material) => {
@@ -126,7 +130,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     for (const id of selected) paint(id, highlightMaterial);
   };
 
-  type Anim = { t0: number; fromAz: number; toAz: number; fromEl: number; toEl: number; fromDist: number; toDist: number; fromTarget: THREE.Vector3; toTarget: THREE.Vector3 };
+  type Anim = { t0: number; ms: number; fromAz: number; toAz: number; fromEl: number; toEl: number; fromDist: number; toDist: number; fromTarget: THREE.Vector3; toTarget: THREE.Vector3 };
   let anim: Anim | null = null;
   const offset = new THREE.Vector3();
   let lastHoverRay = 0;
@@ -135,10 +139,10 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   const hoverListeners = new Set<(id: string | null, x: number, y: number) => void>();
   const setHover = (id: string | null, x: number, y: number) => {
     if (id !== hovered) { hovered = id; refresh(); renderer.domElement.style.cursor = id ? "pointer" : ""; }
-    hoverListeners.forEach((cb) => cb(id, x, y));
+    hoverListeners.forEach((cb) => guard(() => cb(id, x, y)));
   };
 
-  // GPU picking: a raycast against ~1M vertices with no BVH stalled frames for 50-600 ms. Instead render the muscles once into a
+  // GPU picking: a raycast against ~1M vertices with no BVH stalled frames (measured under Rosetta, ADR 0006). Instead render the muscles once into a
   // 1x1 target through a view offset, each mesh flat-coloured with its muscle index+1 in the red channel (0 = background/unmapped).
   const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.UnsignedByteType, format: THREE.RGBAFormat });
   const idMaterials = MUSCLES.map((_, i) => new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB((i + 1) / 255, 0, 0, THREE.LinearSRGBColorSpace) }));
@@ -206,13 +210,14 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
 
   // onFrame state. Everything below is reused every frame (no allocation).
   const frameListeners = new Set<(f: FrameInfo | null) => void>();
-  const frame: FrameInfo = { width: 1, height: 1, animating: false, bounds: { x: 0, y: 0, w: 0, h: 0 }, parts: [] };
+  const callFrame = (cb: (f: FrameInfo | null) => void, f: FrameInfo | null) => { try { cb(f); } catch (err) { console.error(err); } };  // no closure per frame
+  const frame: FrameInfo = { id: "", width: 1, height: 1, animating: false, bounds: { x: 0, y: 0, w: 0, h: 0 }, parts: [] };
   let frameAnchors: MuscleAnchors | null = null, frameSide = 0, emitNull = false;
   const pv = new THREE.Vector3(), toCam = new THREE.Vector3(), fwd = new THREE.Vector3(), corner = new THREE.Vector3();
   const emitFrame = () => {
     if (!frameListeners.size) return;
     if (!frameAnchors) {
-      if (emitNull) { emitNull = false; frameListeners.forEach((cb) => cb(null)); }
+      if (emitNull) { emitNull = false; frameListeners.forEach((cb) => callFrame(cb, null)); }
       return;
     }
     const A = frameAnchors, cp = camera.position;
@@ -244,23 +249,23 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     }
     frame.bounds.x = x0 - BOUNDS_PAD; frame.bounds.y = y0 - BOUNDS_PAD;
     frame.bounds.w = x1 - x0 + 2 * BOUNDS_PAD; frame.bounds.h = y1 - y0 + 2 * BOUNDS_PAD;
-    frameListeners.forEach((cb) => cb(frame));
+    frameListeners.forEach((cb) => callFrame(cb, frame));
   };
 
   // All anchors now, behind the loading overlay: ~15 ms in native arm64 Chrome. Under x64 Chrome on Rosetta (e.g. launched
-  // by an x64 Node test harness) the cold JIT makes it ~1.5 s, which as idle-frame work showed up as 100-1300 ms frame gaps.
+  // by an x64 Node test harness) the cold JIT is far slower; see ADR 0006.
   scene.updateMatrixWorld(true);
   for (const m of MUSCLES) anchorsFor(m.id);
 
   // Warm-up. One full-view pick now: it uploads the geometry and binds every mesh to the id program, work the first frame needs anyway.
-  // The first partial picks then cost 60-250 ms of CPU each (measured, decays to ~5 ms), so spend them in the loop below,
+  // The first partial picks are slow, then fast (measured under Rosetta, ADR 0006), so spend them in the loop below,
   // one per idle frame, instead of making the page load wait for them.
   const centre = () => { const r = renderer.domElement.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2] as const; };
   pick(...centre(), true);
   let warmPicks = 9;
   renderer.setAnimationLoop(() => {
     if (anim) {
-      const raw = Math.min((performance.now() - anim.t0) / FOCUS_MS, 1), k = easeInOutCubic(raw);
+      const raw = Math.min((performance.now() - anim.t0) / anim.ms, 1), k = easeInOutCubic(raw);
       const lerp = (a: number, b: number) => a + (b - a) * k;
       const az = lerp(anim.fromAz, anim.toAz), el = lerp(anim.fromEl, anim.toEl), d = lerp(anim.fromDist, anim.toDist);
       controls.target.lerpVectors(anim.fromTarget, anim.toTarget, k);
@@ -289,7 +294,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > CLICK_MAX_PX) return;  // orbit drag, not a click
     down = null;
     const id = pick(e.clientX, e.clientY);
-    listeners.forEach((cb) => cb(id));
+    listeners.forEach((cb) => guard(() => cb(id)));
   });
   renderer.domElement.addEventListener("pointermove", (e) => { if (e.buttons === 0 && !anim) pendingMove = { x: e.clientX, y: e.clientY }; });
   renderer.domElement.addEventListener("pointerenter", () => { pointerOnCanvas = true; });
@@ -304,6 +309,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       refresh();
       if (ids.length) {
         frameAnchors = anchorsFor(ids[0]);
+        frame.id = ids[0];
         const n = frameAnchors.sides[0].points.length;
         frame.parts = Array.from({ length: n }, () => ({ x: 0, y: 0, visibility: 0 }));
         const c = camera.position;  // initial side: nearer one, no hysteresis
@@ -324,7 +330,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       const off = camera.position.clone().sub(controls.target);
       const fromDist = off.length(), fromAz = Math.atan2(off.x, off.z), fromEl = Math.asin(off.y / fromDist);
       anim = {
-        t0: performance.now(), fromAz, toAz: targetAzimuth(fromAz, MUSCLE_BY_ID[id].view),
+        t0: performance.now(), ms: matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : FOCUS_MS /* 1, not 0: the loop divides by it */, fromAz, toAz: targetAzimuth(fromAz, MUSCLE_BY_ID[id].view),
         fromEl, toEl: THREE.MathUtils.clamp(fromEl, -0.5, 0.8),  // never end looking straight up or down
         fromDist, toDist: dist, fromTarget: controls.target.clone(), toTarget: center,
       };
