@@ -26,28 +26,29 @@ try {
   window.atlas = atlas;
 
   const info = $("info"), rail = $("rail"), pill = $<HTMLButtonElement>("rail-pill"), railCurrent = $("rail-current"), listCard = $("listcard");
-  const callouts = createCallouts($("stage"), [info, rail, listCard, pill, $("credits")]);
+  const callouts = createCallouts($("stage"), [info, rail, $("brand"), $("credits")]);
   atlas.onFrame(callouts.update);
   renderPanel(info, null);
 
   // List rail: "open" on load, "collapsed" pill after the first selection, "overlay" when reopened.
   type RailState = "open" | "collapsed" | "overlay";
-  let railState: RailState = "open", suppressFocusOpen = false, focusOpenedAt = 0;
+  let railState: RailState = "open", current: string | null = null;
+  const pillShown = () => pill.offsetParent !== null;  // display:none in the narrow layout, where the list is always visible
   const setRail = (st: RailState) => {
     railState = st;
     rail.dataset.state = st;
     pill.setAttribute("aria-expanded", String(st !== "collapsed"));
   };
   const closeOverlay = (refocus: boolean) => {
-    const hadFocus = rail.contains(document.activeElement);
+    const active = document.activeElement as HTMLElement | null;
+    const hadFocus = rail.contains(active);
     setRail("collapsed");
-    if (refocus && hadFocus) { suppressFocusOpen = true; pill.focus(); suppressFocusOpen = false; }
+    if (refocus && hadFocus) (pillShown() ? pill : active)?.focus();  // the focused list button may just have been hidden
   };
-  const openOverlay = () => { if (railState === "collapsed") setRail("overlay"); };
-  pill.addEventListener("focus", () => { if (!suppressFocusOpen && railState === "collapsed") { focusOpenedAt = performance.now(); openOverlay(); } });
-  pill.addEventListener("click", () => {
+  const openOverlay = () => { if (railState === "collapsed" && pillShown()) setRail("overlay"); };
+  pill.addEventListener("click", () => {  // also Enter and Space
     if (railState === "collapsed") openOverlay();
-    else if (railState === "overlay" && performance.now() - focusOpenedAt > 400) closeOverlay(true);  // the click that follows a focus-open must not close it
+    else if (railState === "overlay") closeOverlay(true);
   });
   rail.addEventListener("focusout", (e) => {
     const to = e.relatedTarget as Node | null;
@@ -55,20 +56,25 @@ try {
   });
   addEventListener("pointerdown", (e) => { if (railState === "overlay" && !rail.contains(e.target as Node)) setRail("collapsed"); });
 
+  const setPillLabel = (label: string | null) => pill.setAttribute("aria-label", `Muscles: ${label ?? "none"}`);
+  setPillLabel(null);
   const select = (id: string | null) => {
-    if (id === null) {
-      atlas.clear();
-    } else {
-      atlas.highlight([id]);
-      atlas.focus(id);
+    if (id !== current) {  // re-selecting the same muscle must not restart the camera animation
+      current = id;
+      if (id === null) {
+        atlas.clear();
+      } else {
+        atlas.highlight([id]);
+        atlas.focus(id);
+      }
+      renderPanel(info, id);
+      railCurrent.textContent = id === null ? "" : MUSCLE_BY_ID[id].label;
+      setPillLabel(id === null ? null : MUSCLE_BY_ID[id].label);
+      selectedEl.textContent = id === null ? "Selection cleared" : `Selected: ${MUSCLE_BY_ID[id].label}`;
+      buttons.forEach((b, bid) => b.setAttribute("aria-pressed", String(bid === id)));
     }
-    renderPanel(info, id);
-    callouts.show(id);
-    railCurrent.textContent = id === null ? "" : MUSCLE_BY_ID[id].label;
-    if (railState === "overlay") closeOverlay(true);
-    else if (railState === "open" && id !== null) setRail("collapsed");
-    selectedEl.textContent = id === null ? "" : `Selected: ${MUSCLE_BY_ID[id].label}`;
-    buttons.forEach((b, bid) => b.setAttribute("aria-pressed", String(bid === id)));
+    atlas.preview(null);  // a hidden, focused list button may never blur
+    if (railState === "overlay" || (railState === "open" && id !== null)) closeOverlay(true);
   };
 
   for (const m of MUSCLES) {
@@ -88,10 +94,11 @@ try {
   // Click on empty space or an unmapped muscle deselects, same as Esc.
   atlas.onSelect(select);
   addEventListener("keydown", (e) => {
+    if (e.repeat || (e.target instanceof Element && e.target.closest("input,textarea,select,[contenteditable]"))) return;
     if (e.key === "Escape") {
-      if (railState === "overlay") closeOverlay(true); else select(null);  // Esc with the card open only closes the card
+      if (railState === "overlay" && pillShown()) closeOverlay(true); else select(null);  // Esc with the card open only closes the card
     } else if ((e.key === "m" || e.key === "M") && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      if (railState === "collapsed") { openOverlay(); ((listCard.querySelector('button[aria-pressed="true"]') ?? listCard.querySelector("button")) as HTMLButtonElement | null)?.focus(); }
+      if (railState === "collapsed" && pillShown()) { openOverlay(); ((listCard.querySelector('button[aria-pressed="true"]') ?? listCard.querySelector("button")) as HTMLButtonElement | null)?.focus(); }
     }
   });
 
@@ -109,6 +116,7 @@ try {
   const banner = $("error");
   banner.textContent = `Could not load the 3D model: ${err instanceof Error ? err.message : String(err)}`;
   banner.style.display = "block";
+  document.body.classList.add("failed");
 } finally {
   loading.style.display = "none";
   document.body.classList.remove("loading");

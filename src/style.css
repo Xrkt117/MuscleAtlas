@@ -1,6 +1,6 @@
 :root {
-  --bg: #0b0c0e; --fg: #e8e9eb; --muted: #9aa0a8; --line: rgba(255,255,255,.1); --accent: #ffc857;
-  --glass: rgba(18,20,24,.72); --glass-blur: 10px; --glass-border: rgba(255,255,255,.08);
+  --bg: #0b0c0e; --fg: #e8e9eb; --muted: #b4b9c0; --line: rgba(255,255,255,.1); --accent: #ffc857;
+  --glass: rgba(18,20,24,.85); --glass-blur: 10px; --glass-border: rgba(255,255,255,.08);
   --gap: 24px; --radius: 14px;
 }
 * { box-sizing: border-box; }
@@ -19,8 +19,11 @@ h1, h2, h3, h4, p { margin: 0; }
 #loading-bar::-webkit-progress-bar { background: #444; }
 #loading-bar::-webkit-progress-value { background: #c87f6e; }
 #loading-bar::-moz-progress-bar { background: #c87f6e; }
-#error { display: none; position: absolute; inset: 0 0 auto 0; padding: 12px; background: #900; color: #fff; z-index: 6; }
+#error { display: none; position: fixed; inset: 0 0 auto 0; padding: 12px; background: #900; color: #fff; z-index: 6; }  /* outside #stage so it paints above the z 3 panels */
 body.loading #rail, body.loading #info, body.loading #brand, body.loading #credits { visibility: hidden; }
+
+body.failed #rail, body.failed #info { display: none; }  /* credits stay, the error banner is shown above */
+body.failed #loading { display: none; }
 
 /* floating surfaces */
 #brand { position: fixed; z-index: 3; top: var(--gap); left: var(--gap); padding: 0 4px; text-shadow: 0 1px 6px #000; }
@@ -61,6 +64,7 @@ body.loading #rail, body.loading #info, body.loading #brand, body.loading #credi
 .claim:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
 .cite { margin-top: 8px; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
 .fine { margin-top: 8px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+.fine a { color: inherit; overflow-wrap: anywhere; }
 .empty-note { font-size: 13.5px; color: var(--muted); }
 details { margin-top: 8px; font-size: 13.5px; }
 summary { cursor: pointer; color: #c9ccd1; padding: 2px 0; }
