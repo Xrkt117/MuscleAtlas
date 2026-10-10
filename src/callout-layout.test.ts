@@ -103,4 +103,33 @@ describe("layoutCallouts", () => {
       });
     }
   });
+
+  it("an invisible label takes no room: it neither pushes a visible label down nor hides it", () => {
+    const anchors = [lab(450, 300), lab(450, 302)];
+    const [solo] = layoutCallouts(base([anchors[1]]));
+    const out = layoutCallouts(base(anchors, { visible: [false, true] }));
+    expect(out[0].hidden).toBe(true);
+    expect(out[1].hidden).toBe(false);
+    expect(out[1].label).toEqual(solo.label);
+  });
+
+  it("seeded property test: invisible labels never change where the visible ones go", () => {
+    let s = 777;
+    const rnd = () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 2 ** 32);
+    const between = (a: number, b: number) => a + rnd() * (b - a);
+    for (let c = 0; c < 200; c++) {
+      const anchors = Array.from({ length: 1 + Math.floor(rnd() * 7) }, () => ({ x: between(100, 900), y: between(50, 650), w: between(30, 180), h: between(14, 32) }));
+      const visible = anchors.map(() => rnd() < 0.5);
+      const full = layoutCallouts(base(anchors, { visible }));
+      const keep = anchors.filter((_, k) => visible[k]);
+      const only = layoutCallouts(base(keep));
+      let j = 0;
+      full.forEach((o, k) => {
+        if (!visible[k]) return expect(o.hidden).toBe(true);
+        expect(o.hidden).toBe(only[j].hidden);
+        expect(o.label).toEqual(only[j].label);
+        j++;
+      });
+    }
+  });
 });

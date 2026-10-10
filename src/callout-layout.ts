@@ -12,6 +12,8 @@ export interface LayoutIn {
   margin?: number;
   space?: number;
   prevSide?: ("l" | "r")[];
+  /** per anchor; false = not drawn, so it is hidden from the start and takes no room */
+  visible?: boolean[];
 }
 export interface LayoutOut { label: Rect; side: "l" | "r"; from: Pt; to: Pt; hidden: boolean }
 
@@ -21,7 +23,7 @@ const inside = (p: Pt, r: Rect) => p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y 
 
 /** Pure, allocation-light label placement; output order matches `i.anchors`. */
 export function layoutCallouts(i: LayoutIn): LayoutOut[] {
-  const { anchors, bounds, obstacle, avoid, gap = 16, margin = 12, space = 6, prevSide } = i;
+  const { anchors, bounds, obstacle, avoid, gap = 16, margin = 12, space = 6, prevSide, visible } = i;
   const cx = obstacle.x + obstacle.w / 2;
   const stage: Rect = { x: 0, y: 0, w: bounds.w, h: bounds.h };
 
@@ -31,7 +33,7 @@ export function layoutCallouts(i: LayoutIn): LayoutOut[] {
       prev === "l" && a.x <= cx + HYST ? "l" : prev === "r" && a.x >= cx - HYST ? "r" : a.x < cx ? "l" : "r";
     const x = side === "l" ? obstacle.x - gap - a.w : obstacle.x + obstacle.w + gap;
     const label = { x, y: a.y - a.h / 2, w: a.w, h: a.h };
-    const hidden = !inside(a, stage) || avoid.some((r) => inside(a, r));
+    const hidden = visible?.[k] === false || !inside(a, stage) || avoid.some((r) => inside(a, r));
     return { label, side, from: { x: 0, y: 0 }, to: { x: a.x, y: a.y }, hidden };
   });
 
