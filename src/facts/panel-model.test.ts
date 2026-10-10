@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { MUSCLES } from "../muscle-map";
-import { buildPanelModel } from "./panel-model";
+import { buildGuideModel, buildPanelModel } from "./panel-model";
 import type { PanelCite } from "./panel-model";
 
-const allCites = (m: ReturnType<typeof buildPanelModel>): PanelCite[] => [...m.actions, ...m.specific, ...m.general];
+const allCites = (m: ReturnType<typeof buildPanelModel>): PanelCite[] => [...m.actions, ...m.exercises, ...m.loading, ...m.specific, ...m.general];
 
 describe("buildPanelModel", () => {
   it("deltoid has 3 fully populated actions", () => {
@@ -60,14 +60,39 @@ describe("buildPanelModel", () => {
     expect(buildPanelModel("soleus").specific.flatMap((e) => e.badges)).not.toContain("Group finding");
   });
 
-  it("no exercises key; every cite has licence and short", () => {
+  it("every available exercise and loading claim has a complete citation", () => {
     for (const { id } of MUSCLES) {
       const m = buildPanelModel(id);
-      expect(JSON.stringify(m)).not.toContain('"exercises"');
+      expect(m.loading).toHaveLength(2);
+      expect(m.isolation.every((exercise) => exercise.mechanic === "isolation")).toBe(true);
       for (const c of allCites(m)) {
         expect(c.licence.trim()).not.toBe("");
         expect(c.short.trim()).not.toBe("");
       }
     }
+  });
+
+  it("forearms expose their broad exercises as isolation options", () => {
+    const m = buildPanelModel("forearm_muscles");
+    expect(m.exercises.map((exercise) => exercise.name)).toEqual([
+      "Palms-Up Barbell Wrist Curl Over A Bench",
+      "Palms-Down Dumbbell Wrist Curl Over A Bench",
+    ]);
+    expect(m.isolation).toHaveLength(2);
+  });
+
+  it("known exercise gaps stay explicit instead of inventing mappings", () => {
+    for (const id of ["serratus_anterior", "brachialis", "teres_major"]) {
+      const m = buildPanelModel(id);
+      expect(m.exercises, id).toEqual([]);
+      expect(m.isolation, id).toEqual([]);
+    }
+  });
+
+  it("the general guide exposes all categories and the Cambridge model badge", () => {
+    const guide = buildGuideModel();
+    expect(guide).toHaveLength(5);
+    const model = guide.flatMap((section) => section.claims).find((claim) => claim.short.startsWith("Cambridge"));
+    expect(model?.badges).toEqual(["Model estimate"]);
   });
 });

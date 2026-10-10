@@ -1,6 +1,6 @@
 import { MUSCLE_BY_ID, MUSCLES } from "./muscle-map";
 import { createViewer, type AtlasApi } from "./viewer";
-import { renderPanel } from "./panel";
+import { renderGuide, renderPanel, renderSources } from "./panel";
 import { createCallouts } from "./callouts";
 import "./style.css";
 
@@ -26,10 +26,14 @@ try {
   window.atlas = atlas;
 
   const info = $("info"), rail = $("rail"), pill = $<HTMLButtonElement>("rail-pill"), railCurrent = $("rail-current"), listCard = $("listcard");
+  const muscleGuide = $<HTMLDetailsElement>("muscle-guide");
   const viewControls = $("view-controls");
-  const callouts = createCallouts($("stage"), [info, rail, viewControls, $("brand"), $("credits")]);
+  const sources = $("sources");
+  const callouts = createCallouts($("stage"), [info, rail, viewControls, $("brand"), sources]);
   atlas.onFrame(callouts.update);
   renderPanel(info, null);
+  renderGuide($("guide-body"));
+  renderSources($("sources-body"));
   $("zoom-in").addEventListener("click", atlas.zoomIn);
   $("zoom-out").addEventListener("click", atlas.zoomOut);
   $("reset-view").addEventListener("click", atlas.resetView);
@@ -76,6 +80,7 @@ try {
       setPillLabel(id === null ? null : MUSCLE_BY_ID[id].label);
       selectedEl.textContent = id === null ? "Selection cleared" : `Selected: ${MUSCLE_BY_ID[id].label}`;
       buttons.forEach((b, bid) => b.setAttribute("aria-pressed", String(bid === id)));
+      if (id !== null && matchMedia("(max-width: 899px)").matches) muscleGuide.open = false;
     }
     atlas.preview(null);  // a hidden, focused list button may never blur
     if (railState === "overlay" || (railState === "open" && id !== null)) closeOverlay(true);
