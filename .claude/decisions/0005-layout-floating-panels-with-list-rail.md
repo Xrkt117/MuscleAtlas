@@ -10,7 +10,7 @@ compared two real mockups (screenshots read) before choosing.
 ## Decision
 The canvas fills the window. A translucent list card floats left, a translucent info panel floats right
 (What it does + Training evidence, cited), and callout chips with leader lines point at named parts. The list is open
-on first load, then collapses to a pill showing the current muscle after the first selection (click, focus or M
+on first load, then collapses to a pill showing the current muscle after the first selection (click, Enter, Space or M
 reopens it), so callout labels get free space beside the figure. Footer credits stay visible.
 
 ## Consequences

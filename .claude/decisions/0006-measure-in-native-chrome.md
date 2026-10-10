@@ -4,9 +4,12 @@
 **Status:** accepted (partially supersedes the rationale of 0003)
 
 ## Context
-Every headed-Chrome measurement in this project up to now ran under Rosetta: the machine's default `node` is x86_64, so
-Playwright launched emulated Chrome (user agent "x64 Macintosh"). Under emulation: page load 11-16 s, hover stalls of
-340-580 ms, anchor precompute hitches up to 1.4 s, 30-50 fps. Re-measured in native arm64 Chrome (3 runs each):
+Every headed-Chrome measurement in this project up to now was launched by Playwright from the machine's default `node`,
+which is an x86_64 build. On Apple silicon that very likely made Chrome run translated (Rosetta): the same script, dev server and
+Chrome app gave a 33 ms median frame time with the x86_64 node and 8.3 ms with the arm64 node, and a subagent's isolation test
+(first call of one function: 1.3 ms on arm64 Chrome vs 280-520 ms with `arch -x86_64` or the x86_64 launcher) points the same way.
+Not confirmed by inspecting the running process (Chrome's user agent and `architecture` hints report the hardware, not translation).
+Under the slow setup: page load 11-16 s, hover stalls of 340-580 ms, anchor precompute hitches up to 1.4 s, 30-50 fps. Re-measured in native arm64 Chrome (3 runs each):
 page load 0.2-0.4 s, 120 fps, hover sweeps worst gap 18-30 ms with the OLD raycast, 11-38 ms with GPU picking, 11-32 ms
 with the new UI. ADR 0003 chose GPU picking because of the emulated numbers.
 
