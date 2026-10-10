@@ -29,6 +29,8 @@ export interface EvidenceClaim {
   /** Applies beyond the specific muscle (shown as general evidence). */
   general?: true;
   caveat?: "abstract-only" | "single-study";
+  /** The source speaks of the muscles as a group, not of each one (shown as "Group finding"). */
+  scope?: "group";
   cite: Cite;
 }
 

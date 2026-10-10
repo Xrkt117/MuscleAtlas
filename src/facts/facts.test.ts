@@ -101,6 +101,14 @@ describe("facts data", () => {
     }
   });
 
+  it("a 'group' scope needs at least 2 muscles and is not general; the Maeo hamstrings claim has it", () => {
+    for (const e of evidence) if (e.scope === "group") {
+      expect(e.appliesTo === "all" ? 0 : e.appliesTo.length, e.text).toBeGreaterThanOrEqual(2);
+      expect(e.general, e.text).toBeUndefined();
+    }
+    expect(evidence.find((e) => e.cite.sourceId === "maeo-2021-hamstrings")?.scope).toBe("group");
+  });
+
   it("appliesTo 'all' implies general", () => {
     for (const e of evidence) if (e.appliesTo === "all") expect(e.general, e.text).toBe(true);
   });

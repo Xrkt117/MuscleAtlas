@@ -31,6 +31,7 @@
     "text": "One study concluded that hamstrings muscle size can be increased more effectively by seated than by prone (lying) leg curl training.",
     "appliesTo": ["biceps_femoris", "semitendinosus", "semimembranosus"],
     "caveat": "single-study",
+    "scope": "group",
     "cite": { "sourceId": "maeo-2021-hamstrings", "locator": "Abstract, Conclusion", "quote": "Hamstrings muscle size can be more effectively increased by seated than prone leg curl training" }
   },
   {

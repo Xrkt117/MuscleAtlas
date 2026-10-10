@@ -44,6 +44,22 @@ describe("buildPanelModel", () => {
     expect(() => buildPanelModel("nope")).toThrow("Unknown muscle id: nope");
   });
 
+  it("every evidence item has a non-empty quote, and every cite has a url", () => {
+    for (const { id } of MUSCLES) {
+      const m = buildPanelModel(id);
+      for (const e of [...m.specific, ...m.general]) expect(e.quote.trim(), e.text).not.toBe("");
+      for (const c of allCites(m)) expect(c.url, c.short).toMatch(/^https?:\/\//);
+    }
+  });
+
+  it("the hamstrings finding carries the Group finding badge on all three hamstrings", () => {
+    for (const id of ["biceps_femoris", "semitendinosus", "semimembranosus"]) {
+      const e = buildPanelModel(id).specific.find((x) => x.short.startsWith("Maeo"));
+      expect(e?.badges, id).toEqual(["Single study", "Group finding"]);
+    }
+    expect(buildPanelModel("soleus").specific.flatMap((e) => e.badges)).not.toContain("Group finding");
+  });
+
   it("no exercises key; every cite has licence and short", () => {
     for (const { id } of MUSCLES) {
       const m = buildPanelModel(id);
