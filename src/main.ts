@@ -26,9 +26,13 @@ try {
   window.atlas = atlas;
 
   const info = $("info"), rail = $("rail"), pill = $<HTMLButtonElement>("rail-pill"), railCurrent = $("rail-current"), listCard = $("listcard");
-  const callouts = createCallouts($("stage"), [info, rail, $("brand"), $("credits")]);
+  const viewControls = $("view-controls");
+  const callouts = createCallouts($("stage"), [info, rail, viewControls, $("brand"), $("credits")]);
   atlas.onFrame(callouts.update);
   renderPanel(info, null);
+  $("zoom-in").addEventListener("click", atlas.zoomIn);
+  $("zoom-out").addEventListener("click", atlas.zoomOut);
+  $("reset-view").addEventListener("click", atlas.resetView);
 
   // List rail: "open" on load, "collapsed" pill after the first selection, "overlay" when reopened.
   type RailState = "open" | "collapsed" | "overlay";

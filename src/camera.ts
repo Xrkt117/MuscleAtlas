@@ -19,3 +19,8 @@ export function easeInOutCubic(k: number): number {
   const t = Math.min(Math.max(k, 0), 1);
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
+
+/** Scale an orbit distance while keeping the camera inside its safe dolly range. */
+export function scaledDistance(distance: number, scale: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, distance * scale));
+}

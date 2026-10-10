@@ -3,7 +3,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { MUSCLE_BY_ID, MUSCLES } from "./muscle-map";
-import { easeInOutCubic, targetAzimuth } from "./camera";
+import { easeInOutCubic, scaledDistance, targetAzimuth } from "./camera";
 import { muscleIdForNode, nodeNamesFor, partsFor, sanitize } from "./muscles";
 import { anchorForObject } from "./anchors";
 import { facingVisibility } from "./visibility";
@@ -31,6 +31,12 @@ export interface AtlasApi {
   clear(): void;
   /** Animate the camera to frame the muscle (both sides). Throws on an unknown muscle id. */
   focus(id: string): void;
+  /** Move closer to the current orbit target. */
+  zoomIn(): void;
+  /** Move farther from the current orbit target. */
+  zoomOut(): void;
+  /** Return to the initial centred, full-body view without clearing the selection. */
+  resetView(): void;
   /** Sidebar preview: same hover highlight as the pointer, but ignored while the pointer is on the canvas. null clears it. */
   preview(id: string | null): void;
   /** Pointer over a seed muscle (or null) with client coordinates, at most once per frame. Returns an unsubscribe. */
@@ -120,6 +126,10 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
   controls.target.copy(c);
   camera.position.set(c.x, c.y, c.z + size.y * 1.8);  // front view (+Z) after Blender's Y-up conversion
+  controls.minDistance = size.y * 0.18;
+  controls.maxDistance = size.y * 4;
+  const homeTarget = controls.target.clone();
+  const homeOffset = camera.position.clone().sub(homeTarget);
 
   // muscle id -> node objects, looked up by three.js-sanitised name. A missing node means the map and GLB disagree.
   const nodesById = new Map<string, THREE.Object3D[]>();
@@ -178,6 +188,29 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   type Anim = { t0: number; ms: number; fromAz: number; toAz: number; fromEl: number; toEl: number; fromDist: number; toDist: number; fromTarget: THREE.Vector3; toTarget: THREE.Vector3 };
   let anim: Anim | null = null;
   const offset = new THREE.Vector3();
+  const animateView = (toTarget: THREE.Vector3, toAz: number, toEl: number, toDist: number) => {
+    const from = offset.subVectors(camera.position, controls.target);
+    const fromDist = from.length();
+    anim = {
+      t0: performance.now(),
+      ms: matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : FOCUS_MS,
+      fromAz: Math.atan2(from.x, from.z),
+      toAz,
+      fromEl: Math.asin(from.y / fromDist),
+      toEl,
+      fromDist,
+      toDist,
+      fromTarget: controls.target.clone(),
+      toTarget,
+    };
+  };
+  const zoomBy = (scale: number) => {
+    anim = null;
+    const from = offset.subVectors(camera.position, controls.target);
+    camera.position.copy(controls.target).add(from.setLength(scaledDistance(from.length(), scale, controls.minDistance, controls.maxDistance)));
+    pendingMove = null;
+    controls.update();
+  };
   let lastHoverRay = 0;
   let pointerOnCanvas = false;
   let pendingMove: { x: number; y: number } | null = null;  // set by pointermove, consumed once per frame
@@ -378,12 +411,15 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       const dist = (b.getSize(new THREE.Vector3()).length() / 2) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.2;
       const off = camera.position.clone().sub(controls.target);
       const fromDist = off.length(), fromAz = Math.atan2(off.x, off.z), fromEl = Math.asin(off.y / fromDist);
-      anim = {
-        t0: performance.now(), ms: matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : FOCUS_MS /* 1, not 0: the loop divides by it */, fromAz, toAz: targetAzimuth(fromAz, MUSCLE_BY_ID[id].view),
-        fromEl, toEl: THREE.MathUtils.clamp(fromEl, -0.5, 0.8),  // never end looking straight up or down
-        fromDist, toDist: dist, fromTarget: controls.target.clone(), toTarget: center,
-      };
+      animateView(center, targetAzimuth(fromAz, MUSCLE_BY_ID[id].view), THREE.MathUtils.clamp(fromEl, -0.5, 0.8), dist);
       if (hovered) setHover(null, 0, 0);  // hover is paused during the animation; don't leave a stale tooltip
+    },
+    zoomIn() { zoomBy(0.8); },
+    zoomOut() { zoomBy(1.25); },
+    resetView() {
+      const distance = homeOffset.length();
+      animateView(homeTarget.clone(), Math.atan2(homeOffset.x, homeOffset.z), Math.asin(homeOffset.y / distance), distance);
+      if (hovered) setHover(null, 0, 0);
     },
     preview(id) {
       if (pointerOnCanvas || id === hovered) return;

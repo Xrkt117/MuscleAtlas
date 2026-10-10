@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { easeInOutCubic, targetAzimuth } from "./camera";
+import { easeInOutCubic, scaledDistance, targetAzimuth } from "./camera";
 
 const PI = Math.PI;
 
@@ -47,5 +47,17 @@ describe("easeInOutCubic", () => {
   it("clamps outside [0, 1]", () => {
     expect(easeInOutCubic(-0.5)).toBe(0);
     expect(easeInOutCubic(1.5)).toBe(1);
+  });
+});
+
+describe("scaledDistance", () => {
+  it("zooms in and out within the supplied limits", () => {
+    expect(scaledDistance(10, 0.8, 2, 20)).toBe(8);
+    expect(scaledDistance(10, 1.25, 2, 20)).toBe(12.5);
+  });
+
+  it("clamps at both ends of the orbit range", () => {
+    expect(scaledDistance(3, 0.5, 2, 20)).toBe(2);
+    expect(scaledDistance(18, 2, 2, 20)).toBe(20);
   });
 });

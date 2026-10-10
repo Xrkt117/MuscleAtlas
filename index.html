@@ -16,6 +16,17 @@
 <div id="error" role="alert"></div>
 <div id="selected" aria-live="polite"></div>
 <aside id="info" aria-labelledby="info-title"></aside>
+<nav id="view-controls" aria-label="Model view controls">
+  <button id="zoom-in" type="button" aria-label="Zoom in" title="Zoom in">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7v7M7 10.5h7"/></svg>
+  </button>
+  <button id="zoom-out" type="button" aria-label="Zoom out" title="Zoom out">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M7 10.5h7"/></svg>
+  </button>
+  <button id="reset-view" type="button" aria-label="Return to centred view" title="Return to centred view">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-7 9 7M5.5 10v10h13V10M9 20v-6h6v6"/></svg>
+  </button>
+</nav>
 <footer id="credits">Model: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0; BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan</footer>
 <script type="module" src="/src/main.ts"></script>
 </body>

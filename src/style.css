@@ -20,15 +20,16 @@ h1, h2, h3, h4, p { margin: 0; }
 #loading-bar::-webkit-progress-value { background: #c87f6e; }
 #loading-bar::-moz-progress-bar { background: #c87f6e; }
 #error { display: none; position: fixed; inset: 0 0 auto 0; padding: 12px; background: #900; color: #fff; z-index: 6; }  /* outside #stage so it paints above the z 3 panels */
-body.loading #rail, body.loading #info, body.loading #brand, body.loading #credits { visibility: hidden; }
+body.loading #rail, body.loading #info, body.loading #view-controls, body.loading #brand, body.loading #credits { visibility: hidden; }
 
-body.failed #rail, body.failed #info { display: none; }  /* credits stay, the error banner is shown above */
+body.failed #rail, body.failed #info, body.failed #view-controls { display: none; }  /* credits stay, the error banner is shown above */
 body.failed #loading { display: none; }
 
 /* floating surfaces */
 #brand { position: fixed; z-index: 3; top: var(--gap); left: var(--gap); padding: 0 4px; text-shadow: 0 1px 6px #000; }
 #brand h1 { font-size: 18px; font-weight: 650; letter-spacing: .02em; }
-#rail, #info, #credits { position: fixed; z-index: 3; background: var(--glass); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+#rail, #info, #credits, #view-controls button { background: var(--glass); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+#rail, #info, #credits { position: fixed; z-index: 3; }
 #rail { top: 60px; left: var(--gap); width: 220px; border-radius: var(--radius); }
 
 /* list card */
@@ -37,7 +38,7 @@ body.failed #loading { display: none; }
 #list button, #clear { width: 100%; text-align: left; padding: 5px 12px; background: rgba(255,255,255,.05); color: inherit; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: background 120ms, border-color 120ms; }
 #list button:hover, #clear:hover { background: rgba(255,200,87,.12); border-color: rgba(255,200,87,.5); }
 #list button[aria-pressed="true"] { background: #b3261e; border-color: #e0584f; color: #fff; }
-#list button:focus-visible, #clear:focus-visible, #rail-pill:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#list button:focus-visible, #clear:focus-visible, #rail-pill:focus-visible, #view-controls button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 #clear { margin-top: 12px; color: var(--muted); text-align: center; }
 #hint { margin-top: 12px; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
 
@@ -82,6 +83,14 @@ blockquote { margin: 8px 0 0; padding: 4px 0 4px 12px; border-left: 2px solid rg
 .badges { margin-top: 8px; }
 .badge { display: inline-block; margin-right: 8px; padding: 1px 8px; font-size: 11px; line-height: 1.6; border: 1px solid rgba(255,200,87,.45); color: var(--accent); border-radius: 99px; }
 
+/* Camera controls sit under the intro card, then beside the full information panel. */
+#view-controls { position: fixed; z-index: 3; top: var(--gap); right: calc(var(--gap) + min(400px, 32vw) + 10px); display: grid; grid-template-columns: repeat(2, 40px); gap: 6px; }
+#info.empty ~ #view-controls { top: 112px; right: var(--gap); }
+#view-controls button { display: grid; place-items: center; width: 40px; height: 40px; padding: 9px; color: var(--fg); border-radius: 10px; cursor: pointer; transition: background 120ms, border-color 120ms; }
+#view-controls button:hover { background: rgba(255,200,87,.12); border-color: rgba(255,200,87,.5); }
+#view-controls svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#reset-view { grid-column: 1 / -1; justify-self: center; }
+
 #credits { left: var(--gap); right: var(--gap); bottom: 16px; padding: 8px 16px; border-radius: 10px; font-size: 12px; line-height: 1.4; color: var(--muted); }
 
 /* callouts */
@@ -105,6 +114,7 @@ blockquote { margin: 8px 0 0; padding: 4px 0 4px 12px; border-left: 2px solid rg
   #clear, #hint { display: none; }
   #info { top: auto; left: var(--gap); right: var(--gap); bottom: 84px; width: auto; max-height: 45vh; padding: 16px 20px; }
   #info.empty { width: auto; max-height: none; }
+  #view-controls, #info.empty ~ #view-controls { top: 104px; right: var(--gap); }
   #credits { bottom: 8px; }
 }
 
