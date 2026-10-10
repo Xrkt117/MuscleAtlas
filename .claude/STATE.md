@@ -7,12 +7,14 @@ Interactive male-anatomy tutor for a hackathon: an AI drives a 3D muscle model a
 does and how exercise trains it, citing only a verified facts file. PRD: `.claude/PRPs/prds/muscleatlas.prd.md`.
 
 ## Now
-- Nothing in flight. Phases 1-3 plus the spacious UI (floating panels, cited info panel, 3D callouts, list rail) are
-  built, reviewed (`.claude/PRPs/reports/ui-review.md`: 0 blockers, all should-fix items fixed) and committed.
-- 26 local commits are NOT pushed (`origin/main` = `3efe15f`); the live site still shows the older build.
+- Nothing in flight. `main` has 10 local commits not pushed (origin/main = 9e3d5b0, a contributor's tip). They contain
+  the corrected Gray quotes, the chip cap, the rail fix, a progress clamp and a favicon. The LIVE site still shows the
+  contributor's six quotes that are not in the book; push soon: `! git push origin main`.
 
 ## Next
-- [ ] Owner pushes: `! git push origin main`; then open the live site and hand-check it (screenshots are not the hand check).
+- [ ] Owner pushes now; then hand-check the live site (screenshots are not the hand check).
+- [ ] Owner: who is the `spertia` contributor? Agree a rule: facts need the verbatim-quote check before merging. Optional: a test that
+      fails when a quote is not in the source text (needs the OCR text vendored or fetched).
 - [ ] Owner: pick the hackathon (DSH Hacks V2, UnivaBio, AIC Agentic AI) and its deadline and judging rules.
 - [ ] Phase 4 AI tutor: `/prp-plan` it. Decide Claude model, key proxy (site is static), cost cap. The prompt must rank
       evidence above dataset roles (hamstrings, calves) and flag Abstract-only / Single study / Group finding claims.
@@ -22,6 +24,9 @@ does and how exercise trains it, citing only a verified facts file. PRD: `.claud
 - [ ] Minor: a 404 on every page load (probably favicon); Fable review not run on the UI (Fable credits ran out; Opus reviewed).
 
 ## Landmines
+- A contributor (`spertia`) pushed facts with 6 quotes that were not verbatim; the tests only check structure. Always run the
+  exact-substring check against the source text before trusting any `muscles.json` quote. Muscle ids/labels: `rectus_abdominis` is
+  labelled "Abdominals" (covers obliques); Lateral_Bound is listed as a primary adductor exercise (dataset says so).
 - Never add OpenStax to `src/facts/` (forbids LLM ingestion); `facts.test.ts` guards licences.
 - Gray 1918 quotes were checked against OCR text, not page images. The dataset names muscle groups, not heads.
 - Measure performance with the ARM64 node (`file $(which node)` must say arm64). The default x86_64 node gave ~4-10x worse
