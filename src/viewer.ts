@@ -7,6 +7,7 @@ import { easeInOutCubic, targetAzimuth } from "./camera";
 import { muscleIdForNode, nodeNamesFor, partsFor, sanitize } from "./muscles";
 import { anchorForObject } from "./anchors";
 import { facingVisibility } from "./visibility";
+import { progressFraction } from "./progress";
 
 /** Per-frame projection of the selected muscle. One object, reused: valid only inside the callback. */
 export interface FrameInfo {
@@ -71,7 +72,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   const track = (i: number) => (e: ProgressEvent) => {
     bytes[i] = { loaded: e.loaded, total: e.total };
     const total = bytes[0].total + bytes[1].total;
-    onProgress?.(bytes.every((b) => b.total > 0) ? (bytes[0].loaded + bytes[1].loaded) / total : null);
+    onProgress?.(bytes.every((b) => b.total > 0) ? progressFraction(bytes[0].loaded + bytes[1].loaded, total) : null);
   };
   // both files load at once; a failure in either rejects to main.ts
   const [gltf, skeleton] = await Promise.all([
