@@ -2,7 +2,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { MUSCLES } from "./muscle-map";
-import { muscleIdForNode, nodeNamesFor, sanitize } from "./muscles";
+import { muscleIdForNode, nodeNamesFor, partLabel, partsFor, sanitize } from "./muscles";
 
 describe("helpers", () => {
   it("sanitize matches three.js node name sanitising", () => {
@@ -121,6 +121,37 @@ describe("helpers", () => {
     expect(
       muscleIdForNode("Soleus muscle.x"),
     ).toBeUndefined();
+  });
+});
+
+describe("parts", () => {
+  it("partLabel strips parentheses and ' muscle', capitalises", () => {
+    expect(partLabel("(Abdominal part of pectoralis major muscle)")).toBe("Abdominal part of pectoralis major");
+    expect(partLabel("Latissimus dorsi muscle")).toBe("Latissimus dorsi");
+    expect(partLabel("Long head of biceps brachii")).toBe("Long head of biceps brachii");
+    expect(partLabel("vastus lateralis muscle")).toBe("Vastus lateralis");
+  });
+
+  it("every muscle has parts; multi-node muscles one per node", () => {
+    for (const m of MUSCLES) {
+      const parts = partsFor(m.id);
+      expect(parts.length).toBe(m.nodes.length);
+      expect(parts.map((p) => p.base)).toEqual([...m.nodes]);
+      if (m.nodes.length === 1) expect(parts[0].name).toBe(m.label);
+      else expect(parts.map((p) => p.name)).toEqual(m.nodes.map(partLabel));
+    }
+    // derived, not hard-coded: the multi-node muscles are exactly those whose parts carry node labels
+    const multi = MUSCLES.filter((m) => m.nodes.length > 1);
+    expect(multi.length).toBeGreaterThan(0);
+    expect(multi.reduce((n, m) => n + partsFor(m.id).length, 0)).toBe(multi.reduce((n, m) => n + m.nodes.length, 0));
+  });
+
+  it("names the parenthesised pectoralis part", () => {
+    expect(partsFor("pectoralis_major").map((p) => p.name)).toContain("Abdominal part of pectoralis major");
+  });
+
+  it("partsFor throws on unknown id", () => {
+    expect(() => partsFor("nope")).toThrow("Unknown muscle id: nope");
   });
 });
 
