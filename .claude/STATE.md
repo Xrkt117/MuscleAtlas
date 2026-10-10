@@ -1,40 +1,33 @@
 # STATE — MuscleAtlas
 
-**Updated:** 2026-10-09 (night)
+**Updated:** 2026-10-10
 
 ## Objective
 Interactive male-anatomy tutor for a hackathon: an AI drives a 3D muscle model and explains what a muscle
 does and how exercise trains it, citing only a verified facts file. PRD: `.claude/PRPs/prds/muscleatlas.prd.md`.
 
 ## Now
-- Nothing in flight. `main` has 10 local commits not pushed (origin/main = 9e3d5b0, a contributor's tip). They contain
-  the corrected Gray quotes, the chip cap, the rail fix, a progress clamp and a favicon. The LIVE site still shows the
-  contributor's six quotes that are not in the book; push soon: `! git push origin main`.
+- Nothing in flight. Phases 1-3 and the spacious UI (floating panels, cited info panel, callouts, list rail, 17 muscles)
+  are done, reviewed, pushed (`origin/main` = `5cea0f2`) and verified live in native Chrome (loads in about 2 s, no console errors).
 
 ## Next
-- [ ] Owner pushes now; then hand-check the live site (screenshots are not the hand check).
-- [ ] Owner: who is the `spertia` contributor? Agree a rule: facts need the verbatim-quote check before merging. Optional: a test that
-      fails when a quote is not in the source text.
-- [ ] Owner: pick the hackathon (DSH Hacks V2, UnivaBio, AIC Agentic AI) and its deadline and judging rules.
+- [ ] Owner: hand-check the live site (screenshots are not the hand check); pick the hackathon (DSH Hacks V2, UnivaBio, AIC
+      Agentic AI) and get its deadline and judging rules.
+- [ ] Owner: who is the `spertia` contributor? Agree how their facts get reviewed. Optional: a test that fails when a quote
+      is not in the source text.
 - [ ] Phase 4 AI tutor: `/prp-plan` it. Decide Claude model, key proxy (site is static), cost cap. The prompt must rank
-      evidence above dataset roles (hamstrings, calves) and flag Abstract-only / Single study / Group finding claims.
-      The panel and callouts are its tools (`atlas.highlight/focus`, `renderPanel`).
-- [ ] Owner decision: add `happy-dom` (dev dependency) for DOM tests of panel rendering, callout lifecycle, rail keyboard flow?
+      evidence above dataset roles (hamstrings, calves) and flag Abstract only / Single study / Group finding claims.
+      Tools: `atlas.highlight/focus`, `renderPanel`; `window.atlas` is public, so bad calls must never freeze the loop.
+- [ ] Owner decision: add `happy-dom` (dev dependency) for DOM tests of the panel, callout lifecycle and rail keyboard flow?
 - [ ] Phase 5: credits, sample questions, demo script. Later: female anatomy; a purchased textbook as a facts source.
-- [ ] Minor: Fable has not reviewed the UI (credits ran out; Opus did). The favicon 404 is fixed (a0f0e15 as rebased).
 
 ## Landmines
-- A contributor (`spertia`) pushed facts with 6 quotes that were not verbatim; the tests only check structure. Always run the
-  exact-substring check against the source text before trusting any `muscles.json` quote. Muscle ids/labels: `rectus_abdominis` is
-  labelled "Abdominals" (covers obliques); Lateral_Bound is listed as a primary adductor exercise (dataset says so).
+- Measure performance with the ARM64 node (`file $(which node)` must say arm64); the default x86_64 node gave 4-10x worse
+  numbers (ADR 0006, `CLAUDE.local.md`). Headed Playwright `page.screenshot()` clears hover; use CDP `Page.captureScreenshot`.
 - Never add OpenStax to `src/facts/` (forbids LLM ingestion). Gray quotes were checked against OCR text, not page images.
-- Measure performance with the ARM64 node (`file $(which node)` must say arm64). The default x86_64 node gave ~4-10x worse
-  numbers (ADR 0006); everything quoted before that finding (15 s load, 30-50 fps, hover stalls) was wrong.
-- `window.atlas` is public and the tutor will call it: `callouts.update` rebuilds from `FrameInfo.id`; keep listeners try/caught.
-- Blender 4.2.2 `export_materials="EXPORT"` crashes; scripts use `PLACEHOLDER`. three.js renames nodes: use `sanitize()`.
-- Headed Playwright `page.screenshot()` fires `pointerleave`; use CDP `Page.captureScreenshot`.
-- vitest is ^4 (Node 25.2.1). Pages source must stay "GitHub Actions".
-- Commits carry no Claude trailer. A plugin hook blocks Claude from pushing main; the owner pushes.
+- `rectus_abdominis` is labelled "Abdominals" (covers obliques); Lateral_Bound is a listed "primary" adductor exercise (dataset
+  says so). Both are judgement calls left to the owner.
+- Fable credits ran out; the UI was reviewed by Opus, not Fable.
 
 ## Open questions
 - Which hackathon, deadline, team size, judging criteria? PRD skipped answers: vision, JTBD, non-users, constraints.

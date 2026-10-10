@@ -19,7 +19,10 @@
 - `.claude/PRPs/` - PRDs and plans
 
 ## Conventions
-<!-- rules that differ from the framework default; skip the ones that don't -->
+- Deploys: pushing `main` runs `.github/workflows/pages.yml` (tests, then `vite build --base=/MuscleAtlas/`). The repo's Pages
+  source must stay "GitHub Actions"; "Deploy from a branch" serves the raw source and overwrites the build.
+- No `Co-Authored-By` or "generated with" trailers in commits or PRs (owner's rule). Claude cannot push `main` here; the owner does.
+- Facts (`src/facts/`) follow `.claude/rules/facts.md`, including the verbatim-quote check.
 
 ## Model routing (project rule)
 
