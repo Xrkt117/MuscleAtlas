@@ -8,6 +8,7 @@ import { muscleIdForNode, nodeNamesFor, partsFor, sanitize } from "./muscles";
 import { anchorForObject } from "./anchors";
 import { facingVisibility } from "./visibility";
 import { progressFraction } from "./progress";
+import { pickCalloutParts } from "./callout-parts";
 
 /** Per-frame projection of the selected muscle. One object, reused: valid only inside the callback. */
 export interface FrameInfo {
@@ -18,8 +19,8 @@ export interface FrameInfo {
   animating: boolean;
   /** padded projected bbox of the selected muscle (both sides), CSS px */
   bounds: { x: number; y: number; w: number; h: number };
-  /** one per partsFor(selected[0]), same order */
-  parts: { x: number; y: number; visibility: number }[];
+  /** only the chosen (largest, capped) parts of the selected muscle, in partsFor order */
+  parts: { name: string; x: number; y: number; visibility: number }[];
 }
 
 export interface AtlasApi {
@@ -181,9 +182,11 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     return pixel[0] ? MUSCLES[pixel[0] - 1].id : null;
   };
 
+  const pv = new THREE.Vector3();
   // Callout anchors: per muscle, per side, one surface anchor per part (cached; the model never moves).
   interface SideAnchors { points: THREE.Vector3[]; normals: THREE.Vector3[]; mean: THREE.Vector3 }
-  interface MuscleAnchors { sides: [SideAnchors, SideAnchors]; box: THREE.Box3 }
+  /** chosen: indices into partsFor(id) that get a callout chip (the largest parts, capped) */
+  interface MuscleAnchors { sides: [SideAnchors, SideAnchors]; box: THREE.Box3; chosen: number[] }
   const anchorCache = new Map<string, MuscleAnchors>();
   const anchorsFor = (id: string): MuscleAnchors => {
     let a = anchorCache.get(id);
@@ -202,9 +205,11 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       sa.mean.divideScalar(n);
       return sa;
     };
-    const box = new THREE.Box3();
+    const box = new THREE.Box3(), pb = new THREE.Box3();
     for (const nd of nodes) box.expandByObject(nd);
-    a = { sides: [side(0), side(1)], box };
+    const sizes = Array.from({ length: n }, (_, i) => pb.makeEmpty().expandByObject(nodes[2 * i]).expandByObject(nodes[2 * i + 1]).getSize(pv).length());
+    const all = [side(0), side(1)] as [SideAnchors, SideAnchors];
+    a = { sides: all, box, chosen: pickCalloutParts(sizes) };
     anchorCache.set(id, a);
     return a;
   };
@@ -214,7 +219,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   const callFrame = (cb: (f: FrameInfo | null) => void, f: FrameInfo | null) => { try { cb(f); } catch (err) { console.error(err); } };  // no closure per frame
   const frame: FrameInfo = { id: "", width: 1, height: 1, animating: false, bounds: { x: 0, y: 0, w: 0, h: 0 }, parts: [] };
   let frameAnchors: MuscleAnchors | null = null, frameSide = 0, emitNull = false;
-  const pv = new THREE.Vector3(), toCam = new THREE.Vector3(), fwd = new THREE.Vector3(), corner = new THREE.Vector3();
+  const toCam = new THREE.Vector3(), fwd = new THREE.Vector3(), corner = new THREE.Vector3();
   const emitFrame = () => {
     if (!frameListeners.size) return;
     if (!frameAnchors) {
@@ -231,8 +236,8 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     const S = A.sides[frameSide];
     frame.width = cssW; frame.height = cssH; frame.animating = anim !== null;
     camera.getWorldDirection(fwd);
-    for (let i = 0; i < S.points.length; i++) {
-      const p = S.points[i], out = frame.parts[i];
+    for (let j = 0; j < A.chosen.length; j++) {
+      const i = A.chosen[j], p = S.points[i], out = frame.parts[j];
       toCam.subVectors(cp, p);
       const behind = toCam.dot(fwd) >= 0;  // point is behind the camera plane
       const dot = S.normals[i].dot(toCam.normalize());
@@ -311,8 +316,8 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       if (ids.length) {
         frameAnchors = anchorsFor(ids[0]);
         frame.id = ids[0];
-        const n = frameAnchors.sides[0].points.length;
-        frame.parts = Array.from({ length: n }, () => ({ x: 0, y: 0, visibility: 0 }));
+        const names = partsFor(ids[0]);
+        frame.parts = frameAnchors.chosen.map((i) => ({ name: names[i].name, x: 0, y: 0, visibility: 0 }));
         const c = camera.position;  // initial side: nearer one, no hysteresis
         frameSide = frameAnchors.sides[0].mean.distanceTo(c) <= frameAnchors.sides[1].mean.distanceTo(c) ? 0 : 1;
       } else if (frameAnchors) { frameAnchors = null; emitNull = true; }

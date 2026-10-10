@@ -1,5 +1,4 @@
 import type { FrameInfo } from "./viewer";
-import { partsFor } from "./muscles";
 import { layoutCallouts, type Rect } from "./callout-layout";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -39,7 +38,7 @@ export function createCallouts(stage: HTMLElement, avoidEls: HTMLElement[]) {
   const setOn = (v: boolean) => { if (v !== on) { on = v; layer.classList.toggle("on", v); if (v) measure(); } };
   const set = (el: Element, k: string, v: number) => el.setAttribute(k, String(v));
 
-  const show = (id: string | null) => {
+  const show = (id: string | null, names: string[] = []) => {
     shownId = id;
     svg.replaceChildren();
     layer.querySelectorAll(".callout").forEach((c) => c.remove());
@@ -47,8 +46,7 @@ export function createCallouts(stage: HTMLElement, avoidEls: HTMLElement[]) {
     animUntil = Infinity;
     setOn(false);
     if (id === null) return;
-    const parts = partsFor(id);
-    const made = parts.map((p) => {
+    const made = names.map((name) => {
       const g = document.createElementNS(NS, "g");
       const line = document.createElementNS(NS, "line");
       const dot = document.createElementNS(NS, "circle");
@@ -57,7 +55,7 @@ export function createCallouts(stage: HTMLElement, avoidEls: HTMLElement[]) {
       svg.appendChild(g);
       const chip = document.createElement("div");
       chip.className = "callout";
-      chip.textContent = p.name;
+      chip.textContent = name;
       layer.appendChild(chip);
       return { chip, g, line, dot };
     });
@@ -69,7 +67,7 @@ export function createCallouts(stage: HTMLElement, avoidEls: HTMLElement[]) {
     /** Per-frame hook: rebuilds the chips when the selection changes, hides them on null. */
     update(f: FrameInfo | null) {
       if (!f) { if (shownId !== null) show(null); return; }
-      if (f.id !== shownId) show(f.id);
+      if (f.id !== shownId) show(f.id, f.parts.map((p) => p.name));
       const n = Math.min(items.length, f.parts.length);  // never index past the frame's parts
       if (!n) return;
       const now = performance.now();
