@@ -171,90 +171,90 @@
       }
     ]
   },
- "rectus_abdominis": {
-  "actions": [
-    {
-      "text": "Working from below, the rectus abdominis pulls the rib cage down and so bends the spine forward.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 418); the Recti",
-        "quote": "The Recti, acting from below, depress the thorax, and consequently flex the vertebral column"
+  "rectus_abdominis": {
+    "actions": [
+      {
+        "text": "Working from below, the rectus abdominis pulls the rib cage down and so bends the spine forward.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 418); the Recti",
+          "quote": "The Recti, acting from below, depress the thorax, and consequently flex the vertebral column"
+        }
+      },
+      {
+        "text": "Working from above, the rectus abdominis tilts the pelvis up toward the spine (flexes the pelvis on the vertebral column).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 418); the Recti",
+          "quote": "when acting from above, they flex the pelvis upon the vertebral column."
+        }
+      },
+      {
+        "text": "With the pelvis fixed, the abdominal muscles on both sides work together to bend the trunk directly forward. Group statement.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 417); group statement, for the antero-lateral abdominal muscles together",
+          "quote": "If the pelvis alone be fixed, the thorax is bent directly forward, when the muscles of both sides act"
+        }
       }
-    },
-    {
-      "text": "Working from above, the rectus abdominis tilts the pelvis up toward the spine.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 418); the Recti",
-        "quote": "when acting from above, they flex the pelvis upon the vertebral column."
+    ]
+  },
+  "forearm_muscles": {
+    "actions": [
+      {
+        "text": "Flexor carpi radialis flexes the wrist and moves the hand toward the thumb side (abducts it); it also helps turn the hand palm-down (pronate it) and bend the elbow.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, V. The Muscles and Fasciae of the Forearm, 1. The Volar Antibrachial Muscles, Actions (p. 450); Flexor carpi radialis only, one muscle of this group",
+          "quote": "The Flexor carpi radialis is a flexor and abductor of the wrist; it also assists in pronating the hand, and in bending the elbow."
+        }
+      },
+      {
+        "text": "Extensor digitorum straightens the fingers (extends the phalanges), then extends the wrist, and finally the elbow.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, V. The Muscles and Fasciae of the Forearm, 2. The Dorsal Antibrachial Muscles, Actions (p. 456); Extensor digitorum (Gray: Extensor digitorum communis) only, one muscle of this group",
+          "quote": "The Extensor digitorum communis extends the phalanges, then the wrist, and finally the elbow."
+        }
+      },
+      {
+        "text": "Pronator quadratus rotates the radius on the ulna, turning the hand palm-down (prone).",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, V. The Muscles and Fasciae of the Forearm, 1. The Volar Antibrachial Muscles, Actions (p. 451); Pronator quadratus only, one muscle of this group",
+          "quote": "The Pronator quadratus rotates the radius upon the ulna, rendering the hand prone."
+        }
       }
-    },
-    {
-      "text": "With the pelvis fixed, the abdominal muscles on both sides work together to bend the trunk directly forward.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Antero-lateral Muscles of the Abdomen, Actions (p. 417); abdominal group statement",
-        "quote": "If the pelvis alone be fixed, the thorax is bent directly forward, when the muscles of both sides act"
+    ]
+  },
+  "hip_adductors": {
+    "actions": [
+      {
+        "text": "The pectineus and the three adductor muscles powerfully pull the thigh inward (adduct it). Group statement.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Medial Femoral Muscles, Actions (p. 474); group statement, for the Pectineus and the three Adductores together (the Gracilis is not in this sentence)",
+          "quote": "The Pectineus and three Adductores adduct the thigh powerfully"
+        }
+      },
+      {
+        "text": "When the thigh has been moved outward (abducted), the pectineus and adductors draw it back inward, carrying it across the other thigh. Group statement.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Medial Femoral Muscles, Actions (p. 474); group statement, 'they' = the Pectineus and the three Adductores",
+          "quote": "when the limb has been abducted, they draw it medialward, carrying the thigh across that of the opposite side"
+        }
+      },
+      {
+        "text": "In walking, these muscles as a group help draw the lower limb forward. Group statement.",
+        "cite": {
+          "sourceId": "gray-1918-myology",
+          "locator": "Gray 1918, Myology, 2. The Medial Femoral Muscles, Actions (p. 474); group statement, 'all these muscles' of the medial femoral group; the quote stops before the OCR-damaged word 'limb' (OCR: 'hmb')",
+          "quote": "In progression, all these muscles assist in drawing forward the lower"
+        }
       }
-    }
-  ]
-},
-"forearm_muscles": {
-  "actions": [
-    {
-      "text": "The forearm flexors bend the wrist; flexor carpi radialis also helps move the hand toward the thumb side.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Muscles and Fasciae of the Forearm; Flexor carpi radialis, Actions",
-        "quote": "Acting with the flexor carpi ulnaris, the flexor carpi radialis flexes the wrist"
-      }
-    },
-    {
-      "text": "Extensor digitorum straightens the fingers and then extends the wrist.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Muscles and Fasciae of the Forearm; Extensor digitorum, Actions",
-        "quote": "The Extensor digitorum extends the phalanges and then the wrist."
-      }
-    },
-    {
-      "text": "Pronator quadratus turns the forearm so that the palm faces backward.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Muscles and Fasciae of the Forearm; Pronator quadratus, Action",
-        "quote": "The Pronator quadratus pronates the forearm, i.e. turns it so that the palm of the hand is directed backwards."
-      }
-    }
-  ]
-},
-"hip_adductors": {
-  "actions": [
-    {
-      "text": "The pectineus and adductor muscles powerfully pull the thigh inward.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Medial Femoral Muscles, Actions; group statement",
-        "quote": "The Pectineus and the adductores adduct the thigh powerfully"
-      }
-    },
-    {
-      "text": "When the thigh is moved outward, the adductors pull it inward and can carry it across the opposite thigh.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Medial Femoral Muscles, Actions; group statement",
-        "quote": "when the limb has been abducted, they draw it medially, carrying the thigh across that of the opposite side"
-      }
-    },
-    {
-      "text": "During forward movement, the adductors help draw the lower limb forward.",
-      "cite": {
-        "sourceId": "gray-1918-myology",
-        "locator": "Gray 1918, Myology, The Medial Femoral Muscles, Actions; group statement",
-        "quote": "In progression, they assist in drawing forwards the lower limb."
-      }
-    }
-  ]
-},
+    ]
+  },
   "gluteus_maximus": {
     "actions": [
       {
