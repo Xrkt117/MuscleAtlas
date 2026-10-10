@@ -260,50 +260,119 @@
       }
     }
   ],
-  "rectus_abdominis": [
-    {
-      "datasetId": "Crunches",
-      "name": "Crunches",
-      "datasetPrimary": [
-        "abdominals"
-      ],
-      "datasetSecondary": [],
-      "role": "primary",
-      "cite": {
-        "sourceId": "free-exercise-db",
-        "locator": "Crunches",
-        "quote": "abdominals"
-      }
-    },
-    {
-      "datasetId": "Plank",
-      "name": "Plank",
-      "datasetPrimary": [
-        "abdominals"
-      ],
-      "datasetSecondary": [],
-      "role": "primary",
-      "cite": {
-        "sourceId": "free-exercise-db",
-        "locator": "Plank",
-        "quote": "abdominals"
-      }
-    },
-    {
-      "datasetId": "Reverse_Crunch",
-      "name": "Reverse Crunch",
-      "datasetPrimary": [
-        "abdominals"
-      ],
-      "datasetSecondary": [],
-      "role": "primary",
-      "cite": {
-        "sourceId": "free-exercise-db",
-        "locator": "Reverse_Crunch",
-        "quote": "abdominals"
-      }
+"rectus_abdominis": [
+  {
+    "datasetId": "Crunches",
+    "name": "Crunches",
+    "datasetPrimary": [
+      "abdominals"
+    ],
+    "datasetSecondary": [],
+    "role": "primary",
+    "cite": {
+      "sourceId": "free-exercise-db",
+      "locator": "Crunches",
+      "quote": "abdominals"
     }
-  ],
+  },
+  {
+    "datasetId": "Plank",
+    "name": "Plank",
+    "datasetPrimary": [
+      "abdominals"
+    ],
+    "datasetSecondary": [],
+    "role": "primary",
+    "cite": {
+      "sourceId": "free-exercise-db",
+      "locator": "Plank",
+      "quote": "abdominals"
+    }
+  },
+  {
+    "datasetId": "Reverse_Crunch",
+    "name": "Reverse Crunch",
+    "datasetPrimary": [
+      "abdominals"
+    ],
+    "datasetSecondary": [],
+    "role": "primary",
+    "cite": {
+      "sourceId": "free-exercise-db",
+      "locator": "Reverse_Crunch",
+      "quote": "abdominals"
+    }
+  }
+],
+"forearm_muscles": [
+  {
+    "datasetId": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+    "name": "Palms-Up Barbell Wrist Curl Over A Bench",
+    "datasetPrimary": [
+      "forearms"
+    ],
+    "datasetSecondary": [],
+    "role": "primary",
+    "cite": {
+      "sourceId": "free-exercise-db",
+      "locator": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+      "quote": "forearms"
+    }
+  },
+  {
+    "datasetId": "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
+    "name": "Palms-Down Dumbbell Wrist Curl Over A Bench",
+    "datasetPrimary": [
+      "forearms"
+    ],
+    "datasetSecondary": [],
+    "role": "primary",
+    "cite": {
+      "sourceId": "free-exercise-db",
+      "locator": "Palms-Down_Dumbbell_Wrist_Curl_Over_A_Bench",
+      "quote": "forearms"
+    }
+  }
+],
+"hip_adductors": [
+  {
+    "datasetId": "Thigh_Adductor",
+    "name": "Thigh Adductor",
+    "datasetPrimary": [
+      "adductors"
+    ],
+    "datasetSecondary": [
+      "glutes",
+      "hamstrings"
+    ],
+    "role": "primary",
+    "cite": {
+      "sourceId": "free-exercise-db",
+      "locator": "Thigh_Adductor",
+      "quote": "adductors"
+    }
+  },
+  {
+    "datasetId": "Lateral_Bound",
+    "name": "Lateral Bound",
+    "datasetPrimary": [
+      "adductors"
+    ],
+    "datasetSecondary": [
+      "abductors",
+      "calves",
+      "glutes",
+      "hamstrings",
+      "quadriceps"
+    ],
+    "role": "primary",
+    "cite": {
+      "sourceId": "free-exercise-db",
+      "locator": "Lateral_Bound",
+      "quote": "adductors"
+    }
+  }
+],
   "gluteus_maximus": [
     {
       "datasetId": "Butt_Lift_Bridge",
