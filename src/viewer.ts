@@ -4,7 +4,20 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { MUSCLE_BY_ID, MUSCLES } from "./muscle-map";
 import { easeInOutCubic, targetAzimuth } from "./camera";
-import { muscleIdForNode, nodeNamesFor, sanitize } from "./muscles";
+import { muscleIdForNode, nodeNamesFor, partsFor, sanitize } from "./muscles";
+import { anchorForObject } from "./anchors";
+import { facingVisibility } from "./visibility";
+
+/** Per-frame projection of the selected muscle. One object, reused: valid only inside the callback. */
+export interface FrameInfo {
+  width: number;
+  height: number;
+  animating: boolean;
+  /** padded projected bbox of the selected muscle (both sides), CSS px */
+  bounds: { x: number; y: number; w: number; h: number };
+  /** one per partsFor(selected[0]), same order */
+  parts: { x: number; y: number; visibility: number }[];
+}
 
 export interface AtlasApi {
   /** Selected muscles red, everything else dimmed. Throws on an unknown muscle id. */
@@ -19,9 +32,12 @@ export interface AtlasApi {
   onHover(cb: (id: string | null, clientX: number, clientY: number) => void): () => void;
   /** Canvas click: id of the seed muscle hit, or null for empty space / unmapped muscle. Returns an unsubscribe. */
   onSelect(cb: (id: string | null) => void): () => void;
+  /** After each render while a muscle is selected (and once with null when the selection clears). Returns an unsubscribe. */
+  onFrame(cb: (f: FrameInfo | null) => void): () => void;
 }
 
-const FOCUS_MS = 600;
+const FOCUS_MS = matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 600;  // 1, not 0: the loop divides by it
+const BOUNDS_PAD = 12;
 const CLICK_MAX_PX = 4;
 const HOVER_MS = 50;
 
@@ -34,9 +50,12 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 100);
   const controls = new OrbitControls(camera, renderer.domElement);
 
+  let cssW = 1, cssH = 1;
   const resize = () => {
     const w = container.clientWidth, h = container.clientHeight;
     renderer.setSize(w, h);
+    cssW = renderer.domElement.clientWidth || w;
+    cssH = renderer.domElement.clientHeight || h;
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   };
@@ -157,6 +176,82 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     return pixel[0] ? MUSCLES[pixel[0] - 1].id : null;
   };
 
+  // Callout anchors: per muscle, per side, one surface anchor per part (cached; the model never moves).
+  interface SideAnchors { points: THREE.Vector3[]; normals: THREE.Vector3[]; mean: THREE.Vector3 }
+  interface MuscleAnchors { sides: [SideAnchors, SideAnchors]; box: THREE.Box3 }
+  const anchorCache = new Map<string, MuscleAnchors>();
+  const anchorsFor = (id: string): MuscleAnchors => {
+    let a = anchorCache.get(id);
+    if (a) return a;
+    const nodes = nodesFor(id), viewDir = MUSCLE_BY_ID[id].view === "back" ? { x: 0, y: 0, z: -1 } : { x: 0, y: 0, z: 1 };
+    const n = partsFor(id).length;
+    const side = (k: number): SideAnchors => {
+      const sa: SideAnchors = { points: [], normals: [], mean: new THREE.Vector3() };
+      for (let i = 0; i < n; i++) {
+        const an = anchorForObject(nodes[2 * i + k], viewDir);
+        if (!an) throw new Error(`No surface anchor for ${id} part ${i}`);
+        sa.points.push(new THREE.Vector3(an.point.x, an.point.y, an.point.z));
+        sa.normals.push(new THREE.Vector3(an.normal.x, an.normal.y, an.normal.z));
+        sa.mean.add(sa.points[i]);
+      }
+      sa.mean.divideScalar(n);
+      return sa;
+    };
+    const box = new THREE.Box3();
+    for (const nd of nodes) box.expandByObject(nd);
+    a = { sides: [side(0), side(1)], box };
+    anchorCache.set(id, a);
+    return a;
+  };
+
+  // onFrame state. Everything below is reused every frame (no allocation).
+  const frameListeners = new Set<(f: FrameInfo | null) => void>();
+  const frame: FrameInfo = { width: 1, height: 1, animating: false, bounds: { x: 0, y: 0, w: 0, h: 0 }, parts: [] };
+  let frameAnchors: MuscleAnchors | null = null, frameSide = 0, emitNull = false;
+  const pv = new THREE.Vector3(), toCam = new THREE.Vector3(), fwd = new THREE.Vector3(), corner = new THREE.Vector3();
+  const emitFrame = () => {
+    if (!frameListeners.size) return;
+    if (!frameAnchors) {
+      if (emitNull) { emitNull = false; frameListeners.forEach((cb) => cb(null)); }
+      return;
+    }
+    const A = frameAnchors, cp = camera.position;
+    const d0 = A.sides[0].mean.distanceTo(cp), d1 = A.sides[1].mean.distanceTo(cp);
+    if (anim) {  // settling: nearer side; when about equal (head-on view) the screen-left limb, where the label column has room
+      frameSide = Math.max(d0, d1) < Math.min(d0, d1) * 1.15
+        ? (pv.copy(A.sides[0].mean).project(camera).x <= pv.copy(A.sides[1].mean).project(camera).x ? 0 : 1)
+        : (d0 <= d1 ? 0 : 1);
+    } else if ((frameSide === 0 ? d1 < d0 * 0.85 : d0 < d1 * 0.85)) frameSide = 1 - frameSide;  // hysteresis
+    const S = A.sides[frameSide];
+    frame.width = cssW; frame.height = cssH; frame.animating = anim !== null;
+    camera.getWorldDirection(fwd);
+    for (let i = 0; i < S.points.length; i++) {
+      const p = S.points[i], out = frame.parts[i];
+      toCam.subVectors(cp, p);
+      const behind = toCam.dot(fwd) >= 0;  // point is behind the camera plane
+      const dot = S.normals[i].dot(toCam.normalize());
+      pv.copy(p).project(camera);
+      out.x = (pv.x + 1) / 2 * cssW; out.y = (1 - pv.y) / 2 * cssH;
+      const outside = pv.x < -1 || pv.x > 1 || pv.y < -1 || pv.y > 1;
+      out.visibility = behind || outside ? 0 : facingVisibility(dot);
+    }
+    const bb = A.box;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let c = 0; c < 8; c++) {
+      corner.set(c & 1 ? bb.max.x : bb.min.x, c & 2 ? bb.max.y : bb.min.y, c & 4 ? bb.max.z : bb.min.z).project(camera);
+      const x = (corner.x + 1) / 2 * cssW, y = (1 - corner.y) / 2 * cssH;
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+    }
+    frame.bounds.x = x0 - BOUNDS_PAD; frame.bounds.y = y0 - BOUNDS_PAD;
+    frame.bounds.w = x1 - x0 + 2 * BOUNDS_PAD; frame.bounds.h = y1 - y0 + 2 * BOUNDS_PAD;
+    frameListeners.forEach((cb) => cb(frame));
+  };
+
+  // All anchors now, behind the loading overlay: ~15 ms in native arm64 Chrome. Under x64 Chrome on Rosetta (e.g. launched
+  // by an x64 Node test harness) the cold JIT makes it ~1.5 s, which as idle-frame work showed up as 100-1300 ms frame gaps.
+  scene.updateMatrixWorld(true);
+  for (const m of MUSCLES) anchorsFor(m.id);
+
   // Warm-up. One full-view pick now: it uploads the geometry and binds every mesh to the id program, work the first frame needs anyway.
   // The first partial picks then cost 60-250 ms of CPU each (measured, decays to ~5 ms), so spend them in the loop below,
   // one per idle frame, instead of making the page load wait for them.
@@ -184,6 +279,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     }
     controls.update();
     renderer.render(scene, camera);
+    emitFrame();
   });
 
   const listeners = new Set<(id: string | null) => void>();
@@ -206,10 +302,18 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       ids.forEach(nodesFor);  // validate all ids before touching any material
       selected = [...ids];
       refresh();
+      if (ids.length) {
+        frameAnchors = anchorsFor(ids[0]);
+        const n = frameAnchors.sides[0].points.length;
+        frame.parts = Array.from({ length: n }, () => ({ x: 0, y: 0, visibility: 0 }));
+        const c = camera.position;  // initial side: nearer one, no hysteresis
+        frameSide = frameAnchors.sides[0].mean.distanceTo(c) <= frameAnchors.sides[1].mean.distanceTo(c) ? 0 : 1;
+      } else if (frameAnchors) { frameAnchors = null; emitNull = true; }
     },
     clear() {
       selected = [];
       refresh();
+      if (frameAnchors) { frameAnchors = null; emitNull = true; }
     },
     focus(id) {
       const nodes = nodesFor(id);
@@ -239,6 +343,10 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     onSelect(cb) {
       listeners.add(cb);
       return () => { listeners.delete(cb); };
+    },
+    onFrame(cb) {
+      frameListeners.add(cb);
+      return () => { frameListeners.delete(cb); };
     },
   };
 }
