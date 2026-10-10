@@ -14,21 +14,20 @@ does and how exercise trains it, citing only a verified facts file. PRD: `.claud
 ## Next
 - [ ] Owner pushes now; then hand-check the live site (screenshots are not the hand check).
 - [ ] Owner: who is the `spertia` contributor? Agree a rule: facts need the verbatim-quote check before merging. Optional: a test that
-      fails when a quote is not in the source text (needs the OCR text vendored or fetched).
+      fails when a quote is not in the source text.
 - [ ] Owner: pick the hackathon (DSH Hacks V2, UnivaBio, AIC Agentic AI) and its deadline and judging rules.
 - [ ] Phase 4 AI tutor: `/prp-plan` it. Decide Claude model, key proxy (site is static), cost cap. The prompt must rank
       evidence above dataset roles (hamstrings, calves) and flag Abstract-only / Single study / Group finding claims.
       The panel and callouts are its tools (`atlas.highlight/focus`, `renderPanel`).
 - [ ] Owner decision: add `happy-dom` (dev dependency) for DOM tests of panel rendering, callout lifecycle, rail keyboard flow?
 - [ ] Phase 5: credits, sample questions, demo script. Later: female anatomy; a purchased textbook as a facts source.
-- [ ] Minor: a 404 on every page load (probably favicon); Fable review not run on the UI (Fable credits ran out; Opus reviewed).
+- [ ] Minor: Fable has not reviewed the UI (credits ran out; Opus did). The favicon 404 is fixed (a0f0e15 as rebased).
 
 ## Landmines
 - A contributor (`spertia`) pushed facts with 6 quotes that were not verbatim; the tests only check structure. Always run the
   exact-substring check against the source text before trusting any `muscles.json` quote. Muscle ids/labels: `rectus_abdominis` is
   labelled "Abdominals" (covers obliques); Lateral_Bound is listed as a primary adductor exercise (dataset says so).
-- Never add OpenStax to `src/facts/` (forbids LLM ingestion); `facts.test.ts` guards licences.
-- Gray 1918 quotes were checked against OCR text, not page images. The dataset names muscle groups, not heads.
+- Never add OpenStax to `src/facts/` (forbids LLM ingestion). Gray quotes were checked against OCR text, not page images.
 - Measure performance with the ARM64 node (`file $(which node)` must say arm64). The default x86_64 node gave ~4-10x worse
   numbers (ADR 0006); everything quoted before that finding (15 s load, 30-50 fps, hover stalls) was wrong.
 - `window.atlas` is public and the tutor will call it: `callouts.update` rebuilds from `FrameInfo.id`; keep listeners try/caught.
