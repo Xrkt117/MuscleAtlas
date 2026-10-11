@@ -76,8 +76,7 @@ body.failed #loading { display: none; }
 
 /* info panel */
 #info { top: var(--gap); right: var(--gap); bottom: 72px; width: min(400px, 32vw); padding: 24px; border-radius: var(--radius); overflow-y: auto; overscroll-behavior: contain; }
-#info.empty { bottom: auto; padding: 16px 20px; width: min(300px, 32vw); }
-#info .intro { color: var(--muted); }
+#info.empty { display: none; }
 #info h2 { margin-bottom: 8px; font-size: 24px; line-height: 1.2; font-weight: 650; }
 #info section { margin-top: 32px; }
 #info h2 + section { margin-top: 24px; }
@@ -105,7 +104,7 @@ blockquote { margin: 8px 0 0; padding: 4px 0 4px 12px; border-left: 2px solid rg
 .badges { margin-top: 8px; }
 .badge { display: inline-block; margin-right: 8px; padding: 1px 8px; font-size: 11px; line-height: 1.6; border: 1px solid rgba(255,200,87,.45); color: var(--accent); border-radius: 99px; }
 
-/* Camera controls sit under the intro card, then beside the full information panel. */
+/* Camera controls sit under the empty panel position, then beside the full information panel. */
 #view-controls { position: fixed; z-index: 3; top: var(--gap); right: calc(var(--gap) + min(400px, 32vw) + 10px); display: grid; grid-template-columns: repeat(2, 40px); gap: 6px; }
 #info.empty ~ #view-controls { top: 112px; right: var(--gap); }
 #view-controls button { display: grid; place-items: center; width: 40px; height: 40px; padding: 9px; color: var(--fg); border-radius: 10px; cursor: pointer; transition: background 120ms, border-color 120ms; }

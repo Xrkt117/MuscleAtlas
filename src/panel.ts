@@ -94,11 +94,11 @@ export function renderSources(root: HTMLElement): void {
   );
 }
 
-/** Render the cited panel for a muscle id, or the intro card for null. Never moves focus. */
+/** Render the cited panel for a muscle id, or no panel for null. Never moves focus. */
 export function renderPanel(root: HTMLElement, id: string | null): void {
   root.classList.toggle("empty", id === null);
   if (id === null) {
-    root.replaceChildren(h("p", { id: "info-title", class: "intro" }, "Select a muscle to see its function and optimization exercises"));
+    root.replaceChildren();
     return;
   }
   const m = buildPanelModel(id);
