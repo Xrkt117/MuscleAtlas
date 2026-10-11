@@ -43,6 +43,8 @@ export interface AtlasApi {
   onHover(cb: (id: string | null, clientX: number, clientY: number) => void): () => void;
   /** Canvas click: id of the seed muscle hit, or null for empty space / unmapped muscle. Returns an unsubscribe. */
   onSelect(cb: (id: string | null) => void): () => void;
+  /** Canvas right-click: id of the seed muscle hit, or null. Returns an unsubscribe. */
+  onContextSelect(cb: (id: string | null) => void): () => void;
   /** After each render while a muscle is selected (and once with null when the selection clears). Returns an unsubscribe. */
   onFrame(cb: (f: FrameInfo | null) => void): () => void;
 }
@@ -370,13 +372,28 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   });
 
   const listeners = new Set<(id: string | null) => void>();
+  const contextListeners = new Set<(id: string | null) => void>();
   let down: { x: number; y: number } | null = null;
-  renderer.domElement.addEventListener("pointerdown", (e) => { down = { x: e.clientX, y: e.clientY }; });
+  let contextDown: { x: number; y: number } | null = null;
+  renderer.domElement.addEventListener("pointerdown", (e) => {
+    if (e.button === 0) down = { x: e.clientX, y: e.clientY };
+    if (e.button === 2) contextDown = { x: e.clientX, y: e.clientY };
+  });
   renderer.domElement.addEventListener("pointerup", (e) => {
-    if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > CLICK_MAX_PX) return;  // orbit drag, not a click
+    if (e.button !== 0) return;
+    const start = down;
     down = null;
+    if (!start || Math.hypot(e.clientX - start.x, e.clientY - start.y) > CLICK_MAX_PX) return;  // orbit drag, not a click
     const id = pick(e.clientX, e.clientY);
     listeners.forEach((cb) => guard(() => cb(id)));
+  });
+  renderer.domElement.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    const start = contextDown;
+    contextDown = null;
+    if (!start || Math.hypot(e.clientX - start.x, e.clientY - start.y) > CLICK_MAX_PX) return;  // orbit drag, not a mixer click
+    const id = pick(e.clientX, e.clientY);
+    contextListeners.forEach((cb) => guard(() => cb(id)));
   });
   renderer.domElement.addEventListener("pointermove", (e) => { if (e.buttons === 0 && !anim) pendingMove = { x: e.clientX, y: e.clientY }; });
   renderer.domElement.addEventListener("pointerenter", () => { pointerOnCanvas = true; });
@@ -434,6 +451,10 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     onSelect(cb) {
       listeners.add(cb);
       return () => { listeners.delete(cb); };
+    },
+    onContextSelect(cb) {
+      contextListeners.add(cb);
+      return () => { contextListeners.delete(cb); };
     },
     onFrame(cb) {
       frameListeners.add(cb);
