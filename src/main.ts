@@ -1,6 +1,7 @@
 import { MUSCLE_BY_ID, MUSCLES } from "./muscle-map";
 import { createViewer, type AtlasApi } from "./viewer";
-import { renderGuide, renderPanel, renderSources } from "./panel";
+import { renderGuide, renderSources } from "./panel";
+import { createSidePanel } from "./side-panel";
 import { createCallouts } from "./callouts";
 import { createChatbot } from "./chat";
 import { mixerMatches } from "./mixer";
@@ -27,8 +28,8 @@ try {
   });
   window.atlas = atlas;
 
-  const info = $("info"), rail = $("rail"), railCurrent = $("rail-current"), listCard = $("listcard");
-  const musclesSection = $<HTMLDetailsElement>("muscles-section");
+  const side = $("side"), rail = $("rail"), clearBtn = $<HTMLButtonElement>("clear");
+  const sidePanel = createSidePanel(side);
   const mixerList = $<HTMLUListElement>("mixer-list");
   const mixerCount = $("mixer-count"), mixerMatchText = $("mixer-matches");
   const mixerAsk = $<HTMLButtonElement>("mixer-ask"), mixerClear = $<HTMLButtonElement>("mixer-clear");
@@ -37,15 +38,14 @@ try {
   const chatPanel = $("chat-panel");
   let current: string | null = null;
   const mixed = new Set<string>();
-  const callouts = createCallouts($("stage"), [info, rail, viewControls, $("brand"), sources, chatPanel]);
+  const callouts = createCallouts($("stage"), [side, rail, viewControls, $("brand"), sources, chatPanel]);
   atlas.onFrame((frame) => callouts.update(mixed.size ? null : frame));
-  renderPanel(info, null);
   renderGuide($("guide-body"));
   renderSources($("sources-body"));
   $("zoom-in").addEventListener("click", atlas.zoomIn);
   $("zoom-out").addEventListener("click", atlas.zoomOut);
   $("reset-view").addEventListener("click", atlas.resetView);
-  const railSections = [...rail.querySelectorAll<HTMLDetailsElement>(":scope > details")];
+  const railSections = [...rail.querySelectorAll<HTMLDetailsElement>(":scope > details")];  // guide and Mixer: an accordion of two
   for (const section of railSections) section.addEventListener("toggle", () => {
     if (section.open) for (const other of railSections) if (other !== section) other.open = false;
   });
@@ -54,12 +54,15 @@ try {
     const ids = mixed.size ? [...mixed] : current ? [current] : [];
     if (ids.length) atlas.highlight(ids); else atlas.clear();
   };
+  let chatOpen = false;
+  const syncSide = () => { side.hidden = chatOpen || current === null; };  // details panel: needs a selection and a closed chat
   const showCurrent = (id: string | null, focus: boolean) => {
     if (id !== current) {
       current = id;
       if (id !== null && focus) atlas.focus(id);
-      renderPanel(info, id);
-      railCurrent.textContent = id === null ? "" : MUSCLE_BY_ID[id].label;
+      sidePanel.show(id);
+      syncSide();
+      clearBtn.disabled = id === null;
       selectedEl.textContent = id === null ? "Selection cleared" : `Selected: ${MUSCLE_BY_ID[id].label}`;
       buttons.forEach((b, bid) => b.setAttribute("aria-pressed", String(bid === id)));
     }
@@ -107,7 +110,6 @@ try {
     }
     showCurrent(id, true);
     applyHighlight();
-    if (id !== null) musclesSection.open = false;
   };
 
   for (const m of MUSCLES) {
@@ -143,7 +145,7 @@ try {
     send: $<HTMLButtonElement>("chat-send"),
     selectedMuscle: () => current,
     mixedMuscles: () => [...mixed],
-    onOpenChange: (open) => { info.hidden = open; },
+    onOpenChange: (open) => { chatOpen = open; syncSide(); },
   });
   mixerClear.addEventListener("click", () => {
     mixed.clear();
@@ -161,21 +163,17 @@ try {
   addEventListener("keydown", (e) => {
     if (e.repeat || (e.target instanceof Element && e.target.closest("input,textarea,select,[contenteditable]"))) return;
     if (e.key === "Escape") {
-      if (musclesSection.open) {
-        musclesSection.open = false;
-        musclesSection.querySelector("summary")?.focus();
-      } else select(null);
-    } else if ((e.key === "m" || e.key === "M") && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      musclesSection.open = !musclesSection.open;
-      if (musclesSection.open) requestAnimationFrame(() => ((listCard.querySelector('button[aria-pressed="true"]') ?? listCard.querySelector("button")) as HTMLButtonElement | null)?.focus());
+      if (!sidePanel.closePopover()) select(null);  // the popover closes first, then the selection clears
     }
   });
 
   const tip = $("tip"), stage = $("stage");
+  let partName: string | null = null;  // set by onPartHover (fires before onHover each tick): a part of the selected multi-part muscle
+  atlas.onPartHover((part) => { partName = part ? part.name : null; });
   atlas.onHover((id, x, y) => {
     tip.classList.toggle("show", id !== null);  // fades out keeping its old label; a new label is set before the next fade-in
     if (id === null) return;
-    tip.textContent = MUSCLE_BY_ID[id].label;
+    tip.textContent = partName ?? MUSCLE_BY_ID[id].label;
     const r = stage.getBoundingClientRect();
     tip.style.left = `${Math.max(0, Math.min(x - r.left + 12, r.width - tip.offsetWidth))}px`;
     tip.style.top = `${Math.max(0, Math.min(y - r.top + 12, r.height - tip.offsetHeight))}px`;

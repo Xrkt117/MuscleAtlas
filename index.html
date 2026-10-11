@@ -9,20 +9,18 @@
 <body class="loading">
 <header id="brand"><h1>MuscleAtlas</h1></header>
 <nav id="rail" aria-label="Atlas sections">
-  <details id="muscles-section" open>
-    <summary><span class="section-label">Muscles</span><span id="rail-current"></span></summary>
-    <div id="listcard">
-      <ul id="list"></ul>
-      <button id="clear" type="button">Clear</button>
-      <p id="hint">Esc or click empty space to deselect</p>
-    </div>
-  </details>
+  <section id="muscles-section" aria-labelledby="muscles-label">
+    <h2 id="muscles-label" class="section-label">Muscles</h2>
+    <ul id="list"></ul>
+    <button id="clear" type="button" disabled>Clear</button>
+    <p id="hint">Esc or click empty space to deselect</p>
+  </section>
   <details id="muscle-guide">
-    <summary><span class="section-label">Muscle building</span></summary>
+    <summary>Muscle building</summary>
     <div id="guide-body"></div>
   </details>
   <details id="muscle-mixer">
-    <summary><span class="section-label">Mixer</span><span id="mixer-count">0 selected</span></summary>
+    <summary>Mixer<span id="mixer-count">0 selected</span></summary>
     <div id="mixer-body">
       <p class="mixer-help">Right-click muscles in this list or on the model to combine them. Right-click again to remove one.</p>
       <ul id="mixer-list"></ul>
@@ -34,7 +32,7 @@
 <main id="stage"><div id="loading" role="status"><div id="loading-text">Loading model...</div><progress id="loading-bar" max="1"></progress></div><div id="tip" aria-hidden="true"></div></main>
 <div id="error" role="alert"></div>
 <div id="selected" aria-live="polite"></div>
-<aside id="info" aria-labelledby="info-title"></aside>
+<aside id="side" aria-labelledby="side-title" hidden></aside>
 <nav id="view-controls" aria-label="Model view controls">
   <button id="zoom-in" type="button" aria-label="Zoom in" title="Zoom in">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7v7M7 10.5h7"/></svg>
