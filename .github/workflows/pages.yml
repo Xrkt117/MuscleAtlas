@@ -25,6 +25,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npx vite build --base=/MuscleAtlas/
+        env:
+          VITE_CHAT_API_URL: ${{ vars.VITE_CHAT_API_URL }}
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
