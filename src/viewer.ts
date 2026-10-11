@@ -4,7 +4,8 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { MUSCLE_BY_ID, MUSCLES } from "./muscle-map";
 import { easeInOutCubic, scaledDistance, targetAzimuth } from "./camera";
-import { muscleIdForNode, nodeNamesFor, partsFor, sanitize } from "./muscles";
+import { nodeNamesFor, partsFor, sanitize } from "./muscles";
+import { decodePartId, encodeRed, PART_COUNT, partId, type PartRef } from "./part-pick";
 import { anchorForObject } from "./anchors";
 import { facingVisibility } from "./visibility";
 import { progressFraction } from "./progress";
@@ -21,7 +22,7 @@ export interface FrameInfo {
   /** padded projected bbox of the selected muscle (both sides), CSS px */
   bounds: { x: number; y: number; w: number; h: number };
   /** only the chosen (largest, capped) parts of the selected muscle, in partsFor order */
-  parts: { name: string; x: number; y: number; visibility: number }[];
+  parts: { index: number; name: string; x: number; y: number; visibility: number }[];
 }
 
 export interface AtlasApi {
@@ -41,6 +42,11 @@ export interface AtlasApi {
   preview(id: string | null): void;
   /** Pointer over a seed muscle (or null) with client coordinates, at most once per frame. Returns an unsubscribe. */
   onHover(cb: (id: string | null, clientX: number, clientY: number) => void): () => void;
+  /**
+   * Pointer over a part of the SELECTED muscle (or null), with client coordinates, at most once per frame while over a part;
+   * null is sent once when the pointer leaves it. Only a single selected muscle with more than one part reports parts. Returns an unsubscribe.
+   */
+  onPartHover(cb: (part: { id: string; index: number; name: string } | null, clientX: number, clientY: number) => void): () => void;
   /** Canvas click: id of the seed muscle hit, or null for empty space / unmapped muscle. Returns an unsubscribe. */
   onSelect(cb: (id: string | null) => void): () => void;
   /** Canvas right-click: id of the seed muscle hit, or null. Returns an unsubscribe. */
@@ -151,6 +157,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   // Selection and hover are state; refresh() is the only place materials are assigned.
   let selected: string[] = [];
   let hovered: string | null = null;
+  let hoveredPart: { id: string; index: number; name: string } | null = null;  // a part of the single selected muscle under the pointer
   // one throwing listener must not end setAnimationLoop (three.js does not request the next frame after a throw)
   const guard = (fn: () => void) => { try { fn(); } catch (err) { console.error(err); } };
   const refresh = () => {
@@ -177,7 +184,8 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       for (let i = 0; i < nodes.length; i += 2) {
         const section = i / 2;
         const abdominalStyle = id === "rectus_abdominis" ? ABDOMINAL_SECTION_STYLES[section] : undefined;
-        const material = abdominalStyle ? abdominalSectionMaterials[section] : sectionMaterials[section];
+        const partHot = hoveredPart?.id === id && hoveredPart.index === section;
+        const material = partHot ? hoverMaterial : abdominalStyle ? abdominalSectionMaterials[section] : sectionMaterials[section];
         const renderOrder = abdominalStyle?.renderOrder ?? 0;
         paintNode(nodes[i], material, renderOrder);
         if (nodes[i + 1]) paintNode(nodes[i + 1], material, renderOrder);
@@ -217,30 +225,44 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
   let pointerOnCanvas = false;
   let pendingMove: { x: number; y: number } | null = null;  // set by pointermove, consumed once per frame
   const hoverListeners = new Set<(id: string | null, x: number, y: number) => void>();
-  const setHover = (id: string | null, x: number, y: number) => {
-    if (id !== hovered) { hovered = id; refresh(); renderer.domElement.style.cursor = id ? "pointer" : ""; }
+  const partListeners = new Set<(p: { id: string; index: number; name: string } | null, x: number, y: number) => void>();
+  /** Part hover state; fires part listeners every call while over a part, and once with null when it ends. Returns true when the hovered part changed. */
+  const setPart = (id: string | null, partIndex: number, x: number, y: number) => {
+    const multi = id !== null && partIndex >= 0 && selected.length === 1 && selected[0] === id && partsFor(id).length > 1;
+    const same = multi ? hoveredPart?.id === id && hoveredPart.index === partIndex : hoveredPart === null;
+    if (same && !multi) return false;
+    if (!same) hoveredPart = multi ? { id: id!, index: partIndex, name: partsFor(id!)[partIndex].name } : null;
+    const part = hoveredPart;
+    partListeners.forEach((cb) => guard(() => cb(part, x, y)));
+    return !same;
+  };
+  const setHover = (id: string | null, partIndex: number, x: number, y: number) => {
+    const partChanged = setPart(id, partIndex, x, y);
+    if (id !== hovered || partChanged) { hovered = id; refresh(); renderer.domElement.style.cursor = id ? "pointer" : ""; }
     hoverListeners.forEach((cb) => guard(() => cb(id, x, y)));
   };
 
   // GPU picking: a raycast against ~1M vertices with no BVH stalled frames (measured under Rosetta, ADR 0006). Instead render the muscles once into a
-  // 1x1 target through a view offset, each mesh flat-coloured with its muscle index+1 in the red channel (0 = background/unmapped).
+  // 1x1 target through a view offset, each mesh flat-coloured with its part id (one per GLB node, part-pick.ts) in the red channel (0 = background/unmapped).
   const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.UnsignedByteType, format: THREE.RGBAFormat });
-  const idMaterials = MUSCLES.map((_, i) => new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB((i + 1) / 255, 0, 0, THREE.LinearSRGBColorSpace) }));
+  const idMaterials = Array.from({ length: PART_COUNT + 1 }, (_, i) => new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB(encodeRed(i), 0, 0, THREE.LinearSRGBColorSpace) }));
   const blackMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });  // unmapped muscles still occlude
-  const muscleIndexOf = new Map<THREE.Mesh, number>();
+  const partIdOfNode = new Map<THREE.Object3D, number>();
+  for (const m of MUSCLES) nodesFor(m.id).forEach((n, k) => partIdOfNode.set(n, partId(m.id, k >> 1)));  // nodes are [.l, .r] per part
+  const partIdOfMesh = new Map<THREE.Mesh, number>();
   for (const m of meshes) {
-    let id: string | undefined;
-    for (let o: THREE.Object3D | null = m; o && !id; o = o.parent) id = muscleIdForNode(o.name);
-    muscleIndexOf.set(m, id ? MUSCLES.findIndex((x) => x.id === id) : -1);
+    let id: number | undefined;
+    for (let o: THREE.Object3D | null = m; o && id === undefined; o = o.parent) id = partIdOfNode.get(o);
+    partIdOfMesh.set(m, id ?? 0);
   }
   const pixel = new Uint8Array(4);
-  /** Seed muscle id under the pointer, or null. The skeleton is hidden while picking, which is what keeps bones unselectable. */
-  const pick = (clientX: number, clientY: number, warmUp = false): string | null => {
+  /** Muscle and part under the pointer, or null. The skeleton is hidden while picking, which is what keeps bones unselectable. */
+  const pick = (clientX: number, clientY: number, warmUp = false): PartRef | null => {
     const r = renderer.domElement.getBoundingClientRect();
     const fullW = renderer.domElement.width, fullH = renderer.domElement.height;
     const px = Math.floor(((clientX - r.left) / r.width) * fullW), py = Math.floor(((clientY - r.top) / r.height) * fullH);
     if (px < 0 || py < 0 || px >= fullW || py >= fullH) return null;
-    for (const m of meshes) { const i = muscleIndexOf.get(m)!; m.material = i < 0 ? blackMaterial : idMaterials[i]; }
+    for (const m of meshes) { const i = partIdOfMesh.get(m)!; m.material = i === 0 ? blackMaterial : idMaterials[i]; }
     skeletonGroup.visible = false;
     if (!warmUp) camera.setViewOffset(fullW, fullH, px, py, 1, 1);  // warm-up renders the whole view so every mesh gets its GPU state
     const prevColor = renderer.getClearColor(new THREE.Color()), prevAlpha = renderer.getClearAlpha();
@@ -257,7 +279,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       skeletonGroup.visible = true;
       refresh();
     }
-    return pixel[0] ? MUSCLES[pixel[0] - 1].id : null;
+    return decodePartId(pixel[0]);
   };
 
   const pv = new THREE.Vector3();
@@ -364,7 +386,8 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       const { x, y } = pendingMove;
       pendingMove = null;
       lastHoverRay = performance.now();
-      setHover(pick(x, y), x, y);
+      const hit = pick(x, y);
+      setHover(hit?.muscleId ?? null, hit?.partIndex ?? -1, x, y);
     }
     controls.update();
     renderer.render(scene, camera);
@@ -384,7 +407,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     const start = down;
     down = null;
     if (!start || Math.hypot(e.clientX - start.x, e.clientY - start.y) > CLICK_MAX_PX) return;  // orbit drag, not a click
-    const id = pick(e.clientX, e.clientY);
+    const id = pick(e.clientX, e.clientY)?.muscleId ?? null;
     listeners.forEach((cb) => guard(() => cb(id)));
   });
   renderer.domElement.addEventListener("contextmenu", (e) => {
@@ -392,12 +415,12 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     const start = contextDown;
     contextDown = null;
     if (!start || Math.hypot(e.clientX - start.x, e.clientY - start.y) > CLICK_MAX_PX) return;  // orbit drag, not a mixer click
-    const id = pick(e.clientX, e.clientY);
+    const id = pick(e.clientX, e.clientY)?.muscleId ?? null;
     contextListeners.forEach((cb) => guard(() => cb(id)));
   });
   renderer.domElement.addEventListener("pointermove", (e) => { if (e.buttons === 0 && !anim) pendingMove = { x: e.clientX, y: e.clientY }; });
   renderer.domElement.addEventListener("pointerenter", () => { pointerOnCanvas = true; });
-  renderer.domElement.addEventListener("pointerleave", (e) => { pointerOnCanvas = false; pendingMove = null; setHover(null, e.clientX, e.clientY); });
+  renderer.domElement.addEventListener("pointerleave", (e) => { pointerOnCanvas = false; pendingMove = null; setHover(null, -1, e.clientX, e.clientY); });
 
   await new Promise(requestAnimationFrame);  // the loop above has rendered its first frame by now
 
@@ -405,18 +428,20 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
     highlight(ids) {
       ids.forEach(nodesFor);  // validate all ids before touching any material
       selected = [...ids];
+      setPart(null, -1, 0, 0);
       refresh();
       if (ids.length) {
         frameAnchors = anchorsFor(ids[0]);
         frame.id = ids[0];
         const names = partsFor(ids[0]);
-        frame.parts = frameAnchors.chosen.map((i) => ({ name: names[i].name, x: 0, y: 0, visibility: 0 }));
+        frame.parts = frameAnchors.chosen.map((i) => ({ index: i, name: names[i].name, x: 0, y: 0, visibility: 0 }));
         const c = camera.position;  // initial side: nearer one, no hysteresis
         frameSide = frameAnchors.sides[0].mean.distanceTo(c) <= frameAnchors.sides[1].mean.distanceTo(c) ? 0 : 1;
       } else if (frameAnchors) { frameAnchors = null; emitNull = true; }
     },
     clear() {
       selected = [];
+      setPart(null, -1, 0, 0);
       refresh();
       if (frameAnchors) { frameAnchors = null; emitNull = true; }
     },
@@ -429,24 +454,29 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       const off = camera.position.clone().sub(controls.target);
       const fromDist = off.length(), fromAz = Math.atan2(off.x, off.z), fromEl = Math.asin(off.y / fromDist);
       animateView(center, targetAzimuth(fromAz, MUSCLE_BY_ID[id].view), THREE.MathUtils.clamp(fromEl, -0.5, 0.8), dist);
-      if (hovered) setHover(null, 0, 0);  // hover is paused during the animation; don't leave a stale tooltip
+      if (hovered) setHover(null, -1, 0, 0);  // hover is paused during the animation; don't leave a stale tooltip
     },
     zoomIn() { zoomBy(0.8); },
     zoomOut() { zoomBy(1.25); },
     resetView() {
       const distance = homeOffset.length();
       animateView(homeTarget.clone(), Math.atan2(homeOffset.x, homeOffset.z), Math.asin(homeOffset.y / distance), distance);
-      if (hovered) setHover(null, 0, 0);
+      if (hovered) setHover(null, -1, 0, 0);
     },
     preview(id) {
       if (pointerOnCanvas || id === hovered) return;
       if (id) nodesFor(id);  // validate
       hovered = id;
+      hoveredPart = null;
       refresh();  // no hover listeners: the tooltip is pointer-only
     },
     onHover(cb) {
       hoverListeners.add(cb);
       return () => { hoverListeners.delete(cb); };
+    },
+    onPartHover(cb) {
+      partListeners.add(cb);
+      return () => { partListeners.delete(cb); };
     },
     onSelect(cb) {
       listeners.add(cb);
