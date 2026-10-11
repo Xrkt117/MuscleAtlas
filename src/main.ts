@@ -35,8 +35,10 @@ try {
   const viewControls = $("view-controls");
   const sources = $("sources");
   const chatPanel = $("chat-panel");
+  let current: string | null = null;
+  const mixed = new Set<string>();
   const callouts = createCallouts($("stage"), [info, rail, viewControls, $("brand"), sources, chatPanel]);
-  atlas.onFrame(callouts.update);
+  atlas.onFrame((frame) => callouts.update(mixed.size ? null : frame));
   renderPanel(info, null);
   renderGuide($("guide-body"));
   renderSources($("sources-body"));
@@ -48,8 +50,6 @@ try {
     if (section.open) for (const other of railSections) if (other !== section) other.open = false;
   });
 
-  let current: string | null = null;
-  const mixed = new Set<string>();
   const applyHighlight = () => {
     const ids = mixed.size ? [...mixed] : current ? [current] : [];
     if (ids.length) atlas.highlight(ids); else atlas.clear();
@@ -78,7 +78,6 @@ try {
       remove.setAttribute("aria-label", `Remove ${MUSCLE_BY_ID[id].label} from Mixer`);
       remove.addEventListener("click", () => {
         mixed.delete(id);
-        if (current === id) showCurrent(mixed.values().next().value ?? null, false);
         renderMixer();
         applyHighlight();
       });
@@ -95,9 +94,9 @@ try {
     if (ids.length) selectedEl.textContent = `Mixer: ${ids.map((id) => MUSCLE_BY_ID[id].label).join(", ")}`;
   };
   const toggleMixer = (id: string) => {
+    const enteringMixer = mixed.size === 0;
     if (mixed.has(id)) mixed.delete(id); else mixed.add(id);
-    if (mixed.has(id)) showCurrent(id, true);
-    else if (current === id) showCurrent(mixed.values().next().value ?? null, false);
+    if (enteringMixer && mixed.size) showCurrent(null, false);
     renderMixer();
     applyHighlight();
   };
