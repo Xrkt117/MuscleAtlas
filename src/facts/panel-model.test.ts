@@ -3,7 +3,7 @@ import { MUSCLES } from "../muscle-map";
 import { buildGuideModel, buildPanelModel } from "./panel-model";
 import type { PanelCite } from "./panel-model";
 
-const allCites = (m: ReturnType<typeof buildPanelModel>): PanelCite[] => [...m.actions, ...m.exercises, ...m.loading, ...m.specific, ...m.general];
+const allCites = (m: ReturnType<typeof buildPanelModel>): PanelCite[] => [...m.actions, ...m.exercises, ...m.programming, ...m.specific, ...m.general];
 
 describe("buildPanelModel", () => {
   it("deltoid has 3 fully populated actions", () => {
@@ -60,11 +60,12 @@ describe("buildPanelModel", () => {
     expect(buildPanelModel("soleus").specific.flatMap((e) => e.badges)).not.toContain("Group finding");
   });
 
-  it("every available exercise and loading claim has a complete citation", () => {
+  it("every available exercise and programming claim has a complete citation", () => {
     for (const { id } of MUSCLES) {
       const m = buildPanelModel(id);
-      expect(m.loading).toHaveLength(2);
+      expect(m.programming).toHaveLength(5);
       expect(m.isolation.every((exercise) => exercise.mechanic === "isolation")).toBe(true);
+      expect([...m.calisthenics, ...m.loadedExercises]).toHaveLength(m.exercises.length);
       for (const c of allCites(m)) {
         expect(c.licence.trim()).not.toBe("");
         expect(c.short.trim()).not.toBe("");
@@ -91,8 +92,19 @@ describe("buildPanelModel", () => {
 
   it("the general guide exposes all categories and the Cambridge model badge", () => {
     const guide = buildGuideModel();
-    expect(guide).toHaveLength(5);
+    expect(guide).toHaveLength(6);
     const model = guide.flatMap((section) => section.claims).find((claim) => claim.short.startsWith("Cambridge"));
     expect(model?.badges).toEqual(["Model estimate"]);
+  });
+
+  it("separates bodyweight exercises from externally loaded options", () => {
+    const chest = buildPanelModel("pectoralis_major");
+    expect(chest.calisthenics.map((exercise) => exercise.name)).toEqual(["Pushups", "Incline Push-Up"]);
+    expect(chest.loadedExercises.map((exercise) => exercise.name)).toEqual(["Dumbbell Bench Press"]);
+  });
+
+  it("uses strength-category band adduction instead of a plyometric lateral bound", () => {
+    const adductors = buildPanelModel("hip_adductors");
+    expect(adductors.exercises.map((exercise) => exercise.name)).toEqual(["Thigh Adductor", "Band Hip Adductions"]);
   });
 });

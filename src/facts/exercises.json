@@ -375,25 +375,19 @@
       "mechanic": "isolation"
     },
     {
-      "datasetId": "Lateral_Bound",
-      "name": "Lateral Bound",
+      "datasetId": "Band_Hip_Adductions",
+      "name": "Band Hip Adductions",
       "datasetPrimary": [
         "adductors"
       ],
-      "datasetSecondary": [
-        "abductors",
-        "calves",
-        "glutes",
-        "hamstrings",
-        "quadriceps"
-      ],
+      "datasetSecondary": [],
       "role": "primary",
       "cite": {
         "sourceId": "free-exercise-db",
-        "locator": "Lateral_Bound",
+        "locator": "Band_Hip_Adductions",
         "quote": "adductors"
       },
-      "mechanic": "compound"
+      "mechanic": "isolation"
     }
   ],
   "gluteus_maximus": [

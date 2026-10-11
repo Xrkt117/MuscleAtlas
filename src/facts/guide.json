@@ -59,6 +59,39 @@
     ]
   },
   {
+    "id": "programming",
+    "title": "Hypertrophy programming",
+    "claims": [
+      {
+        "id": "trained-volume-template",
+        "text": "For young, trained men, one systematic review proposed 12–20 weekly sets per muscle group as an optimum standard range; it is not a universal starting dose.",
+        "cite": {
+          "sourceId": "baz-valle-2022",
+          "locator": "Abstract",
+          "quote": "a range of 12-20 weekly sets per muscle group may be an optimum standard recommendation for increasing muscle hypertrophy in young, trained men"
+        }
+      },
+      {
+        "id": "proximity-to-failure",
+        "text": "A recent review recommends relatively high effort, around two repetitions in reserve, within an individualized and goal-dependent program.",
+        "cite": {
+          "sourceId": "van-every-2025",
+          "locator": "Section 6, Practical application",
+          "quote": "RET programming should emphasize a personalized, goal-dependent approach with relatively high effort, aiming to achieve a proximity to failure (i.e., ∼2 reps in reserve)"
+        }
+      },
+      {
+        "id": "programming-fundamentals",
+        "text": "The fundamentals are progressive overload, enough training volume, proximity to failure, recovery, and long-term adherence.",
+        "cite": {
+          "sourceId": "van-every-2025",
+          "locator": "Section 6, Practical application",
+          "quote": "Evidence-based practice should emphasize the fundamentals of RET: progressive overload, sufficient training volume, a proximity to failure, adequate recovery, and long-term adherence."
+        }
+      }
+    ]
+  },
+  {
     "id": "exercise-choice",
     "title": "Exercise overview",
     "claims": [

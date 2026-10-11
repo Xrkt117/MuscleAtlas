@@ -9,6 +9,7 @@ export interface PanelExercise extends PanelCite {
   name: string;
   quote: string;
   mechanic: "compound" | "isolation";
+  modality: "calisthenics" | "external-load";
   role: "primary" | "secondary";
   datasetPrimary: string[];
   datasetSecondary: string[];
@@ -20,11 +21,26 @@ export interface PanelModel {
   title: string;
   actions: PanelAction[];
   exercises: PanelExercise[];
+  calisthenics: PanelExercise[];
+  loadedExercises: PanelExercise[];
   isolation: PanelExercise[];
-  loading: PanelGuideClaim[];
+  programming: PanelGuideClaim[];
   specific: PanelEvidence[];
   general: PanelEvidence[];
 }
+
+const calisthenicsExerciseIds = new Set([
+  "Bodyweight_Squat",
+  "Butt_Lift_Bridge",
+  "Crunches",
+  "Dips_-_Triceps_Version",
+  "Incline_Push-Up",
+  "Plank",
+  "Pullups",
+  "Pushups",
+  "Reverse_Crunch",
+  "Single_Leg_Glute_Bridge",
+]);
 
 function panelCite(cite: Cite): PanelCite {
   const s = getSource(cite.sourceId);
@@ -52,6 +68,17 @@ export function buildGuideModel(): PanelGuideSection[] {
 
 export function buildPanelModel(id: string): PanelModel {
   const f = getFacts(id);
+  const panelExercise = (exercise: (typeof f.exercises)[number]): PanelExercise => ({
+    name: exercise.name,
+    quote: exercise.cite.quote,
+    mechanic: exercise.mechanic,
+    modality: calisthenicsExerciseIds.has(exercise.datasetId) ? "calisthenics" : "external-load",
+    role: exercise.role,
+    datasetPrimary: exercise.datasetPrimary,
+    datasetSecondary: exercise.datasetSecondary,
+    ...panelCite(exercise.cite),
+  });
+  const panelExercises = f.exercises.map(panelExercise);
   const evidence = (general: boolean): PanelEvidence[] =>
     f.evidence
       .filter((e) => !!e.general === general)
@@ -68,27 +95,17 @@ export function buildPanelModel(id: string): PanelModel {
     id,
     title: MUSCLE_BY_ID[id].label,
     actions: f.actions.map((a) => ({ text: a.text, quote: a.cite.quote, ...panelCite(a.cite) })),
-    exercises: f.exercises.map((exercise) => ({
-      name: exercise.name,
-      quote: exercise.cite.quote,
-      mechanic: exercise.mechanic,
-      role: exercise.role,
-      datasetPrimary: exercise.datasetPrimary,
-      datasetSecondary: exercise.datasetSecondary,
-      ...panelCite(exercise.cite),
-    })),
-    isolation: f.exercises
-      .filter((exercise) => exercise.mechanic === "isolation")
-      .map((exercise) => ({
-        name: exercise.name,
-        quote: exercise.cite.quote,
-        mechanic: exercise.mechanic,
-        role: exercise.role,
-        datasetPrimary: exercise.datasetPrimary,
-        datasetSecondary: exercise.datasetSecondary,
-        ...panelCite(exercise.cite),
-      })),
-    loading: ["moderate-load-template", "wide-loading-range"].map((claimId) => panelGuideClaim(getGuideClaim(claimId))),
+    exercises: panelExercises,
+    calisthenics: panelExercises.filter((exercise) => exercise.modality === "calisthenics"),
+    loadedExercises: panelExercises.filter((exercise) => exercise.modality === "external-load"),
+    isolation: panelExercises.filter((exercise) => exercise.mechanic === "isolation"),
+    programming: [
+      "moderate-load-template",
+      "wide-loading-range",
+      "trained-volume-template",
+      "proximity-to-failure",
+      "programming-fundamentals",
+    ].map((claimId) => panelGuideClaim(getGuideClaim(claimId))),
     specific: evidence(false),
     general: evidence(true),
   };

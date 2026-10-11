@@ -38,9 +38,16 @@ function exerciseItem(exercise: PanelExercise): HTMLElement {
     h("p", { class: "exercise-name" }, exercise.name),
     h("p", { class: "badges" },
       h("span", { class: "badge" }, exercise.mechanic === "isolation" ? "Isolation" : "Compound"),
+      h("span", { class: "badge muted-badge" }, exercise.modality === "calisthenics" ? "Bodyweight" : "External load"),
       h("span", { class: "badge muted-badge" }, `Region ${exercise.role}`)),
     muted(`Dataset groups — primary: ${exercise.datasetPrimary.join(", ")}${secondary}`, "fine"),
     original(exercise, exercise.quote));
+}
+
+function exerciseGroup(title: string, exercises: PanelExercise[], empty: string): HTMLElement {
+  return h("div", { class: "exercise-group" },
+    h("h4", null, title),
+    ...(exercises.length ? exercises.map(exerciseItem) : [muted(empty, "empty-note")]));
 }
 
 /** Render the permanent, cited muscle-building overview in the left rail. */
@@ -101,19 +108,22 @@ export function renderPanel(root: HTMLElement, id: string | null): void {
       muted(a.short),
       original(a, a.quote))));
   const exercises = h("section", null, h("h3", null, "Exercises"),
-    muted("Source-linked examples, not a ranking. Dataset labels describe broad regions, not individual muscle heads.", "section-note"),
-    ...(m.exercises.length ? m.exercises.map(exerciseItem) : [muted("No exercise mapping in the current source is specific enough for this muscle.", "empty-note")]));
+    muted("Curated strength-training options that can support hypertrophy when progressively overloaded. They are source-linked examples, not a universal ranking; dataset labels describe broad regions, not individual muscle heads.", "section-note"),
+    ...(m.exercises.length ? [
+      exerciseGroup("Calisthenics / bodyweight", m.calisthenics, "No sufficiently specific bodyweight exercise is mapped for this muscle."),
+      exerciseGroup("Weights, bands & machines", m.loadedExercises, "No sufficiently specific externally loaded exercise is mapped for this muscle."),
+    ] : [muted("No exercise mapping in the current source is specific enough for this muscle.", "empty-note")]));
   const isolation = h("section", null, h("h3", null, "Isolation"),
     muted("Single-joint options classified as isolation exercises by the exercise dataset. Other muscles can still assist.", "section-note"),
     ...(m.isolation.length
       ? [h("ul", { class: "compact-list" }, ...m.isolation.map((exercise) => h("li", null, exercise.name)))]
       : [muted("No source-verified isolation option is available for this muscle.", "empty-note")]));
-  const loading = h("section", null, h("h3", null, "Loading"),
-    muted("General hypertrophy guidance — not specific to this muscle or a substitute for pain-free technique.", "section-note"),
-    ...m.loading.map((claim) => citedClaim(claim)));
+  const programming = h("section", null, h("h3", null, "Hypertrophy programming"),
+    muted("General, evidence-linked programming guidance — not specific to this muscle or a substitute for pain-free technique and individualized recovery.", "section-note"),
+    ...m.programming.map((claim) => citedClaim(claim)));
   const evidence = h("section", null, h("h3", null, "Training evidence"),
     ...(m.specific.length ? m.specific.map(evidenceItem) : [muted("No muscle-specific studies in our sources.", "empty-note")]),
     ...(m.general.length ? [h("h4", null, "General findings, not specific to this muscle"), ...m.general.map(evidenceItem)] : []));
-  root.replaceChildren(h("h2", { id: "info-title" }, m.title), actions, exercises, isolation, loading, evidence);
+  root.replaceChildren(h("h2", { id: "info-title" }, m.title), actions, exercises, isolation, programming, evidence);
   root.scrollTop = 0;
 }

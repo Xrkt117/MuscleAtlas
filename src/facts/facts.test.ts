@@ -94,7 +94,7 @@ describe("facts data", () => {
   });
 
   it("the guide covers the requested training topics", () => {
-    expect(guide.map((section) => section.id)).toEqual(["training-stimulus", "loading", "exercise-choice", "frequency", "nutrition-sleep"]);
+    expect(guide.map((section) => section.id)).toEqual(["training-stimulus", "loading", "programming", "exercise-choice", "frequency", "nutrition-sleep"]);
     for (const section of guide) expect(section.claims.length, section.id).toBeGreaterThan(0);
   });
 
