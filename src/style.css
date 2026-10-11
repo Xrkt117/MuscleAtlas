@@ -104,9 +104,9 @@ blockquote { margin: 8px 0 0; padding: 4px 0 4px 12px; border-left: 2px solid rg
 .badges { margin-top: 8px; }
 .badge { display: inline-block; margin-right: 8px; padding: 1px 8px; font-size: 11px; line-height: 1.6; border: 1px solid rgba(255,200,87,.45); color: var(--accent); border-radius: 99px; }
 
-/* Camera controls sit under the empty panel position, then beside the full information panel. */
+/* Camera controls occupy the top-right when no muscle is selected, then sit beside the full information panel. */
 #view-controls { position: fixed; z-index: 3; top: var(--gap); right: calc(var(--gap) + min(400px, 32vw) + 10px); display: grid; grid-template-columns: repeat(2, 40px); gap: 6px; }
-#info.empty ~ #view-controls { top: 112px; right: var(--gap); }
+#info.empty ~ #view-controls { top: var(--gap); right: var(--gap); }
 #view-controls button { display: grid; place-items: center; width: 40px; height: 40px; padding: 9px; color: var(--fg); border-radius: 10px; cursor: pointer; transition: background 120ms, border-color 120ms; }
 #view-controls button:hover { background: rgba(255,200,87,.12); border-color: rgba(255,200,87,.5); }
 #view-controls svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
