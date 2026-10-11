@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "muscleatlas-ai",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-10",
+  "vars": {
+    "ALLOWED_ORIGINS": "http://localhost:5173,https://xrkt117.github.io",
+    "OPENAI_MODEL": "gpt-6-luna"
+  }
+}
