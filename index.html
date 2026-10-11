@@ -8,17 +8,28 @@
 </head>
 <body class="loading">
 <header id="brand"><h1>MuscleAtlas</h1></header>
-<nav id="rail" aria-label="Muscles" data-state="open">
-  <button id="rail-pill" type="button" aria-expanded="false" aria-controls="listcard"><span class="pill-label">Muscles</span><span id="rail-current"></span></button>
-  <div id="listcard">
-    <ul id="list"></ul>
-    <button id="clear" type="button">Clear</button>
-    <p id="hint">Esc or click empty space to deselect</p>
-    <details id="muscle-guide">
-      <summary>Muscle building</summary>
-      <div id="guide-body"></div>
-    </details>
-  </div>
+<nav id="rail" aria-label="Atlas sections">
+  <details id="muscles-section" open>
+    <summary><span class="section-label">Muscles</span><span id="rail-current"></span></summary>
+    <div id="listcard">
+      <ul id="list"></ul>
+      <button id="clear" type="button">Clear</button>
+      <p id="hint">Esc or click empty space to deselect</p>
+    </div>
+  </details>
+  <details id="muscle-guide">
+    <summary><span class="section-label">Muscle building</span></summary>
+    <div id="guide-body"></div>
+  </details>
+  <details id="muscle-mixer">
+    <summary><span class="section-label">Mixer</span><span id="mixer-count">0 selected</span></summary>
+    <div id="mixer-body">
+      <p class="mixer-help">Right-click muscles in this list or on the model to combine them. Right-click again to remove one.</p>
+      <ul id="mixer-list"></ul>
+      <p id="mixer-matches"></p>
+      <div class="mixer-actions"><button id="mixer-ask" type="button" disabled>Ask AI</button><button id="mixer-clear" type="button" disabled>Clear mix</button></div>
+    </div>
+  </details>
 </nav>
 <main id="stage"><div id="loading" role="status"><div id="loading-text">Loading model...</div><progress id="loading-bar" max="1"></progress></div><div id="tip" aria-hidden="true"></div></main>
 <div id="error" role="alert"></div>
@@ -41,6 +52,24 @@
     <div id="sources-body"></div>
   </details>
 </footer>
+<button id="chat-launch" type="button" aria-label="Open MuscleAtlas AI" aria-expanded="false" aria-controls="chat-panel" title="Ask MuscleAtlas AI">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8 8 0 0 0-6.6 12.5L4 21l5.5-1.5A8 8 0 1 0 12 3Z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></svg>
+</button>
+<section id="chat-panel" aria-labelledby="chat-title" hidden>
+  <header class="chat-header">
+    <div><p class="chat-kicker">Source-grounded assistant</p><h2 id="chat-title">MuscleAtlas AI</h2></div>
+    <button id="chat-close" type="button" aria-label="Close MuscleAtlas AI">×</button>
+  </header>
+  <p class="chat-mixer-help"><strong>Mixer:</strong> close this panel, then right-click several muscles in the list or on the model. Reopen chat and ask for exercises that cover the whole mix.</p>
+  <div id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+  <p id="chat-status" role="status"></p>
+  <form id="chat-form">
+    <label for="chat-input">Ask about a muscle or build a program</label>
+    <textarea id="chat-input" rows="3" maxlength="1200" placeholder="Example: Build a 3-day hypertrophy program with dumbbells"></textarea>
+    <button id="chat-send" type="submit">Send</button>
+  </form>
+  <p class="chat-disclaimer">Educational only. For pain, injury, or medical concerns, consult a qualified professional.</p>
+</section>
 <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

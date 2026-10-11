@@ -11,7 +11,7 @@ h1, h2, h3, h4, p { margin: 0; }
 /* stage fills the window */
 #stage { position: fixed; inset: 0; overflow: hidden; background: #000; }
 #stage canvas { display: block; }
-#selected { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }  /* announced, not shown: the rail pill and panel show the selection */
+#selected { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }  /* announced, not shown: the rail summary and panel show the selection */
 #tip { position: absolute; pointer-events: none; padding: 4px 10px; background: #000c; border: 1px solid #fff2; border-radius: 6px; white-space: nowrap; opacity: 0; transition: opacity 120ms; font-size: 13px; z-index: 3; }
 #tip.show { opacity: 1; }
 #loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; z-index: 5; background: #222; }
@@ -20,7 +20,7 @@ h1, h2, h3, h4, p { margin: 0; }
 #loading-bar::-webkit-progress-value { background: #c87f6e; }
 #loading-bar::-moz-progress-bar { background: #c87f6e; }
 #error { display: none; position: fixed; inset: 0 0 auto 0; padding: 12px; background: #900; color: #fff; z-index: 6; }  /* outside #stage so it paints above the z 3 panels */
-body.loading #rail, body.loading #info, body.loading #view-controls, body.loading #brand, body.loading #sources { visibility: hidden; }
+body.loading #rail, body.loading #info, body.loading #view-controls, body.loading #brand, body.loading #sources, body.loading #chat-launch, body.loading #chat-panel { visibility: hidden; }
 
 body.failed #rail, body.failed #info, body.failed #view-controls { display: none; }  /* sources stay, the error banner is shown above */
 body.failed #loading { display: none; }
@@ -28,9 +28,15 @@ body.failed #loading { display: none; }
 /* floating surfaces */
 #brand { position: fixed; z-index: 3; top: var(--gap); left: var(--gap); padding: 0 4px; text-shadow: 0 1px 6px #000; }
 #brand h1 { font-size: 18px; font-weight: 650; letter-spacing: .02em; }
-#rail, #info, #sources, #view-controls button { background: var(--glass); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+#rail, #info, #sources, #view-controls button, #chat-launch, #chat-panel { background: var(--glass); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
 #rail, #info, #sources { position: fixed; z-index: 3; }
 #rail { top: 60px; left: var(--gap); width: 220px; border-radius: var(--radius); }
+#rail > details { margin: 0; }
+#rail > details + details { border-top: 1px solid var(--line); }
+#rail > details > summary { display: flex; align-items: baseline; gap: 8px; padding: 10px 14px; list-style-position: inside; }
+#rail > details > summary:hover { background: rgba(255,200,87,.08); }
+.section-label { font-size: 11.5px; font-weight: 650; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+#rail-current { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 
 /* list card */
 #listcard { padding: 12px; }
@@ -38,35 +44,33 @@ body.failed #loading { display: none; }
 #list button, #clear { width: 100%; text-align: left; padding: 5px 12px; background: rgba(255,255,255,.05); color: inherit; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: background 120ms, border-color 120ms; }
 #list button:hover, #clear:hover { background: rgba(255,200,87,.12); border-color: rgba(255,200,87,.5); }
 #list button[aria-pressed="true"] { background: #b3261e; border-color: #e0584f; color: #fff; }
-#list button:focus-visible, #clear:focus-visible, #rail-pill:focus-visible, #view-controls button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#list button[data-mixed="true"] { box-shadow: inset 0 0 0 2px var(--accent); }
+#list button[aria-pressed="true"][data-mixed="true"] { box-shadow: inset 0 0 0 2px #fff; }
+#list button:focus-visible, #clear:focus-visible, #view-controls button:focus-visible, #chat-launch:focus-visible, #chat-panel button:focus-visible, #chat-input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 #clear { margin-top: 12px; color: var(--muted); text-align: center; }
 #hint { margin-top: 12px; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
-#muscle-guide { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
-#muscle-guide > summary { font-size: 12.5px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
-#guide-body { max-height: min(42vh, 420px); margin-top: 10px; padding-right: 4px; overflow-y: auto; overscroll-behavior: contain; }
+#guide-body { max-height: min(34vh, 360px); padding: 4px 14px 14px; overflow-y: auto; overscroll-behavior: contain; }
 #guide-body section + section { margin-top: 20px; }
 #guide-body h3 { margin-bottom: 8px; font-size: 11.5px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .guide-note { margin-bottom: 16px; font-size: 11.5px; line-height: 1.45; color: var(--muted); }
 .guide-claim { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); font-size: 12.5px; line-height: 1.45; }
 .guide-claim:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
 .guide-claim .cite, .guide-claim details { font-size: 11.5px; }
+#mixer-count { margin-left: auto; font-size: 11px; color: var(--muted); }
+#mixer-body { padding: 2px 14px 14px; }
+.mixer-help, #mixer-matches { font-size: 11.5px; line-height: 1.45; color: var(--muted); }
+#mixer-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; padding: 0; list-style: none; }
+#mixer-list button { padding: 4px 8px; border: 1px solid rgba(255,200,87,.45); border-radius: 99px; background: rgba(255,200,87,.1); color: var(--fg); font-size: 11px; cursor: pointer; }
+.mixer-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+.mixer-actions button { padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.05); color: var(--fg); cursor: pointer; }
+.mixer-actions button:disabled { cursor: default; opacity: .45; }
 
-/* list rail: open (first load) -> collapsed pill -> overlay card */
-#rail-pill { display: none; width: 100%; align-items: baseline; gap: 8px; padding: 8px 14px; background: none; color: inherit; border: 0; border-radius: var(--radius); cursor: pointer; text-align: left; transition: background 120ms; }
-#rail-pill:hover { background: rgba(255,200,87,.12); }
-.pill-label { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
-#rail-current { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
-#rail[data-state="collapsed"] #listcard { display: none; }
-#rail[data-state="collapsed"] #rail-pill, #rail[data-state="overlay"] #rail-pill { display: flex; }
-#rail[data-state="overlay"] #listcard { border-top: 1px solid var(--line); }
-#rail[data-state="collapsed"] { width: auto; max-width: 260px; }
-/* wide: the open card / overlay stays inside the window; only the list scrolls, Clear and the hint stay visible */
+/* Each rail section keeps its own persistent summary and independent expanded state. */
 @media (min-width: 900px) {
-  #rail { display: flex; flex-direction: column; max-height: calc(100vh - 60px - 88px); }  /* top offset, collapsed sources + gap */
+  #rail { max-height: calc(100vh - 60px - 88px); }
   #listcard { display: flex; flex-direction: column; min-height: 0; }
-  #rail[data-state="collapsed"] #listcard { display: none; }
-  #list { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
-  #clear, #hint, #muscle-guide { flex: none; }
+  #list { max-height: min(34vh, 390px); overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+  #clear, #hint { flex: none; }
 }
 #list button { overflow-wrap: anywhere; }  /* long labels such as "Hip adductors (inner thigh)" wrap inside the button */
 
@@ -90,6 +94,7 @@ body.failed #loading { display: none; }
 .exercise-item:last-child { margin-bottom: 0; }
 .exercise-name { font-weight: 650; }
 .exercise-item .badges { margin-top: 6px; }
+.exercise-group + .exercise-group { margin-top: 24px; padding-top: 2px; border-top: 1px solid var(--line); }
 .muted-badge { border-color: var(--line); color: var(--muted); }
 .compact-list { margin: 0; padding-left: 20px; color: #d7d9dd; }
 .compact-list li + li { margin-top: 6px; }
@@ -121,6 +126,30 @@ blockquote { margin: 8px 0 0; padding: 4px 0 4px 12px; border-left: 2px solid rg
 .source-notes { margin-top: 5px; font-size: 11.5px; }
 .source-notes .fine { padding-left: 10px; border-left: 1px solid var(--line); }
 
+/* Source-grounded AI tutor */
+#chat-launch { position: fixed; z-index: 5; right: var(--gap); bottom: 14px; display: grid; place-items: center; width: 52px; height: 52px; padding: 13px; color: var(--fg); border-radius: 50%; cursor: pointer; transition: transform 120ms, background 120ms, border-color 120ms; }
+#chat-launch:hover { transform: translateY(-2px); background: rgba(30,33,39,.96); border-color: rgba(255,200,87,.5); }
+#chat-launch svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#chat-panel { position: fixed; z-index: 5; right: var(--gap); bottom: 78px; display: flex; flex-direction: column; width: min(390px, calc(100vw - 2 * var(--gap))); height: min(620px, calc(100vh - 102px)); border-radius: var(--radius); overflow: hidden; }
+#chat-panel[hidden] { display: none; }
+.chat-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.chat-kicker { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.chat-header h2 { margin-top: 2px; font-size: 18px; line-height: 1.2; }
+#chat-close { width: 34px; height: 34px; padding: 0; border: 0; border-radius: 9px; background: rgba(255,255,255,.06); color: var(--fg); font-size: 24px; line-height: 1; cursor: pointer; }
+.chat-mixer-help { padding: 9px 14px; border-bottom: 1px solid var(--line); background: rgba(255,200,87,.06); color: #d7d9dd; font-size: 11.5px; line-height: 1.4; }
+#chat-messages { flex: 1; min-height: 0; padding: 14px; overflow-y: auto; overscroll-behavior: contain; }
+.chat-message { width: fit-content; max-width: 88%; margin-bottom: 10px; padding: 10px 12px; border-radius: 12px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; line-height: 1.5; }
+.chat-message.assistant { background: rgba(255,255,255,.065); border: 1px solid var(--line); }
+.chat-message.user { margin-left: auto; background: rgba(179,38,30,.72); border: 1px solid rgba(224,88,79,.8); color: #fff; }
+.chat-message a { color: var(--accent); text-underline-offset: 3px; }
+#chat-status { min-height: 20px; padding: 0 14px; color: var(--accent); font-size: 12px; }
+#chat-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 10px 14px 8px; border-top: 1px solid var(--line); }
+#chat-form label { grid-column: 1 / -1; font-size: 11px; color: var(--muted); }
+#chat-input { min-width: 0; resize: none; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: rgba(0,0,0,.28); color: var(--fg); font: inherit; font-size: 13px; }
+#chat-send { align-self: stretch; padding: 0 14px; border: 1px solid rgba(255,200,87,.45); border-radius: 9px; background: rgba(255,200,87,.12); color: var(--accent); cursor: pointer; }
+#chat-send:disabled { cursor: wait; opacity: .55; }
+.chat-disclaimer { padding: 0 14px 12px; color: var(--muted); font-size: 10.5px; line-height: 1.4; }
+
 /* callouts */
 .callouts { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 180ms; }
 .callouts.on { opacity: 1; }
@@ -134,18 +163,19 @@ blockquote { margin: 8px 0 0; padding: 4px 0 4px 12px; border-left: 2px solid rg
 @media (max-width: 899px) {
   :root { --gap: 12px; }
   #brand { top: 10px; }
-  #rail { top: 44px; left: var(--gap); right: var(--gap); width: auto; max-width: none !important; }
-  #rail-pill { display: none !important; }
-  #rail[data-state] #listcard { display: block; padding: 6px; }
+  #rail { top: 44px; left: var(--gap); right: var(--gap); z-index: 4; width: auto; max-width: none; }
+  #rail > details > summary { padding: 7px 10px; }
+  #listcard { display: block; padding: 6px; }
   #list { display: flex; gap: 6px; overflow-x: auto; }
   #list button { width: auto; white-space: nowrap; }
   #clear, #hint { display: none; }
-  #muscle-guide { margin: 4px 6px 0; }
-  #guide-body { max-height: 38vh; }
+  #guide-body { max-height: 32vh; padding: 4px 10px 10px; }
   #info { top: auto; left: var(--gap); right: var(--gap); bottom: 84px; width: auto; max-height: 45vh; padding: 16px 20px; }
   #info.empty { top: auto; bottom: 84px; width: auto; max-height: none; }
   #view-controls, #info.empty ~ #view-controls { top: 104px; right: var(--gap); }
   #sources { bottom: 8px; }
+  #chat-launch { right: var(--gap); bottom: 54px; }
+  #chat-panel { left: var(--gap); right: var(--gap); bottom: 118px; width: auto; height: min(58vh, 560px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

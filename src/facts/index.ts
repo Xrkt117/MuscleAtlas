@@ -39,6 +39,11 @@ export function getGuide(): GuideFile {
   return guide;
 }
 
+/** Complete evidence registry, in display order. */
+export function getEvidence(): EvidenceFile {
+  return evidence;
+}
+
 /** Throws on an unknown guide claim id. */
 export function getGuideClaim(id: string): GuideClaim {
   const claim = guide.flatMap((section) => section.claims).find((item) => item.id === id);
