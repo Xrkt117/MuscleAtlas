@@ -143,6 +143,7 @@ try {
     send: $<HTMLButtonElement>("chat-send"),
     selectedMuscle: () => current,
     mixedMuscles: () => [...mixed],
+    onOpenChange: (open) => { info.hidden = open; },
   });
   mixerClear.addEventListener("click", () => {
     mixed.clear();

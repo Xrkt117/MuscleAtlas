@@ -12,6 +12,7 @@ interface ChatElements {
   send: HTMLButtonElement;
   selectedMuscle: () => string | null;
   mixedMuscles: () => string[];
+  onOpenChange?: (open: boolean) => void;
 }
 
 interface ChatTurn { role: "user" | "assistant"; content: string }
@@ -54,6 +55,7 @@ export function createChatbot(elements: ChatElements): ChatbotApi {
   const setOpen = (open: boolean) => {
     elements.panel.hidden = !open;
     elements.launch.setAttribute("aria-expanded", String(open));
+    elements.onOpenChange?.(open);
     if (open) requestAnimationFrame(() => elements.input.focus());
     else elements.launch.focus();
   };
