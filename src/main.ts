@@ -34,6 +34,7 @@ try {
   const mixerCount = $("mixer-count"), mixerMatchText = $("mixer-matches");
   const mixerAsk = $<HTMLButtonElement>("mixer-ask"), mixerClear = $<HTMLButtonElement>("mixer-clear");
   const viewControls = $("view-controls");
+  const mixerSection = $<HTMLDetailsElement>("muscle-mixer");
   const sources = $("sources");
   const chatPanel = $("chat-panel");
   let current: string | null = null;
@@ -55,7 +56,10 @@ try {
     if (ids.length) atlas.highlight(ids); else atlas.clear();
   };
   let chatOpen = false;
-  const syncSide = () => { side.hidden = chatOpen || current === null; };  // details panel: needs a selection and a closed chat
+  const syncSide = () => {
+    side.hidden = chatOpen || current === null;  // details panel: needs a selection and a closed chat
+    document.body.classList.toggle("idle", !chatOpen && current === null && mixed.size === 0);  // landing hint
+  };
   const showCurrent = (id: string | null, focus: boolean) => {
     if (id !== current) {
       current = id;
@@ -94,13 +98,15 @@ try {
         ? `${matches.length} source-linked exercise${matches.length === 1 ? "" : "s"} cover the full mix.`
         : "No exact overlap exists in the current exercise source; the AI will not invent one.";
     buttons.forEach((button, id) => button.dataset.mixed = String(mixed.has(id)));
+    syncSide();
     if (ids.length) selectedEl.textContent = `Mixer: ${ids.map((id) => MUSCLE_BY_ID[id].label).join(", ")}`;
   };
   const toggleMixer = (id: string) => {
     const enteringMixer = mixed.size === 0;
     if (mixed.has(id)) mixed.delete(id); else mixed.add(id);
-    if (enteringMixer && mixed.size) showCurrent(null, false);
+    if (enteringMixer && mixed.size) { showCurrent(null, false); mixerSection.open = true; }  // reveal "Ask AI"
     renderMixer();
+    syncSide();
     applyHighlight();
   };
   const select = (id: string | null) => {
@@ -133,6 +139,11 @@ try {
     buttons.set(m.id, b);
   }
   renderMixer();
+  const fade = () => list.classList.toggle("more", list.scrollHeight - list.scrollTop - list.clientHeight > 2);
+  list.addEventListener("scroll", fade);
+  addEventListener("resize", fade);
+  for (const section of railSections) section.addEventListener("toggle", fade);
+  fade();
   $("clear").addEventListener("click", () => select(null));
   const chat = createChatbot({
     launch: $<HTMLButtonElement>("chat-launch"),
@@ -146,6 +157,21 @@ try {
     selectedMuscle: () => current,
     mixedMuscles: () => [...mixed],
     onOpenChange: (open) => { chatOpen = open; syncSide(); },
+    hooks: {
+      focus: (id) => atlas.focus(id),
+      resetView: () => atlas.resetView(),
+      show: (ids) => {
+        if (ids.length <= 1) return select(ids[0] ?? null);
+        mixed.clear();
+        for (const id of ids) mixed.add(id);
+        showCurrent(null, false);
+        renderMixer();
+        mixerSection.open = true;
+        syncSide();
+        applyHighlight();
+        atlas.resetView();  // front and back muscles both in frame
+      },
+    },
   });
   mixerClear.addEventListener("click", () => {
     mixed.clear();

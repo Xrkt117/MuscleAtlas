@@ -13,7 +13,7 @@
     <h2 id="muscles-label" class="section-label">Muscles</h2>
     <ul id="list"></ul>
     <button id="clear" type="button" disabled>Clear</button>
-    <p id="hint">Esc or click empty space to deselect</p>
+    <p id="hint">Esc or click empty space to deselect · right-click to mix</p>
   </section>
   <details id="muscle-guide">
     <summary>Muscle building</summary>
@@ -30,6 +30,7 @@
   </details>
 </nav>
 <main id="stage"><div id="loading" role="status"><div id="loading-text">Loading model...</div><progress id="loading-bar" max="1"></progress></div><div id="tip" aria-hidden="true"></div></main>
+<p id="stage-hint">Click a muscle — or ask the AI coach to build you a workout.</p>
 <div id="error" role="alert"></div>
 <div id="selected" aria-live="polite"></div>
 <aside id="side" aria-labelledby="side-title" hidden></aside>
@@ -50,20 +51,19 @@
     <div id="sources-body"></div>
   </details>
 </footer>
-<button id="chat-launch" type="button" aria-label="Open MuscleAtlas AI" aria-expanded="false" aria-controls="chat-panel" title="Ask MuscleAtlas AI">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8 8 0 0 0-6.6 12.5L4 21l5.5-1.5A8 8 0 1 0 12 3Z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></svg>
+<button id="chat-launch" type="button" aria-label="Open MuscleAtlas AI" aria-expanded="false" aria-controls="chat-panel" title="Ask the AI coach">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8 8 0 0 0-6.6 12.5L4 21l5.5-1.5A8 8 0 1 0 12 3Z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></svg><span class="launch-long">Ask the AI coach</span><span class="launch-short">AI coach</span>
 </button>
 <section id="chat-panel" aria-labelledby="chat-title" hidden>
   <header class="chat-header">
     <div><p class="chat-kicker">Source-grounded assistant</p><h2 id="chat-title">MuscleAtlas AI</h2></div>
     <button id="chat-close" type="button" aria-label="Close MuscleAtlas AI">×</button>
   </header>
-  <p class="chat-mixer-help"><strong>Mixer:</strong> close this panel, then right-click several muscles in the list or on the model. Reopen chat and ask for exercises that cover the whole mix.</p>
   <div id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div>
   <p id="chat-status" role="status"></p>
   <form id="chat-form">
     <label for="chat-input">Ask about a muscle or build a program</label>
-    <textarea id="chat-input" rows="3" maxlength="1200" placeholder="Example: Build a 3-day hypertrophy program with dumbbells"></textarea>
+    <textarea id="chat-input" rows="3" maxlength="1200" placeholder="Give the coach a goal…"></textarea>
     <button id="chat-send" type="submit">Send</button>
   </form>
   <p class="chat-disclaimer">Educational only. For pain, injury, or medical concerns, consult a qualified professional.</p>

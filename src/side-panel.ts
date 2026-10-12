@@ -5,7 +5,7 @@ import { MUSCLE_BY_ID } from "./muscle-map";
 
 const NO_EXERCISES = "No exercise mapping in the current source is specific enough for this muscle.";
 const NOTE = "This is a dataset listing, not a ranking and not evidence of benefit. Dataset groups are broad regions, not individual muscle heads.";
-const TABS = [{ key: "ex", label: "Exercises" }, { key: "an", label: "Anatomy and evidence" }] as const;
+const TABS = [{ key: "ex", label: "Overview" }, { key: "an", label: "Anatomy and evidence" }] as const;
 type Key = (typeof TABS)[number]["key"];
 
 /** The expandable part of a row: dataset groups, mechanic and kind, then the verbatim source quote. */
@@ -56,6 +56,9 @@ export function createSidePanel(root: HTMLElement) {
     note.addEventListener("focus", () => setNote(true));
     for (const ev of ["mouseleave", "blur"]) note.addEventListener(ev, () => setNote(false));
     return [
+      h("section", { class: "fn" }, h("h3", { class: "sec-h" }, "What it does"),
+        ...m.actions.map((a) => h("div", { class: "fn-item" }, h("p", null, a.text), h("p", { class: "cite" }, a.short)))),
+      h("h3", { class: "sec-h" }, "How to train it"),
       h("div", { class: "row-h" }, h("span", { class: "empty-note" }, "Listed as in the dataset"), h("span", { class: "note-wrap" }, note, tip)),
       ...(m.exercises.length
         ? [exerciseList([...m.calisthenics, ...m.loadedExercises])]

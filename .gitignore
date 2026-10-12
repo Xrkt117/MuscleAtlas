@@ -6,3 +6,5 @@ spike/data/
 spike/node_modules/
 node_modules/
 dist/
+.dev.vars
+worker/.wrangler/
