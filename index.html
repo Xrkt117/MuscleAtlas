@@ -7,13 +7,12 @@
 <title>MuscleAtlas</title>
 </head>
 <body class="loading">
-<header id="brand"><h1>MuscleAtlas</h1></header>
+<header id="brand"><h1>Muscle<span class="brand-atlas">Atlas</span></h1></header>
 <nav id="rail" aria-label="Atlas sections">
   <section id="muscles-section" aria-labelledby="muscles-label">
-    <h2 id="muscles-label" class="section-label">Muscles</h2>
+    <div class="rail-head"><h2 id="muscles-label" class="section-label">Muscles</h2><button id="clear" type="button" disabled>Clear</button></div>
     <ul id="list"></ul>
-    <button id="clear" type="button" disabled>Clear</button>
-    <p id="hint">Esc or click empty space to deselect · right-click to mix</p>
+    <p id="hint">Esc to deselect · right-click to mix</p>
   </section>
   <details id="muscle-guide">
     <summary>Muscle building</summary>
@@ -33,7 +32,6 @@
 <p id="stage-hint">Click a muscle — or ask the AI coach to build you a workout.</p>
 <div id="error" role="alert"></div>
 <div id="selected" aria-live="polite"></div>
-<aside id="side" aria-labelledby="side-title" hidden></aside>
 <nav id="view-controls" aria-label="Model view controls">
   <button id="zoom-in" type="button" aria-label="Zoom in" title="Zoom in">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7v7M7 10.5h7"/></svg>
@@ -54,6 +52,8 @@
 <button id="chat-launch" type="button" aria-label="Open MuscleAtlas AI" aria-expanded="false" aria-controls="chat-panel" title="Ask the AI coach">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8 8 0 0 0-6.6 12.5L4 21l5.5-1.5A8 8 0 1 0 12 3Z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></svg><span class="launch-long">Ask the AI coach</span><span class="launch-short">AI coach</span>
 </button>
+<div id="right-col">
+<aside id="side" aria-labelledby="side-title" hidden></aside>
 <section id="chat-panel" aria-labelledby="chat-title" hidden>
   <header class="chat-header">
     <div><p class="chat-kicker">Source-grounded assistant</p><h2 id="chat-title">MuscleAtlas AI</h2></div>
@@ -68,6 +68,7 @@
   </form>
   <p class="chat-disclaimer">Educational only. For pain, injury, or medical concerns, consult a qualified professional.</p>
 </section>
+</div>
 <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

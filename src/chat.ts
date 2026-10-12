@@ -109,7 +109,7 @@ export function createChatbot(elements: ChatElements): ChatbotApi {
     return b;
   });
   elements.messages.append(chips);
-  const setBusy = (busy: boolean) => { elements.send.disabled = busy; for (const b of chipButtons) b.disabled = busy; };
+  const setBusy = (busy: boolean) => { elements.status.classList.toggle("busy", busy); elements.send.disabled = busy; for (const b of chipButtons) b.disabled = busy; };
   elements.input.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.isComposing) { event.preventDefault(); elements.form.requestSubmit(); }
   });

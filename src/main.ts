@@ -57,7 +57,7 @@ try {
   };
   let chatOpen = false;
   const syncSide = () => {
-    side.hidden = chatOpen || current === null;  // details panel: needs a selection and a closed chat
+    side.hidden = current === null;  // details panel: needs a selection (the Mixer clears it); stays visible beside an open chat
     document.body.classList.toggle("idle", !chatOpen && current === null && mixed.size === 0);  // landing hint
   };
   const showCurrent = (id: string | null, focus: boolean) => {
@@ -75,6 +75,7 @@ try {
   const renderMixer = () => {
     const ids = [...mixed];
     mixerCount.textContent = `${ids.length} selected`;
+    mixerCount.classList.toggle("on", ids.length > 0);
     mixerAsk.disabled = ids.length === 0;
     mixerClear.disabled = ids.length === 0;
     mixerList.replaceChildren(...ids.map((id) => {
@@ -123,6 +124,7 @@ try {
     const b = document.createElement("button");
     b.type = "button";
     b.textContent = m.label;
+    b.title = m.label;
     b.setAttribute("aria-pressed", "false");
     b.addEventListener("click", () => select(m.id));
     b.addEventListener("contextmenu", (event) => { event.preventDefault(); toggleMixer(m.id); });
@@ -211,6 +213,6 @@ try {
   banner.style.display = "block";
   document.body.classList.add("failed");
 } finally {
-  loading.style.display = "none";
+  loading.classList.add("done");  // fades out (CSS), then stays invisible and inert
   document.body.classList.remove("loading");
 }

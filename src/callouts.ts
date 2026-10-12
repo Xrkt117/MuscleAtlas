@@ -37,7 +37,9 @@ export function createCallouts(stage: HTMLElement, avoidEls: HTMLElement[]) {
   const measure = () => blks.forEach((b, k) => { b.w = b.box.offsetWidth; b.h = b.box.offsetHeight; if (anchors[k]) { anchors[k].w = b.w; anchors[k].h = b.h; } });
   const readAvoid = () => {
     measure();
-    avoid = avoidEls.filter((e) => e.offsetWidth > 0).map((e) => ({ x: e.offsetLeft - stage.offsetLeft, y: e.offsetTop - stage.offsetTop, w: e.offsetWidth, h: e.offsetHeight }));
+    // page rects, not offsetLeft: #side and the chat panel sit inside the fixed #right-col
+    const s = stage.getBoundingClientRect();
+    avoid = avoidEls.filter((e) => e.offsetWidth > 0).map((e) => { const r = e.getBoundingClientRect(); return { x: r.left - s.left, y: r.top - s.top, w: r.width, h: r.height }; });
   };
   readAvoid();
   const ro = new ResizeObserver(readAvoid);

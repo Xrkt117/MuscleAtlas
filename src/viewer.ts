@@ -450,7 +450,7 @@ export async function createViewer(container: HTMLElement, onProgress?: (fractio
       const b = new THREE.Box3();
       for (const n of nodes) b.expandByObject(n);  // applies world matrices, incl. the negative-scale mirror
       const center = b.getCenter(new THREE.Vector3());
-      const dist = (b.getSize(new THREE.Vector3()).length() / 2) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.2;
+      const dist = (b.getSize(new THREE.Vector3()).length() / 2) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.5;  // margin leaves room for part callouts beside the rail and side panel
       const off = camera.position.clone().sub(controls.target);
       const fromDist = off.length(), fromAz = Math.atan2(off.x, off.z), fromEl = Math.asin(off.y / fromDist);
       animateView(center, targetAzimuth(fromAz, MUSCLE_BY_ID[id].view), THREE.MathUtils.clamp(fromEl, -0.5, 0.8), dist);

@@ -68,7 +68,6 @@ export function createSidePanel(root: HTMLElement) {
 
   function show(id: string | null) {
     noteBtn = noteTip = null;
-    root.hidden = id === null;
     if (id === null) { root.replaceChildren(); return; }
     const tabs = TABS.map((t) => h("button", {
       type: "button", role: "tab", id: `side-tab-${t.key}`, class: "tab", "aria-controls": `side-panel-${t.key}`,
@@ -76,6 +75,11 @@ export function createSidePanel(root: HTMLElement) {
     const panels = {
       ex: h("div", { role: "tabpanel", id: "side-panel-ex", class: "tabpanel", "aria-labelledby": "side-tab-ex" }, ...exercisesPanel(id)),
       an: h("div", { role: "tabpanel", id: "side-panel-an", class: "tabpanel", "aria-labelledby": "side-tab-an" }, ...anatomyContent(id)),
+    };
+    const tablist = h("div", { role: "tablist", "aria-label": "Muscle details", class: "tabs" }, ...tabs);
+    const place = () => {  // slide the underline under the active tab (runs on user action and when the panel gets a size)
+      const t = tabs.find((b) => b.getAttribute("aria-selected") === "true");
+      if (t) { tablist.style.setProperty("--ind-x", `${t.offsetLeft}px`); tablist.style.setProperty("--ind-w", `${t.offsetWidth}px`); }
     };
     const select = (k: Key, focus = false) => {
       active = k;
@@ -87,6 +91,7 @@ export function createSidePanel(root: HTMLElement) {
         if (on && focus) tabs[i].focus();
       });
       if (k !== "ex") setNote(false);
+      place();
     };
     tabs.forEach((b, i) => {
       b.addEventListener("click", () => select(TABS[i].key));
@@ -100,9 +105,10 @@ export function createSidePanel(root: HTMLElement) {
     });
     root.replaceChildren(
       h("h2", { id: "side-title" }, MUSCLE_BY_ID[id].label),
-      h("div", { role: "tablist", "aria-label": "Muscle details", class: "tabs" }, ...tabs),
+      tablist,
       panels.ex, panels.an);
     select(active);
+    new ResizeObserver(place).observe(tablist);  // fires when the panel becomes visible
   }
 
   return {
