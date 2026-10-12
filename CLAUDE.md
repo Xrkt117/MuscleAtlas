@@ -13,7 +13,7 @@
 ## Layout
 - `src/` - app code (`viewer.ts` is the three.js viewer and `AtlasApi`; `muscle-map.ts` the mapped muscle groups (23 at last count; see `MUSCLES`))
 - `public/models/` - the Draco GLBs (`muscles-draco.glb`, plus `skeleton-draco.glb` as unselectable decoration); `public/draco/` - local Draco decoder files
-- `src/panel.ts` - cited info panel (DOM via `h()`, never innerHTML); `src/chat.ts` / `src/chat-context.ts` - AI chat UI and public cited context; `src/mixer.ts` - multi-muscle exercise overlap; `worker/` - server-side OpenAI proxy; `src/callouts.ts` - 3D callout chips and leader lines; `src/style.css` - all CSS (layout A: floating panels over a full-window canvas)
+- `src/panel.ts` - cited anatomy content (DOM via `h()`, never innerHTML); `src/side-panel.ts` - right-hand panel with the Exercises and Anatomy tabs; `src/part-pick.ts` - part id <-> muscle/part for GPU picking; `src/chat.ts` / `src/chat-context.ts` - AI chat UI and public cited context; `src/mixer.ts` - multi-muscle exercise overlap; `worker/` - server-side OpenAI proxy; `src/callouts.ts` - 3D part callouts (label, leader line, dot); `src/style.css` - all CSS (flat: list left, side panel right, ADR 0007)
 - `src/facts/` - cited facts the AI tutor may use; every claim has a source id and a verbatim quote
 - `spike/` - throwaway research (model export and checks); do not build on it
 - `.claude/PRPs/` - PRDs and plans

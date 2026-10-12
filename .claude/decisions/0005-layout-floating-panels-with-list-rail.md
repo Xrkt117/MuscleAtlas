@@ -1,7 +1,7 @@
 # 0005 — UI layout: floating panels over a full canvas, list collapses to a pill
 
 **Date:** 2026-10-09
-**Status:** accepted
+**Status:** superseded by 0007
 
 ## Context
 The owner wanted a spacious UI with a lot of cited information and callouts pointing at muscle parts in 3D. They
